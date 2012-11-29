@@ -1,0 +1,58 @@
+.vimulator {
+    width: 960px;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+}
+.vimulator pre {
+    position: relative;
+    z-index: 2;
+    font-size: 3em;
+    line-height: 1.2;
+    height: 6em;
+    background: #ccc;
+}
+.vimulator .cursor {
+    background: #f00;
+    color: #fff;
+}
+.vimulator .insert .cursor {
+    background: transparent;
+    color: #000;
+    border-left: 5px solid #f00;
+    margin-left: -5px;
+    width: 0;
+}
+.vimulator ol {
+    position: relative;
+    z-index: 1;
+    font-size: 2em;
+    list-style: none;
+    line-height: 2em;
+    margin: 0;
+    padding: 0;
+}
+.vimulator ol li {
+    display: none;
+    margin-bottom: 1em;
+    -webkit-transition: opacity 0.5s linear;
+}
+.vimulator ol li:nth-child(1) { display: block; opacity: 1; }
+.vimulator ol li:nth-child(2) { display: block; opacity: 0.75; }
+.vimulator ol li:nth-child(3) { display: block; opacity: 0.5; }
+.vimulator ol li:nth-child(4) { display: block; opacity: 0.25; }
+.vimulator ol li:nth-child(5) { display: block; opacity: 0; }
+
+.vimulator ol kbd,
+.vimulator ol b {
+    font-family: monospace;
+    display: inline-block;
+    border: 1px solid #333;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+.vimulator ol b {
+    border-style: dotted;
+    color: #fff;
+}
