@@ -1,26 +1,6 @@
 (function () {
-    var C = Vimulator.Command;
-
-    function pluralize(count, word) {
-        if (count === 1) {
-            return "1 " + word;
-        } else {
-            return count + " " + word.replace(/y$/, "ie") + "s";
-        }
-    }
-
-    function ordinalize(count) {
-        var str = "" + count;
-        if (/^(.*[^1])?1$/.test(count)) {
-            return count + "st";
-        } else if (/^(.*[^1])?2$/.test(count)) {
-            return count + "nd";
-        } else if (/^(.*[^1])?3$/.test(count)) {
-            return count + "rd";
-        } else {
-            return count + "th";
-        }
-    }
+    var C = Vimulator.Command,
+        U = Vimulator.Utils;
 
     Vimulator.NormalMode.Motions = {
         // Character motions
@@ -30,7 +10,7 @@
                 vim.moveCursorRelative(0, -count);
             },
             description: function (count) {
-                return "Move left " + pluralize(count, "character");
+                return "Move left " + U.pluralize(count, "character");
             }
         }),
 
@@ -39,7 +19,7 @@
                 vim.moveCursorRelative(count, 0);
             },
             description: function (count) {
-                return "Move down " + pluralize(count, "line");
+                return "Move down " + U.pluralize(count, "line");
             }
         }),
 
@@ -48,7 +28,7 @@
                 vim.moveCursorRelative(-count, 0);
             },
             description: function (count) {
-                return "Move up " + pluralize(count, "line");
+                return "Move up " + U.pluralize(count, "line");
             }
         }),
 
@@ -57,7 +37,7 @@
                 vim.moveCursorRelative(0, count);
             },
             description: function (count) {
-                return "Move right " + pluralize(count, "character");
+                return "Move right " + U.pluralize(count, "character");
             }
         }),
 
@@ -79,7 +59,7 @@
                 if (count === 1) {
                     return "Move to the end of the line";
                 } else {
-                    return "Move to the end of the " + ordinalize(count - 1) +
+                    return "Move to the end of the " + U.ordinalize(count - 1) +
                            " line after the cursor";
                 }
             }
@@ -118,7 +98,7 @@
                 }
             },
             description: function (count) {
-                return "Move forward " + pluralize(count, "word");
+                return "Move forward " + U.pluralize(count, "word");
             }
         }),
 
@@ -143,7 +123,7 @@
                 }
             },
             description: function (count) {
-                return "Move forward " + pluralize(count, "word") +
+                return "Move forward " + U.pluralize(count, "word") +
                        " (including punctuation)";
             }
         }),
@@ -172,7 +152,7 @@
                 if (count === 1) {
                     return "Move to the next word end";
                 } else {
-                    return "Move the " + ordinalize(count) + " word end " +
+                    return "Move the " + U.ordinalize(count) + " word end " +
                            "after the cursor";
                 }
             }
@@ -202,7 +182,7 @@
                 if (count === 1) {
                     return "Move to the next word end (including punctuation)";
                 } else {
-                    return "Move the " + ordinalize(count) + " word end " +
+                    return "Move the " + U.ordinalize(count) + " word end " +
                            "after the cursor (including punctuation)";
                 }
             }
@@ -228,7 +208,7 @@
                 }
             },
             description: function (count) {
-                return "Move back " + pluralize(count, "word");
+                return "Move back " + U.pluralize(count, "word");
             }
         }),
 
@@ -252,7 +232,7 @@
                 }
             },
             description: function (count) {
-                return "Move back " + pluralize(count, "word") +
+                return "Move back " + U.pluralize(count, "word") +
                        " (including punctuation)";
             }
         }),
