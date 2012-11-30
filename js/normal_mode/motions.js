@@ -1,34 +1,63 @@
 (function () {
     var C = Vimulator.Command;
 
+    function pluralize(count, word) {
+        if (count === 1) {
+            return "1 " + word;
+        } else {
+            return count + " " + word.replace(/y$/, "ie") + "s";
+        }
+    }
+
+    function ordinalize(count) {
+        var str = "" + count;
+        if (/^(.*[^1])?1$/.test(count)) {
+            return count + "st";
+        } else if (/^(.*[^1])?2$/.test(count)) {
+            return count + "nd";
+        } else if (/^(.*[^1])?3$/.test(count)) {
+            return count + "rd";
+        } else {
+            return count + "th";
+        }
+    }
+
     Vimulator.NormalMode.Motions = {
         // Character motions
 
         'h': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(0, -count);
-                //TODO return '<kbd>h</kbd>: Move left ' + count + ' lines';
+            },
+            description: function (count) {
+                return "Move left " + pluralize(count, "character");
             }
         }),
 
         'j': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(count, 0);
-                //TODO return '<kbd>j</kbd>: Move down ' + count + ' lines';
+            },
+            description: function (count) {
+                return "Move down " + pluralize(count, "line");
             }
         }),
 
         'k': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(-count, 0);
-                //TODO return '<kbd>k</kbd>: Move up ' + count + ' lines';
+            },
+            description: function (count) {
+                return "Move up " + pluralize(count, "line");
             }
         }),
 
         'l': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(0, count);
-                //TODO return '<kbd>l</kbd>: Move right ' + count + ' lines';
+            },
+            description: function (count) {
+                return "Move right " + pluralize(count, "character");
             }
         }),
 
@@ -38,14 +67,21 @@
         '0': new C({
             callback: function (vim) {
                 vim.moveCursorCol(0);
-                //TODO return '<kbd>0</kbd>: Move to the start of the line';
-            }
+            },
+            description: "Move to the start of the line"
         }),
 
         '$': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(count - 1, '$');
-                //TODO return '<kbd>$</kbd>: Move to the end of the line',
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Move to the end of the line";
+                } else {
+                    return "Move to the end of the " + ordinalize(count - 1) +
+                           " line after the cursor";
+                }
             }
         }),
 
@@ -53,8 +89,8 @@
             callback: function (vim) {
                 var col = vim.currentLine().search(/[^\s]/);
                 vim.moveCursorCol(col);
-                //TODO return '<kbd>^</kbd>: Move to the first non-space on the line',
-            }
+            },
+            description: "Move to the first non-space on the line",
         }),
 
 
@@ -80,6 +116,9 @@
                         return;
                     }
                 }
+            },
+            description: function (count) {
+                return "Move forward " + pluralize(count, "word");
             }
         }),
 
@@ -102,6 +141,10 @@
                         return;
                     }
                 }
+            },
+            description: function (count) {
+                return "Move forward " + pluralize(count, "word") +
+                       " (including punctuation)";
             }
         }),
 
@@ -123,6 +166,14 @@
                     } else {
                         return;
                     }
+                }
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Move to the next word end";
+                } else {
+                    return "Move the " + ordinalize(count) + " word end " +
+                           "after the cursor";
                 }
             }
         }),
@@ -146,6 +197,14 @@
                         return;
                     }
                 }
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Move to the next word end (including punctuation)";
+                } else {
+                    return "Move the " + ordinalize(count) + " word end " +
+                           "after the cursor (including punctuation)";
+                }
             }
         }),
 
@@ -167,6 +226,9 @@
                         return;
                     }
                 }
+            },
+            description: function (count) {
+                return "Move back " + pluralize(count, "word");
             }
         }),
 
@@ -188,6 +250,10 @@
                         return;
                     }
                 }
+            },
+            description: function (count) {
+                return "Move back " + pluralize(count, "word") +
+                       " (including punctuation)";
             }
         }),
 
@@ -202,6 +268,13 @@
                 vim.moveCursor(row, 0);
                 col = vim.currentLine().search(/[^\s]/);
                 vim.moveCursorCol(col);
+            },
+            description: function (count) {
+                if (count) {
+                    return "Jump to line " + count;
+                } else {
+                    return "Jump to the start of the file";
+                }
             }
         }),
 
@@ -213,6 +286,13 @@
                 vim.moveCursor(row, 0);
                 col = vim.currentLine().search(/[^\s]/);
                 vim.moveCursorRelative(0, col);
+            },
+            description: function (count) {
+                if (count) {
+                    return "Jump to line " + count;
+                } else {
+                    return "Jump to the end of the file";
+                }
             }
         })
     };
