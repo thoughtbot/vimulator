@@ -85,7 +85,7 @@
     };
 
     Vimulator.Operation.prototype.description = function () {
-        var desc, keys;
+        var desc, keys, multiplier;
 
         keys = function (str) {
             if (str) {
@@ -95,10 +95,14 @@
             }
         };
         
-        desc = keys(this.multiplier) + keys(this.commandKey || this.commandPrefix);
+        desc = keys(this.multiplier) +
+               keys(this.commandKey || this.commandPrefix);
 
-        if (!this.complete()) {
-            desc += "<b>&hellip;</b> ";
+        if (this.command) {
+            multiplier = this.multiplier ? ~~this.multiplier : null;
+            desc += this.command.description(multiplier, this.argument);
+        } else {
+            desc += '<b>&hellip;</b>';
         }
 
         return desc.replace(/\s+$/, "");

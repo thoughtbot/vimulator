@@ -82,4 +82,34 @@ describe("Command", function () {
             expect(callback).toHaveBeenCalledWith(vim, null, 'x');
         });
     });
+
+    describe(".description", function () {
+        it("defaults to the empty string", function () {
+            var cmd = new Vimulator.Command({});
+            expect(cmd.description()).toBe("");
+        });
+
+        it("can be specified as a string", function () {
+            var cmd = new Vimulator.Command({description: "foo"});
+            expect(cmd.description()).toBe("foo");
+        });
+
+        it("can be specified as a function", function () {
+            var cmd = new Vimulator.Command({description: function () {
+                return "Functional";
+            }});
+            expect(cmd.description()).toBe("Functional");
+        });
+
+        it("recieves the default count", function () {
+            var desc, cmd;
+            desc = jasmine.createSpy();
+            cmd = new Vimulator.Command({description: desc});
+
+            cmd.description(null, "foo");
+            expect(desc).toHaveBeenCalledWith(1, "foo");
+            cmd.description(7, "foo");
+            expect(desc).toHaveBeenCalledWith(7, "foo");
+        });
+    });
 });

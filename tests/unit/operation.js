@@ -334,30 +334,36 @@ describe("Operation", function () {
             );
         });
 
-        it("includes the command key", function () {
-            var cmd = mockCommand();
-            op.setCommand(cmd, "x");
+        it("includes the command prefix", function () {
+            op.multiplier = '3';
+            op.keyPress('z');
             expect(op.description()).toBe(
-                "<kbd>x</kbd>"
+                "<kbd>3</kbd> <kbd>z</kbd> <b>&hellip;</b>"
             );
+        });
+
+        it("includes the command key and description", function () {
+            var cmd = mockCommand("none", "DESCRIPTION");
+            op.setCommand(cmd, "x");
+            expect(op.description()).toBe("<kbd>x</kbd> DESCRIPTION");
         });
 
         it("splits up multi-character command keys", function () {
-            var cmd = mockCommand();
+            var cmd = mockCommand("none", "Go to the beginning");
             op.setCommand(cmd, "gg");
             expect(op.description()).toBe(
-                "<kbd>g</kbd> <kbd>g</kbd>"
+                "<kbd>g</kbd> <kbd>g</kbd> Go to the beginning"
             );
         });
 
-        it("includes a placeholder if the command needs an argument", function () {
-            var cmd = mockCommand("literal");
+        it("passes the multiplier & argument to the command", function () {
+            var cmd = mockCommand("literal", "Replace");
+            op.multiplier = "4";
             op.setCommand(cmd, "r");
-            expect(op.description()).toBe(
-                "<kbd>r</kbd> <b>&hellip;</b>"
-            );
-        });
+            op.argument = "p";
 
-        //TODO Command descriptions, including arguments
+            expect(op.description()).toBe("<kbd>4</kbd> <kbd>r</kbd> Replace");
+            expect(cmd.description).toHaveBeenCalledWith(4, "p");
+        });
     });
 });

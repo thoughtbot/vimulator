@@ -31,7 +31,7 @@ function cursorPosition() {
     }
 }
 
-function mockCommand(argumentType) {
+function mockCommand(argumentType, description) {
     return {
         wantsOperation: jasmine.createSpy().andCallFake(function () {
             return argumentType === "operation";
@@ -39,6 +39,7 @@ function mockCommand(argumentType) {
         wantsLiteral: jasmine.createSpy().andCallFake(function () {
             return argumentType === "literal"
         }),
+        description: jasmine.createSpy().andReturn(description),
         execute: jasmine.createSpy()
     };
 }

@@ -4,6 +4,17 @@
         this.callback = options.callback;
         this.subCommands = options.subCommands;
         this.defaultCount = "defaultCount" in options ? options.defaultCount : 1;
+
+        if (typeof options.description === "function") {
+            this.description = function (count, arg) {
+                count = count === null ? this.defaultCount : count;
+                return options.description(count, arg);
+            };
+        } else {
+            this.description = function () {
+                return options.description || "";
+            };
+        }
     };
 
     Vimulator.Command.prototype.wantsOperation = function () {
