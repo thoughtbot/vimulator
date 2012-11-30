@@ -12,7 +12,7 @@ function pressEscape() {
 
 function reset(text) {
     $('#vimulator pre').text(text);
-    window.vimulator = new Vimulator.Base('#vimulator');
+    window.vimulator = new Vimulator.Base().init('#vimulator');
 }
 
 function currentText() {

@@ -1,9 +1,7 @@
 (function () {
     window.Vimulator = {};
 
-    Vimulator.Base = function () {
-        this.init.apply(this, arguments);
-    };
+    Vimulator.Base = function () {};
 
     Vimulator.Base.prototype.init = function (container) {
         this.modes = {
@@ -21,6 +19,8 @@
         this.lines = this.textContainer.text().split('\n');
 
         this.render();
+
+        return this;
     };
 
     Vimulator.Base.prototype.setMode = function (name) {

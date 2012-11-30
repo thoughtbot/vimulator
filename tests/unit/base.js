@@ -2,7 +2,7 @@ describe("Base", function () {
     var vim;
 
     beforeEach(function () {
-        vim = new Vimulator.Base();
+        vim = new Vimulator.Base().init();
     });
 
     describe(".mode", function () {

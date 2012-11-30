@@ -1,7 +1,5 @@
 (function () {
-    Vimulator.Demo = function () {
-            this.init.apply(this, arguments);
-    };
+    Vimulator.Demo = function () {};
     Vimulator.Demo.prototype = new Vimulator.Base();
     Vimulator.Demo.prototype.delay = 500;
 
