@@ -1,5 +1,6 @@
 (function () {
-    var C = Vimulator.Command;
+    var C = Vimulator.Command,
+        U = Vimulator.Utils;
 
     function findForwards(vim, count, chr) {
         var col, line, found;
@@ -59,12 +60,24 @@
         }
     }
 
+    function chrDesc (chr) {
+        if (chr) {
+            return "<kbd>" + chr + "</kbd>";
+        } else {
+            return "<b>&hellip;</b>";
+        }
+    }
+
     Vimulator.NormalMode.LineSearch = {
         'f': new C({
             argument: "literal",
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 'f', chr: chr};
                 findForwards(vim, count, chr);
+            },
+            description: function (count, chr) {
+                return "Find the " + U.ordinalize(count) + " occurence of " +
+                       chrDesc(chr) + " after the cursor";
             }
         }),
 
@@ -73,6 +86,10 @@
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 'F', chr: chr};
                 findBackwards(vim, count, chr);
+            },
+            description: function (count, chr) {
+                return "Find the " + U.ordinalize(count) + " occurence of " +
+                       chrDesc(chr) + " before the cursor";
             }
         }),
 
@@ -81,6 +98,10 @@
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 't', chr: chr};
                 untilForwards(vim, count, chr);
+            },
+            description: function (count, chr) {
+                return "Move to the " + U.ordinalize(count) + " occurence of " +
+                       chrDesc(chr) + " after the cursor";
             }
         }),
 
@@ -89,6 +110,10 @@
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 'T', chr: chr};
                 untilBackwards(vim, count, chr);
+            },
+            description: function (count, chr) {
+                return "Move to the " + U.ordinalize(count) + " occurence of " +
+                       chrDesc(chr) + " before the cursor";
             }
         }),
 
@@ -108,6 +133,13 @@
                 };
 
                 findFuncs[vim.lastSearch.op](vim, count, vim.lastSearch.chr, true);
+            },
+            description: function (count) {
+                desc = "Repeat the last search ";
+                if (count > 1) {
+                    desc += count + " times";
+                }
+                return desc;
             }
         }),
 
@@ -127,6 +159,13 @@
                 };
 
                 findFuncs[vim.lastSearch.op](vim, count, vim.lastSearch.chr, true);
+            },
+            description: function (count) {
+                desc = "Repeat the last search backwards ";
+                if (count > 1) {
+                    desc += count + " times";
+                }
+                return desc;
             }
         })
     };

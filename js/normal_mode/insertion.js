@@ -1,11 +1,13 @@
 (function () {
-    var C = Vimulator.Command;
+    var C = Vimulator.Command,
+        U = Vimulator.Utils;
 
     Vimulator.NormalMode.Insertion = {
         'i': new C({
             callback: function (vim) {
                 vim.setMode("insert");
-            }
+            },
+            description: "Insert text before the cursor"
         }),
 
         'I': new C({
@@ -13,21 +15,26 @@
                 var col = vim.currentLine().search(/[^\s]/);
                 vim.moveCursorCol(col);
                 vim.setMode("insert");
-            }
+            },
+            description: "Insert text at the start of the line" +
+                         " (after leading whitespace)"
         }),
 
         'gI': new C({
             callback: function (vim) {
                 vim.moveCursorCol(0);
                 vim.setMode("insert");
-            }
+            },
+            description: "Insert text at the start of the line" +
+                         " (before leading whitespace)"
         }),
 
         'a': new C({
             callback: function (vim) {
                 vim.cursor.col += 1; //FIXME
                 vim.setMode("insert");
-            }
+            },
+            description: "Append text after the cursor"
         }),
 
         'A': new C({
@@ -35,7 +42,8 @@
                 vim.moveCursorCol('$');
                 vim.cursor.col += 1; //FIXME
                 vim.setMode("insert");
-            }
+            },
+            description: "Append text at the end of the line"
         }),
 
         'o': new C({
@@ -43,7 +51,8 @@
                 vim.insertRowBelow('');
                 vim.moveCursor(vim.cursor.row + 1, 1);
                 vim.setMode("insert");
-            }
+            },
+            description: "Insert text on a new line after the cursor"
         }),
 
         'O': new C({
@@ -51,7 +60,8 @@
                 vim.insertRowAbove('');
                 vim.moveCursorCol(1);
                 vim.setMode("insert");
-            }
+            },
+            description: "Insert text on a new line before the cursor"
         }),
 
         's': new C({
@@ -62,6 +72,10 @@
                     line.substr(vim.cursor.col + count)
                 );
                 vim.setMode("insert");
+            },
+            description: function (count) {
+                return "Substitute " + U.pluralize(count, "character") +
+                       " under the cursor";
             }
         }),
 
@@ -76,6 +90,14 @@
                 }
 
                 vim.setMode("insert");
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Substitute this line";
+                } else {
+                    return "Substitute this line, and the next " +
+                           U.pluralize(count - 1, "line");
+                }
             }
         })
     };

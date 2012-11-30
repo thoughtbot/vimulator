@@ -1,12 +1,16 @@
 (function () {
-    var C, deleteSubCommands, changeSubCommands;
+    var C, U, deleteSubCommands, changeSubCommands;
 
     C = Vimulator.Command;
+    U = Vimulator.Utils;
 
     deleteSubCommands = {
         'd': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(count - 1, 0);
+            },
+            description: function (count) {
+                return U.pluralize(count, "whole line");
             }
         })
     };
@@ -15,6 +19,9 @@
         'c': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(count - 1, 0);
+            },
+            description: function (count) {
+                return U.pluralize(count, "whole line");
             }
         }),
         'w': Vimulator.NormalMode.Motions['e'],
@@ -55,7 +62,17 @@
                 deleteSubCommands,
                 Vimulator.NormalMode.Motions,
                 Vimulator.NormalMode.LineSearch
-            )
+            ),
+            description: function (count, motion) {
+                var desc = "Delete ";
+                if (motion) {
+                    //FIXME Motion description count is wrong
+                    // e.g. `2d2w` outputs `2d4w`
+                    return desc + motion.description();
+                } else {
+                    return desc + "<b>&hellip;</b>";
+                }
+            }
         }),
 
         'c': new C({
@@ -102,7 +119,17 @@
                 changeSubCommands,
                 Vimulator.NormalMode.Motions,
                 Vimulator.NormalMode.LineSearch
-            )
+            ),
+            description: function (count, motion) {
+                var desc = "Change ";
+                if (motion) {
+                    //FIXME Motion description count is wrong
+                    // e.g. `2d2w` outputs `2d4w`
+                    return desc + motion.description();
+                } else {
+                    return desc + "<b>&hellip;</b>";
+                }
+            }
         })
     };
 }());
