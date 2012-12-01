@@ -19,6 +19,16 @@ describe("Base", function () {
             expect(vim.mode.name).toBe("normal");
         });
 
+        it("calls the enter method on the new mode", function () {
+            spyOn(vim.modes.insert, "enter");
+            spyOn(vim.modes.normal, "enter");
+
+            vim.setMode("insert");
+            expect(vim.modes.insert.enter).toHaveBeenCalled();
+            vim.setMode("normal");
+            expect(vim.modes.normal.enter).toHaveBeenCalled();
+        });
+
         it("raises an error if the mode does not exist", function () {
             expect(function () {
                 vim.setMode("jazz");

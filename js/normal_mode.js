@@ -5,6 +5,9 @@
         this.buildOperation();
     };
 
+    Vimulator.NormalMode.prototype.enter = function () {
+    };
+
     Vimulator.NormalMode.prototype.buildOperation = function () {
         this.currentOperation = new Vimulator.Operation(this.commandList());
     };

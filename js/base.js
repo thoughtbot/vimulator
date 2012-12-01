@@ -17,6 +17,7 @@
         this.setMode("normal");
         this.cursor = {row: 0, col: 0};
         this.lines = this.textContainer.text().split('\n');
+        this.registers = {};
 
         this.render();
 
@@ -28,6 +29,8 @@
         if (!this.mode) {
             throw new Error("Illegal mode");
         }
+
+        this.mode.enter();
     };
 
     Vimulator.Base.prototype.bindKeyListeners = function () {
