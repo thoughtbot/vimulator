@@ -35,8 +35,7 @@
                 var before, after;
 
                 before = {row: vim.cursor.row, col: vim.cursor.col};
-                motion.multiply(count);
-                motion.execute(vim);
+                motion.execute(vim, count);
                 after = {row: vim.cursor.row, col: vim.cursor.col};
 
                 // Some motions delete the character the cursor lands on,
@@ -66,8 +65,6 @@
             description: function (count, motion) {
                 var desc = "Delete ";
                 if (motion) {
-                    //FIXME Motion description count is wrong
-                    // e.g. `2d2w` outputs `2d4w`
                     return desc + motion.description();
                 } else {
                     return desc + "<b>&hellip;</b>";
@@ -81,8 +78,7 @@
                 var before, after;
 
                 before = {row: vim.cursor.row, col: vim.cursor.col};
-                motion.multiply(count);
-                motion.execute(vim);
+                motion.execute(vim, count);
                 after = {row: vim.cursor.row, col: vim.cursor.col};
 
                 // Some motions change the character the cursor lands on,
@@ -123,8 +119,6 @@
             description: function (count, motion) {
                 var desc = "Change ";
                 if (motion) {
-                    //FIXME Motion description count is wrong
-                    // e.g. `2d2w` outputs `2d4w`
                     return desc + motion.description();
                 } else {
                     return desc + "<b>&hellip;</b>";

@@ -1,7 +1,7 @@
 (function () {
     Vimulator.Operation = function (context) {
         this.context = context;
-        this.multiplier = '';
+        this.multiplier = null;
         this.commandPrefix = '';
         this.command = null;
         this.commandKey = null;
@@ -28,7 +28,7 @@
     Vimulator.Operation.prototype.keyPress = function (key) {
         if (!this.command) {
             if (key >= '1' && key <= '9' || key === '0' && this.multiplier) {
-                this.multiplier += key;
+                this.multiplier = ~~('' + (this.multiplier || '') + key);
                 return;
             }
 
@@ -60,28 +60,23 @@
         return !!(!this.command.wantsLiteral() || this.argument);
     };
 
-    Vimulator.Operation.prototype.execute = function (vim) {
+    Vimulator.Operation.prototype.execute = function (vim, parentMultiplier) {
         var multiplier;
 
         if (!this.complete()) {
             return false;
         }
 
-        multiplier = this.multiplier ? ~~this.multiplier : null;
+        multiplier = this.multiply(parentMultiplier);
         this.command.execute(vim, multiplier, this.argument);
         return true;
     };
 
     Vimulator.Operation.prototype.multiply = function (factor) {
-        var a, b;
-
         if (!factor) {
-            return;
+            return this.multiplier;
         }
-
-        a = ~~this.multiplier || 1;
-        b = ~~factor;
-        this.multiplier = '' + (a * b);
+        return factor * (this.multiplier || 1);
     };
 
     Vimulator.Operation.prototype.description = function () {
@@ -89,6 +84,7 @@
 
         keys = function (str) {
             if (str) {
+                str = '' + str;
                 return "<kbd>" + str.split("").join("</kbd> <kbd>") + "</kbd> ";
             } else {
                 return "";

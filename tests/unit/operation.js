@@ -65,13 +65,13 @@ describe("Operation", function () {
             });
 
             it("adds numbers to the multiplier", function () {
-                expect(op.multiplier).toBe('');
+                expect(op.multiplier).toBe(null);
                 op.keyPress('1');
-                expect(op.multiplier).toBe('1');
+                expect(op.multiplier).toBe(1);
                 op.keyPress('4');
-                expect(op.multiplier).toBe('14');
+                expect(op.multiplier).toBe(14);
                 op.keyPress('0');
-                expect(op.multiplier).toBe('140');
+                expect(op.multiplier).toBe(140);
             });
 
             it("treats an initial 0 as a command not a multiplier", function () {
@@ -174,7 +174,7 @@ describe("Operation", function () {
             });
 
             it("passes the multiplier on to the command", function () {
-                op.multiplier = "123";
+                op.multiplier = 123;
                 op.execute(vim);
                 expect(cmd.execute).toHaveBeenCalledWith(vim, 123, null);
             });
@@ -280,6 +280,21 @@ describe("Operation", function () {
                 expect(cmd.execute).toHaveBeenCalledWith(vim, null, arg);
             });
         });
+
+        describe("when passed a parent multiplier", function () {
+            var cmd;
+
+            beforeEach(function () {
+                cmd = mockCommand("none");
+                op.setCommand(cmd);
+            });
+
+            it("combines the parent multiplier with its own", function () {
+                op.multiplier = 3;
+                op.execute(vim, 4);
+                expect(cmd.execute).toHaveBeenCalledWith(vim, 12, null);
+            });
+        });
     });
 
     describe(".multiply", function () {
@@ -290,28 +305,24 @@ describe("Operation", function () {
         });
 
         describe("with a blank multiplier", function () {
-            it("takes the given multiplier", function () {
-                op.multiply('7');
-                expect(op.multiplier).toBe('7');
+            it("returns the given multiplier", function () {
+                expect(op.multiply(7)).toBe(7);
             });
 
             it("doesn't change for another blank multiplier", function () {
-                op.multiply('');
-                expect(op.multiplier).toBe('');
+                expect(op.multiply(null)).toBe(null);
             });
         });
 
         describe("with a non-blank multiplier", function () {
             it("takes the given multiplier", function () {
-                op.multiplier = '3';
-                op.multiply('7');
-                expect(op.multiplier).toBe('21');
+                op.multiplier = 3;
+                expect(op.multiply(7)).toBe(21);
             });
 
             it("doesn't change for a blank multiplier", function () {
-                op.multiplier = '3';
-                op.multiply('');
-                expect(op.multiplier).toBe('3');
+                op.multiplier = 3;
+                expect(op.multiply(null)).toBe(3);
             });
         });
     });
@@ -328,14 +339,14 @@ describe("Operation", function () {
         });
 
         it("includes the multiplier", function () {
-            op.multiplier = '12';
+            op.multiplier = 12;
             expect(op.description()).toBe(
                 "<kbd>1</kbd> <kbd>2</kbd> <b>&hellip;</b>"
             );
         });
 
         it("includes the command prefix", function () {
-            op.multiplier = '3';
+            op.multiplier = 3;
             op.keyPress('z');
             expect(op.description()).toBe(
                 "<kbd>3</kbd> <kbd>z</kbd> <b>&hellip;</b>"
@@ -358,7 +369,7 @@ describe("Operation", function () {
 
         it("passes the multiplier & argument to the command", function () {
             var cmd = mockCommand("literal", "Replace");
-            op.multiplier = "4";
+            op.multiplier = 4;
             op.setCommand(cmd, "r");
             op.argument = "p";
 
