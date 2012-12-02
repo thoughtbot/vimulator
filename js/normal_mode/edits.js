@@ -1,5 +1,6 @@
 (function () {
-    var C = Vimulator.Command;
+    var C = Vimulator.Command,
+        U = Vimulator.Utils;
 
     Vimulator.NormalMode.Edits = {
         'x': new C({
@@ -11,6 +12,22 @@
                     line.substr(vim.cursor.col + count)
                 );
                 vim.moveCursorRelative(0, 0);
+            }
+        }),
+
+        'X': new C({
+            repeatable: true,
+            callback: function (vim, count) {
+                var line = vim.currentLine();
+                vim.replaceRow(
+                    line.substr(0, vim.cursor.col - count) +
+                    line.substr(vim.cursor.col)
+                );
+                vim.moveCursorRelative(0, -count);
+            },
+            description: function (count) {
+                return "Delete " + U.pluralize(count, "character") +
+                       " before the cursor";
             }
         }),
 

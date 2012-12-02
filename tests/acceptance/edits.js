@@ -21,6 +21,29 @@ describe("The x command", function () {
     });
 });
 
+describe("The X command", function () {
+    beforeEach(function () { reset("Just some text"); });
+
+    it("deletes the character before the cursor", function () {
+        pressKeys("2lX");
+        expect(currentText()).toBe("Jst some text");
+        expect(cursorPosition()).toEqual({row: 0, col: 1});
+    });
+
+    it("accepts a numerical multiplier", function () {
+        pressKeys("$10X");
+        expect(currentText()).toBe("Just");
+        expect(cursorPosition()).toEqual({row: 0, col: 3});
+    });
+
+    it("is limitted to the current line", function () {
+        reset("First line\nSecond line");
+        pressKeys("j2l7X");
+        expect(currentText()).toBe("First line\ncond line");
+        expect(cursorPosition()).toEqual({row: 1, col: 0});
+    });
+});
+
 describe("The r command", function () {
     beforeEach(function () { reset("Kust some text"); });
 
