@@ -110,6 +110,6 @@
                            " line after the cursor";
                 }
             }
-        }),
+        })
     };
 }());
