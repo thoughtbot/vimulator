@@ -12,6 +12,10 @@
                     line.substr(vim.cursor.col + count)
                 );
                 vim.moveCursorRelative(0, 0);
+            },
+            description: function (count) {
+                return "Delete " + U.pluralize(count, "character") +
+                       " under the cursor";
             }
         }),
 
@@ -49,6 +53,10 @@
                     line.substr(vim.cursor.col + count)
                 );
                 vim.moveCursorRelative(0, count - 1);
+            },
+            description: function (count, replacement) {
+                return "Replace " + U.pluralize(count, "character") +
+                       " with " + U.literalArgDescription(replacement);
             }
         }),
 
@@ -64,6 +72,14 @@
                 if (count > 1) {
                     startRow = vim.cursor.row + 1;
                     vim.removeRows(startRow, startRow + count - 1);
+                }
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Delete to the end of the line";
+                } else {
+                    return "Delete to the end of the " + U.ordinalize(count-1) +
+                           " line after the cursor";
                 }
             }
         }),
@@ -85,6 +101,14 @@
                 vim.moveCursorCol('$');
                 vim.cursor.col += 1; //FIXME
                 vim.setMode("insert");
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Change to the end of the line";
+                } else {
+                    return "Change to the end of the " + U.ordinalize(count-1) +
+                           " line after the cursor";
+                }
             }
         }),
     };

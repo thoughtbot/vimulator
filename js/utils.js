@@ -21,4 +21,12 @@
             return count + "th";
         }
     };
+
+    Vimulator.Utils.literalArgDescription = function (chr) {
+        if (chr) {
+            return "<kbd>" + chr + "</kbd>";
+        } else {
+            return "<b>&hellip;</b>";
+        }
+    };
 }());

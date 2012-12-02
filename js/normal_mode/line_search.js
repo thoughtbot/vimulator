@@ -60,14 +60,6 @@
         }
     }
 
-    function chrDesc (chr) {
-        if (chr) {
-            return "<kbd>" + chr + "</kbd>";
-        } else {
-            return "<b>&hellip;</b>";
-        }
-    }
-
     Vimulator.NormalMode.LineSearch = {
         'f': new C({
             argument: "literal",
@@ -77,7 +69,7 @@
             },
             description: function (count, chr) {
                 return "Find the " + U.ordinalize(count) + " occurence of " +
-                       chrDesc(chr) + " after the cursor";
+                       U.literalArgDescription(chr) + " after the cursor";
             }
         }),
 
@@ -89,7 +81,7 @@
             },
             description: function (count, chr) {
                 return "Find the " + U.ordinalize(count) + " occurence of " +
-                       chrDesc(chr) + " before the cursor";
+                       U.literalArgDescription(chr) + " before the cursor";
             }
         }),
 
@@ -101,7 +93,7 @@
             },
             description: function (count, chr) {
                 return "Move to the " + U.ordinalize(count) + " occurence of " +
-                       chrDesc(chr) + " after the cursor";
+                       U.literalArgDescription(chr) + " after the cursor";
             }
         }),
 
@@ -113,7 +105,7 @@
             },
             description: function (count, chr) {
                 return "Move to the " + U.ordinalize(count) + " occurence of " +
-                       chrDesc(chr) + " before the cursor";
+                       U.literalArgDescription(chr) + " before the cursor";
             }
         }),
 
