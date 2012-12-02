@@ -53,8 +53,14 @@
 
     Vimulator.Base.prototype.keyPress = function (code) {
         var chr, op;
+
         chr = String.fromCharCode(code);
         op = this.mode.keyPress(chr);
+
+        if (op && op.repeatable()) {
+            this.lastEdit = op;
+        }
+
         this.render(op);
     };
 
@@ -78,6 +84,23 @@
         this.textContainer
                 .html(rendered.join('\n'))
                 .attr('class', this.mode.name);
+    };
+
+    Vimulator.Base.prototype.repeatLastEdit = function () {
+        var i, chr, lastInsert;
+
+        if (!this.lastEdit) {
+            return;
+        }
+
+        lastInsert = this.registers['.'];
+        this.lastEdit.execute(this);
+        if (this.mode.name === "insert") {
+            for (i = 0; i < lastInsert.length; i++) {
+                this.keyPress(lastInsert.charCodeAt(i));
+            }
+            this.keyPress(27);
+        }
     };
 
     Vimulator.Base.prototype.moveCursorRow = function (row) {

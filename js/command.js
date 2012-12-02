@@ -4,6 +4,7 @@
         this.callback = options.callback;
         this.subCommands = options.subCommands;
         this.defaultCount = "defaultCount" in options ? options.defaultCount : 1;
+        this.repeatable = options.repeatable || false;
 
         if (typeof options.description === "function") {
             this.description = function (count, arg) {

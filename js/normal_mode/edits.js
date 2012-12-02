@@ -3,6 +3,7 @@
 
     Vimulator.NormalMode.Edits = {
         'x': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 var line = vim.currentLine();
                 vim.replaceRow(
@@ -14,6 +15,7 @@
         }),
 
         'r': new C({
+            repeatable: true,
             argument: "literal",
             callback: function (vim, count, replacement) {
                 var line, repeat;
@@ -34,6 +36,7 @@
         }),
 
         'D': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 var line, startRow;
 
@@ -49,6 +52,7 @@
         }),
 
         'C': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 var line, startRow;
 

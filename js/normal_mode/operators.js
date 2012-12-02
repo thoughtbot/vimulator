@@ -6,6 +6,7 @@
 
     deleteSubCommands = {
         'd': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 vim.moveCursorRelative(count - 1, 0);
             },
@@ -17,6 +18,7 @@
 
     changeSubCommands = {
         'c': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 vim.moveCursorRelative(count - 1, 0);
             },
@@ -30,6 +32,7 @@
 
     Vimulator.NormalMode.Operators = {
         'd': new C({
+            repeatable: true,
             argument: "operation",
             callback: function (vim, count, motion) {
                 var before, after;
@@ -73,6 +76,7 @@
         }),
 
         'c': new C({
+            repeatable: true,
             argument: "operation",
             callback: function (vim, count, motion) {
                 var before, after;

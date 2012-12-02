@@ -4,6 +4,7 @@
 
     Vimulator.NormalMode.Insertion = {
         'i': new C({
+            repeatable: true,
             callback: function (vim) {
                 vim.setMode("insert");
             },
@@ -11,6 +12,7 @@
         }),
 
         'I': new C({
+            repeatable: true,
             callback: function (vim) {
                 var col = vim.currentLine().search(/[^\s]/);
                 vim.moveCursorCol(col);
@@ -21,6 +23,7 @@
         }),
 
         'gI': new C({
+            repeatable: true,
             callback: function (vim) {
                 vim.moveCursorCol(0);
                 vim.setMode("insert");
@@ -30,6 +33,7 @@
         }),
 
         'a': new C({
+            repeatable: true,
             callback: function (vim) {
                 vim.cursor.col += 1; //FIXME
                 vim.setMode("insert");
@@ -38,6 +42,7 @@
         }),
 
         'A': new C({
+            repeatable: true,
             callback: function (vim) {
                 vim.moveCursorCol('$');
                 vim.cursor.col += 1; //FIXME
@@ -47,6 +52,7 @@
         }),
 
         'o': new C({
+            repeatable: true,
             callback: function (vim) {
                 vim.insertRowBelow('');
                 vim.moveCursor(vim.cursor.row + 1, 1);
@@ -56,6 +62,7 @@
         }),
 
         'O': new C({
+            repeatable: true,
             callback: function (vim) {
                 vim.insertRowAbove('');
                 vim.moveCursorCol(1);
@@ -65,6 +72,7 @@
         }),
 
         's': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 var line = vim.currentLine();
                 vim.replaceRow(
@@ -80,6 +88,7 @@
         }),
 
         'S': new C({
+            repeatable: true,
             callback: function (vim, count) {
                 vim.replaceRow('');
                 vim.moveCursorCol(0);

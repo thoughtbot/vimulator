@@ -377,4 +377,27 @@ describe("Operation", function () {
             expect(cmd.description).toHaveBeenCalledWith(4, "p");
         });
     });
+
+    describe(".repeatable", function () {
+        it("is always false when the operation is incomplete", function () {
+            var op = new Vimulator.Operation();
+            op.setCommand(mockCommand());
+            spyOn(op, "complete").andReturn(false);
+
+            expect(op.repeatable()).toBe(false);
+        });
+
+        it("delegates to the command when the operation is complete", function () {
+            var op, cmd, result;
+
+            result = {};
+            op = new Vimulator.Operation();
+            cmd = mockCommand();
+            cmd.repeatable = result;
+            op.setCommand(cmd);
+            spyOn(op, "complete").andReturn(true);
+
+            expect(op.repeatable()).toBe(result);
+        });
+    });
 });

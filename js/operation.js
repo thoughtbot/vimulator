@@ -103,4 +103,8 @@
 
         return desc.replace(/\s+$/, "");
     };
+
+    Vimulator.Operation.prototype.repeatable = function () {
+        return this.complete() && this.command.repeatable;
+    };
 }());

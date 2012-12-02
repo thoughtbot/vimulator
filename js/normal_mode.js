@@ -18,7 +18,8 @@
             Vimulator.NormalMode.Insertion,
             Vimulator.NormalMode.Edits,
             Vimulator.NormalMode.LineSearch,
-            Vimulator.NormalMode.Operators
+            Vimulator.NormalMode.Operators,
+            Vimulator.NormalMode.Repeat
         );
         return this.commands;
     };
