@@ -31,5 +31,9 @@ describe("Repeating the last command with .", function () {
         expect(currentText()).toBe("Here are some words, they are all here");
     });
 
-    //TODO Dot should take a count
+    it("accepts numerical multipliers", function () {
+        reset("First\nSecond\nThird\nFourth");
+        pressKeys("ddj2.");
+        expect(currentText()).toBe("Second");
+    });
 });

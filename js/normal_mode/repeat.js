@@ -5,7 +5,10 @@
     Vimulator.NormalMode.Repeat = {
         '.': new C({
             callback: function (vim, count) {
-                vim.repeatLastEdit();
+                var i;
+                for (i = 0; i < count; i += 1) {
+                    vim.repeatLastEdit();
+                }
             },
             description: function (count) {
                 var desc = "Repeat last edit";
