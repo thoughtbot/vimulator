@@ -68,6 +68,12 @@ describe("NormalMode", function () {
                 var op = nm.currentOperation;
                 expect(nm.keyPress(ESC)).toBe(op);
             });
+
+            it("cancels the operation", function () {
+                var op = nm.currentOperation;
+                nm.keyPress(ESC);
+                expect(op.cancelled).toBe(true);
+            });
         });
 
         describe("that completes the current operation", function () {

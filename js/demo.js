@@ -18,7 +18,7 @@
             }
 
             li.html(op.description())
-              .toggleClass("complete", op.complete());
+              .toggleClass("complete", op.complete() || op.cancelled);
         }
     };
 }());

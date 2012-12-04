@@ -29,12 +29,15 @@
 
         // Escape
         if (key === '\u001B') {
+            op.cancel();
             this.buildOperation();
         } else {
             op.keyPress(key);
-
             if (op.complete()) {
                 op.execute(this.vim);
+            }
+
+            if (op.complete() || op.cancelled) {
                 this.buildOperation();
             }
         }

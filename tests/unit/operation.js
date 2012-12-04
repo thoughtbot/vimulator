@@ -99,6 +99,20 @@ describe("Operation", function () {
                 op.keyPress('z');
                 expect(op.command.identity).toBe("zz-command");
             });
+
+            it("cancels the operation if there is an unexpected key", function () {
+                op = new Vimulator.Operation({
+                    getCommand: function () { return undefined; }
+                });
+
+                expect(op.cancelled).toBe(false);
+                op.keyPress('1');
+                expect(op.cancelled).toBe(false);
+                op.keyPress('g');
+                expect(op.cancelled).toBe(false);
+                op.keyPress('1');
+                expect(op.cancelled).toBe(true);
+            });
         });
 
         describe("for an operation expecting a literal argument", function () {
