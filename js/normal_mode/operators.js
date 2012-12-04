@@ -35,15 +35,22 @@
             repeatable: true,
             argument: "operation",
             callback: function (vim, count, motion) {
-                var before, after;
+                var before, after, range;
 
                 before = {row: vim.cursor.row, col: vim.cursor.col};
-                motion.execute(vim, count);
+                range = motion.execute(vim, count);
                 after = {row: vim.cursor.row, col: vim.cursor.col};
+
+                //TODO Refactor normal motions to return a range.
+                //  Would allow a lot of the logic here to be moved.
+                if (range) {
+                    before = range.start;
+                    after = range.end;
+                }
 
                 // Some motions delete the character the cursor lands on,
                 // other motions do not
-                if (/[Ee$ftFT]/.test(motion.commandKey)) {
+                if (/[Ee$ftFTai]/.test(motion.commandKey)) {
                     after.col += 1;
                 }
 
@@ -63,7 +70,8 @@
             subCommands: new Vimulator.CommandList(
                 deleteSubCommands,
                 Vimulator.NormalMode.Motions,
-                Vimulator.NormalMode.LineSearch
+                Vimulator.NormalMode.LineSearch,
+                Vimulator.TextObject.Commands
             ),
             description: function (count, motion) {
                 var desc = "Delete ";
@@ -118,7 +126,8 @@
             subCommands: new Vimulator.CommandList(
                 changeSubCommands,
                 Vimulator.NormalMode.Motions,
-                Vimulator.NormalMode.LineSearch
+                Vimulator.NormalMode.LineSearch,
+                Vimulator.TextObject.Commands
             ),
             description: function (count, motion) {
                 var desc = "Change ";

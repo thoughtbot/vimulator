@@ -183,7 +183,7 @@ describe("Operation", function () {
             });
 
             it("executes the command", function () {
-                expect(op.execute(vim)).toBe(true);
+                op.execute(vim);
                 expect(cmd.execute).toHaveBeenCalledWith(vim, null, null);
             });
 
@@ -244,7 +244,7 @@ describe("Operation", function () {
             });
 
             it("executes the command with the argument", function () {
-                expect(op.execute(vim)).toBe(true);
+                op.execute(vim);
                 expect(cmd.execute).toHaveBeenCalledWith(vim, null, 'x');
             });
         });
@@ -290,7 +290,7 @@ describe("Operation", function () {
             });
 
             it("executes the command with the argument", function () {
-                expect(op.execute(vim)).toBe(true);
+                op.execute(vim);
                 expect(cmd.execute).toHaveBeenCalledWith(vim, null, arg);
             });
         });

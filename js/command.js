@@ -32,6 +32,6 @@
 
     Vimulator.Command.prototype.execute = function (vim, count, argument) {
         count = count === null ? this.defaultCount : count;
-        this.callback(vim, count, argument);
+        return this.callback(vim, count, argument);
     };
 }());

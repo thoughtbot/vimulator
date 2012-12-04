@@ -79,8 +79,7 @@
         }
 
         multiplier = this.multiply(parentMultiplier);
-        this.command.execute(vim, multiplier, this.argument);
-        return true;
+        return this.command.execute(vim, multiplier, this.argument);
     };
 
     Vimulator.Operation.prototype.multiply = function (factor) {
