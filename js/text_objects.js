@@ -54,7 +54,7 @@
                     if (textObject) {
                         return textObject.aroundRange(vim);
                     } else {
-                        return null;
+                        vim.mode.cancelOperation();
                     }
                 },
                 description: function (count, key) {
@@ -74,7 +74,7 @@
                     if (textObject) {
                         return textObject.insideRange(vim);
                     } else {
-                        return null;
+                        vim.mode.cancelOperation();
                     }
                 },
                 description: function (count, key) {

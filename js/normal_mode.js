@@ -12,6 +12,11 @@
         this.currentOperation = new Vimulator.Operation(this.commandList());
     };
 
+    Vimulator.NormalMode.prototype.cancelOperation = function () {
+        this.currentOperation.cancel();
+        this.buildOperation();
+    };
+
     Vimulator.NormalMode.prototype.commandList = function () {
         this.commands = this.commands || new Vimulator.CommandList(
             Vimulator.NormalMode.Motions,
@@ -29,8 +34,7 @@
 
         // Escape
         if (key === '\u001B') {
-            op.cancel();
-            this.buildOperation();
+            this.cancelOperation();
         } else {
             op.keyPress(key);
             if (op.complete()) {

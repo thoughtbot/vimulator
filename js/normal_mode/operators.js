@@ -41,6 +41,11 @@
                 range = motion.execute(vim, count);
                 after = {row: vim.cursor.row, col: vim.cursor.col};
 
+                //FIXME Bit of a hack
+                if (!vim.mode.currentOperation.complete()) {
+                    return;
+                }
+
                 //TODO Refactor normal motions to return a range.
                 //  Would allow a lot of the logic here to be moved.
                 if (range) {
