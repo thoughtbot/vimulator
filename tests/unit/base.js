@@ -106,6 +106,16 @@ describe("Base", function () {
             expect(vim.findNext('o', {from: {row: 0, col: 0}}))
                 .toEqual({row: 0, col: 6});
         });
+
+        it("optionally includes the character under the cursor", function () {
+            vim.lines = ["Foo"];
+            vim.moveCursorRelative(0, 1);
+
+            expect(vim.findNext('o'))
+                .toEqual({row: 0, col: 2});
+            expect(vim.findNext('o', {inclusive: true}))
+                .toEqual({row: 0, col: 1});
+        });
     });
 
     describe(".findLast", function () {
@@ -167,6 +177,16 @@ describe("Base", function () {
                 .toEqual({row: 0, col: 6});
             expect(vim.findLast('o', {from: {row: 0, col: 15}}))
                 .toEqual({row: 0, col: 11});
+        });
+
+        it("optionally includes the character under the cursor", function () {
+            vim.lines = ["Foo"];
+            vim.moveCursorRelative(0, 2);
+
+            expect(vim.findLast('o'))
+                .toEqual({row: 0, col: 1});
+            expect(vim.findLast('o', {inclusive: true}))
+                .toEqual({row: 0, col: 2});
         });
     });
 });

@@ -8,8 +8,16 @@
     Vimulator.TextObject.prototype.insideRange = function (vim) {
         var start, end;
 
-        start = vim.findLast(this.startDelim, {offset: 1, wrap: true});
-        end = vim.findNext(this.endDelim, {offset: -1, wrap: true});
+        start = vim.findLast(this.startDelim, {
+            offset: 1,
+            wrap: true,
+            inclusive: true
+        });
+        end = vim.findNext(this.endDelim, {
+            offset: -1,
+            wrap: true,
+            inclusive: true
+        });
 
         if (start && end) {
             return {start: start, end: end};
@@ -21,8 +29,14 @@
     Vimulator.TextObject.prototype.aroundRange = function (vim) {
         var start, end;
 
-        start = vim.findLast(this.startDelim, {wrap: true});
-        end = vim.findNext(this.endDelim, {wrap: true});
+        start = vim.findLast(this.startDelim, {
+            wrap: true,
+            inclusive: true
+        });
+        end = vim.findNext(this.endDelim, {
+            wrap: true,
+            inclusive: true
+        });
 
         if (start && end) {
             return {start: start, end: end};

@@ -175,17 +175,18 @@
     };
 
     Vimulator.Base.prototype.findNext = function (target, options) {
-        var row, col, lineAfter;
+        var row, col, lineAfter, lineOffset;
 
         options = options || {};
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        lineAfter = this.currentLine().substr(options.from.col + 1);
+        lineOffset = options.inclusive ? 0 : 1;
+        lineAfter = this.currentLine().substr(options.from.col + lineOffset);
         row = options.from.row;
         col = lineAfter.indexOf(target);
         if (col !== -1) {
-            col += options.from.col + 1;
+            col += options.from.col + lineOffset;
         }
 
         while (options.wrap && row < this.lines.length - 1 && col === -1) {
@@ -211,13 +212,14 @@
     };
 
     Vimulator.Base.prototype.findLast = function (target, options) {
-        var row, col, lineBefore;
+        var row, col, lineBefore, lineOffset;
 
         options = options || {};
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        lineBefore = this.currentLine().substr(0, options.from.col);
+        lineOffset = options.inclusive ? 1 : 0;
+        lineBefore = this.currentLine().substr(0, options.from.col + lineOffset);
         row = options.from.row;
         col = lineBefore.lastIndexOf(target);
 
