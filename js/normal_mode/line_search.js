@@ -3,16 +3,14 @@
         U = Vimulator.Utils;
 
     function findForwards(vim, count, chr) {
-        var col, line, found;
+        var found, position;
 
-        found = 0;
-        while (col !== -1 && found < count) {
-            line = vim.currentLine().substr(vim.cursor.col + 1);
-            col = line.indexOf(chr);
-            if (col > -1) {
-                found += 1;
-            }
-            vim.moveCursorRelative(0, col + 1);
+        found = -1;
+        position = vim.cursor;
+        while (position && found < count) {
+            found += 1;
+            vim.moveCursor(position.row, position.col);
+            position = vim.findNext(chr);
         }
 
         return found > 0;
@@ -32,16 +30,14 @@
     }
 
     function findBackwards(vim, count, chr) {
-        var col, line, found;
+        var found, position;
 
-        found = 0;
-        while (col !== -1 && found < count) {
-            line = vim.currentLine().substr(0, vim.cursor.col);
-            col = line.lastIndexOf(chr);
-            if (col !== -1) {
-                found += 1;
-                vim.moveCursorCol(col);
-            }
+        found = -1;
+        position = vim.cursor;
+        while (position && found < count) {
+            found += 1;
+            vim.moveCursor(position.row, position.col);
+            position = vim.findLast(chr);
         }
 
         return found > 0;

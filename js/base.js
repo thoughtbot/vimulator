@@ -173,4 +173,73 @@
         this.lines.splice(start.row + 1, end.row - start.row);
         this.moveCursor(start.row, start.col);
     };
+
+    Vimulator.Base.prototype.findNext = function (target, options) {
+        var row, col, lineAfter;
+
+        options = options || {};
+        options.offset = options.offset || 0;
+        options.from = options.from || this.cursor;
+
+        lineAfter = this.currentLine().substr(options.from.col + 1);
+        row = options.from.row;
+        col = lineAfter.indexOf(target);
+        if (col !== -1) {
+            col += options.from.col + 1;
+        }
+
+        while (options.wrap && row < this.lines.length - 1 && col === -1) {
+            row += 1;
+            col = this.lines[row].indexOf(target);
+        }
+
+        if (col === -1) {
+            return null;
+        }
+
+        col += options.offset;
+        while (col >= this.lines[row].length) {
+            if (options.wrap && row < this.lines.length - 1) {
+                col -= this.lines[row].length;
+                row += 1;
+            } else {
+                col = this.lines[row].length - 1;
+            }
+        }
+
+        return {row: row, col: col};
+    };
+
+    Vimulator.Base.prototype.findLast = function (target, options) {
+        var row, col, lineBefore;
+
+        options = options || {};
+        options.offset = options.offset || 0;
+        options.from = options.from || this.cursor;
+
+        lineBefore = this.currentLine().substr(0, options.from.col);
+        row = options.from.row;
+        col = lineBefore.lastIndexOf(target);
+
+        while (options.wrap && row > 0 && col === -1) {
+            row -= 1;
+            col = this.lines[row].lastIndexOf(target);
+        }
+
+        if (col === -1) {
+            return null;
+        }
+
+        col += options.offset;
+        while (col < 0) {
+            if (options.wrap && row > 0) {
+                col += this.lines[row].length - 1;
+                row -= 1;
+            } else {
+                col = 0;
+            }
+        }
+
+        return {row: row, col: col};
+    };
 }());
