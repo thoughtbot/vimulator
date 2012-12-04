@@ -108,7 +108,7 @@
         if (this.command) {
             multiplier = this.multiplier ? ~~this.multiplier : null;
             desc += this.command.description(multiplier, this.argument);
-        } else {
+        } else if (!this.cancelled) {
             desc += '<b>&hellip;</b>';
         }
 

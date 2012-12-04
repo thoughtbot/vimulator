@@ -352,6 +352,11 @@ describe("Operation", function () {
             expect(op.description()).toBe("<b>&hellip;</b>");
         });
 
+        it("is blank if the operation has been cancelled", function () {
+            op.cancel();
+            expect(op.description()).toBe("");
+        });
+
         it("includes the multiplier", function () {
             op.multiplier = 12;
             expect(op.description()).toBe(
