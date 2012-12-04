@@ -77,6 +77,8 @@
                     textObject = textObjects[key];
                     if (textObject) {
                         desc += " " + textObject.name;
+                    } else if (key) {
+                        desc += " (unknown text object)";
                     }
                     return desc;
                 }
@@ -97,6 +99,8 @@
                     textObject = textObjects[key];
                     if (textObject) {
                         desc += " " + textObject.name;
+                    } else if (key) {
+                        desc += " (unknown text object)";
                     }
                     return desc;
                 }
