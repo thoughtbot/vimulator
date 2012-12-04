@@ -91,15 +91,26 @@
             repeatable: true,
             argument: "operation",
             callback: function (vim, count, motion) {
-                var before, after;
+                var before, after, range;
 
                 before = {row: vim.cursor.row, col: vim.cursor.col};
-                motion.execute(vim, count);
+                range = motion.execute(vim, count);
                 after = {row: vim.cursor.row, col: vim.cursor.col};
+
+                //TODO Refactor normal motions to return a range.
+                //  Would allow a lot of the logic here to be moved.
+                if (/[ai]/.test(motion.commandKey)) {
+                    if (!range) {
+                        return;
+                    }
+
+                    before = range.start;
+                    after = range.end;
+                }
 
                 // Some motions change the character the cursor lands on,
                 // other motions do not
-                if (/[EeWw$ftFT]/.test(motion.commandKey)) {
+                if (/[EeWw$ftFTai]/.test(motion.commandKey)) {
                     after.col += 1;
                 }
 
