@@ -274,6 +274,24 @@
                     return "Jump to the end of the file";
                 }
             }
+        }),
+
+        //RETURN
+        '\u000D': new C({
+            callback: function (vim, count) {
+                var col;
+                vim.moveCursorRelative(count, 0);
+                col = vim.currentLine().search(/[^\s]/);
+                vim.moveCursorCol(col);
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Move to the start of the next line";
+                } else {
+                    return "Move to the start of the " + U.ordinalize(count) +
+                           " line after the cursor";
+                }
+            }
         })
     };
 }());

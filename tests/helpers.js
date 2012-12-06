@@ -1,4 +1,5 @@
 ESC = '\u001B';
+RETURN = '\u000D';
 
 function pressKeys(keys) {
     jQuery.each(keys.split(''), function (i, key) {
