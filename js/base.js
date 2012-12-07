@@ -44,7 +44,10 @@
 
         // Use keyup for special characters like escape
         $(window).keyup(function (e) {
-            if (e.keyCode < 32) {
+            if (
+                e.keyCode === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
+                e.keyCode === Vimulator.Utils.Keys.ESC.charCodeAt(0)
+            ) {
                 vim.keyPress(e.keyCode);
                 return false;
             }
