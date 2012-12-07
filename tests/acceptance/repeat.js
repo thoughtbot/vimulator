@@ -23,6 +23,11 @@ describe("Repeating the last command with .", function () {
         expect(currentText()).toBe("Here ore some words, they ore all here");
     });
 
+    it("repeats backspaces", function () {
+        pressKeys("ea" + BACKSPACE + ESC + "e.e.");
+        expect(currentText()).toBe("Her ar som words, they are all here");
+    });
+
     it("does not repeat motions", function () {
         pressKeys("3l");
         expect(cursorPosition()).toEqual({row: 0, col: 3});

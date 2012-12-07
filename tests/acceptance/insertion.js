@@ -95,3 +95,26 @@ describe("Substituting lines with S", function () {
         expect(currentText()).toBe("1 and 2\nThird\nFourth");
     });
 });
+
+describe("Deleting characters with backspace", function () {
+    it("deletes a character before the cursor", function () {
+        reset("Hello world!!1");
+        pressKeys("A" + BACKSPACE + BACKSPACE + ESC);
+        expect(currentText()).toBe("Hello world!");
+        expect(cursorPosition()).toEqual({row: 0, col: 11});
+    });
+
+    it("deletes line breaks", function () {
+        reset("First line\nSecond line\nThird line");
+        pressKeys("ja" + BACKSPACE + BACKSPACE + ESC);
+        expect(currentText()).toBe("First lineecond line\nThird line");
+        expect(cursorPosition()).toEqual({row: 0, col: 9});
+    });
+
+    it("does not delete beyond the end of the document", function () {
+        reset("Hello world");
+        pressKeys("gI" + BACKSPACE + BACKSPACE + ESC);
+        expect(currentText()).toBe("Hello world");
+        expect(cursorPosition()).toEqual({row: 0, col: 0});
+    });
+});

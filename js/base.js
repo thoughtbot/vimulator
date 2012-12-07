@@ -36,9 +36,15 @@
     Vimulator.Base.prototype.bindKeyListeners = function () {
         var vim = this;
 
+        this.input = $('<input type="text">').appendTo(this.container)
+                                             .focus()
+                                             .blur(function () {
+                                                 $(this).focus();
+                                             });
+
         // Use keyup for special characters like escape
         $(window).keyup(function (e) {
-            if (e.keyCode === 27) {
+            if (e.keyCode < 32) {
                 vim.keyPress(e.keyCode);
                 return false;
             }
@@ -136,13 +142,35 @@
         return this.lines[this.cursor.row];
     };
 
-    Vimulator.Base.prototype.appendText = function (text) {
-        line = this.currentLine();
-        this.lines[this.cursor.row] =
-                line.substr(0, this.cursor.col) +
-                text +
-                line.substr(this.cursor.col);
-        this.cursor.col += text.length;
+    Vimulator.Base.prototype.appendChr = function (chr) {
+        var line;
+
+        if (chr === Vimulator.Utils.Keys.BACKSPACE) {
+            this.removeChr();
+        } else {
+            line = this.currentLine();
+            this.lines[this.cursor.row] =
+                    line.substr(0, this.cursor.col) +
+                    chr +
+                    line.substr(this.cursor.col);
+            this.cursor.col += 1;
+        }
+    };
+
+    Vimulator.Base.prototype.removeChr = function () {
+        var line = this.currentLine();
+
+        if (this.cursor.col === 0 && this.cursor.row > 0) {
+            this.moveCursorRelative(-1, '$');
+            this.cursor.col += 1; //FIXME
+            this.lines[this.cursor.row] += line;
+            this.removeRows(this.cursor.row + 1, this.cursor.row + 2);
+        } else if (this.cursor.col > 0) {
+            this.lines[this.cursor.row] =
+                    line.substr(0, this.cursor.col - 1) +
+                    line.substr(this.cursor.col);
+            this.cursor.col -= 1;
+        }
     };
 
     Vimulator.Base.prototype.insertRowBelow = function (text, index) {

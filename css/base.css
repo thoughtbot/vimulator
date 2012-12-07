@@ -3,6 +3,10 @@
     margin: 20px auto;
     font-family: 'Arial', sans-serif;
 }
+.vimulator input {
+    position: absolute;
+    left: -9999px;
+}
 .vimulator pre {
     position: relative;
     z-index: 2;

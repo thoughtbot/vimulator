@@ -13,7 +13,7 @@ describe("InsertMode", function () {
             vim = jasmine.createSpyObj("vim", [
                 "moveCursorRelative",
                 "setMode",
-                "appendText"
+                "appendChr"
             ]);
             vim.registers = {};
             im = new Vimulator.InsertMode(vim);
@@ -33,7 +33,7 @@ describe("InsertMode", function () {
             for (i = 0; i < chars.length; i +=1) {
                 chr = chars[i];
                 im.keyPress(chr);
-                expect(vim.appendText).toHaveBeenCalledWith(chr);
+                expect(vim.appendChr).toHaveBeenCalledWith(chr);
             }
         });
 

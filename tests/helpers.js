@@ -1,5 +1,6 @@
 ESC = '\u001B';
 RETURN = '\u000D';
+BACKSPACE = '\u0008';
 
 function pressKeys(keys) {
     jQuery.each(keys.split(''), function (i, key) {

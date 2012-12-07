@@ -4,8 +4,9 @@
     Vimulator.Utils = {};
 
     Vimulator.Utils.Keys = K = {
-        ESC: '\u001B',
-        RETURN: '\u000D'
+        BACKSPACE:  '\u0008',
+        RETURN:     '\u000D',
+        ESC:        '\u001B'
     };
 
     Vimulator.Utils.pluralize = function (count, word) {

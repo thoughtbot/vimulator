@@ -28,7 +28,7 @@
             return op;
         } else {
             this.vim.registers["."] += key;
-            this.vim.appendText(key);
+            this.vim.appendChr(key);
         }
     };
 }());
