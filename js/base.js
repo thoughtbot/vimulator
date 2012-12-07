@@ -52,8 +52,10 @@
 
         // Use keypress for general characters
         $(window).keypress(function (e) {
-            vim.keyPress(e.keyCode);
-            return false;
+            if (e.keyCode >= 32) {
+                vim.keyPress(e.keyCode);
+                return false;
+            }
         });
     };
 
