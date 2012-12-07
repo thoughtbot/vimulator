@@ -126,16 +126,15 @@
                 } else {
                     vim.removeRange(before, after);
                     if (before.row > after.row || before.row == after.row && before.col > after.col) {
-                        vim.moveCursor(after.row, after.col);
+                        vim.moveCursor(after.row, after.col - 1);
                     } else {
-                        vim.moveCursor(before.row, before.col);
+                        vim.moveCursor(before.row, before.col - 1);
                     }
                 }
 
-                if (motion.commandKey === '$') {
-                    vim.cursor.col += 1;
+                if (vim.cursor.col > 0) {
+                    vim.cursor.col += 1; //FIXME
                 }
-
                 vim.setMode("insert");
             },
             subCommands: new Vimulator.CommandList(

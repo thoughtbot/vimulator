@@ -127,6 +127,17 @@ describe("The change operator c", function () {
             pressKeys("2c2w" + "Lovely" + ESC);
             expect(currentText()).toBe("Lovely words!");
         });
+
+        it("can change to the end of line", function () {
+            pressKeys("4wc2w" + "things." + ESC);
+            expect(currentText()).toBe("Here are, some things.");
+        });
+
+        it("can wrap onto multiple lines", function () {
+            reset("Some words\non several lines");
+            pressKeys("wc3w" + "short" + ESC);
+            expect(currentText()).toBe("Some short lines");
+        });
     });
 
     describe("with the e motion", function () {
