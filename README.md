@@ -49,10 +49,10 @@ objects:
 
 ### Line search
 
-* <kbd>f</kbd>: Find the next occurrence of a chracter
-* <kbd>F</kbd>: Find the previous occurrence of a chracter
+* <kbd>f</kbd>: Find the next occurrence of a character
+* <kbd>F</kbd>: Find the previous occurrence of a character
 * <kbd>t</kbd>: Find the character before the next occurrence of a character
-* <kbd>T</kbd>: Find the character after the previous ocurrence of a chracter
+* <kbd>T</kbd>: Find the character after the previous ocurrence of a character
 * <kbd>;</kbd>: Repeat the last line search
 * <kbd>,</kbd>: Repeat the last line search, reversing the direction
 
