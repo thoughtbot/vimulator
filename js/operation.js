@@ -40,7 +40,7 @@
         ) {
             this.multiplier = ~~('' + (this.multiplier || '') + key);
             return;
-        } else if (!this.commandPrefix && /[gz]/.test(key)) {
+        } else if (!this.command && !this.commandPrefix && /[gz]/.test(key)) {
             // g and z are special: They are prefixes to other commands rather
             // than being commands in their own right.
             this.commandPrefix = key;

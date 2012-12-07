@@ -191,4 +191,25 @@ describe("The change operator c", function () {
             expect(currentText()).toBe("One row");
         });
     });
+
+    describe("with line motions", function () {
+        beforeEach(function () {
+            reset("First\nSecond\nThird\nFourth");
+        });
+
+        it("changes to the end of the file with G", function () {
+            pressKeys("jlcG" + "Last" + ESC);
+            expect(currentText()).toBe("First\nLast");
+        });
+
+        it("changes to the beginning of the file with gg", function () {
+            pressKeys("Gkcgg" + "1st, 2nd, 3rd" + ESC);
+            expect(currentText()).toBe("1st, 2nd, 3rd\nFourth");
+        });
+
+        it("changes to a specific line with [count]G", function () {
+            pressKeys("jc3G" + "2 and 3" + ESC);
+            expect(currentText()).toBe("First\n2 and 3\nFourth");
+        });
+    });
 });

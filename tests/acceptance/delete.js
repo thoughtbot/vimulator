@@ -180,4 +180,28 @@ describe("The delete operator d", function () {
             expect(currentText()).toBe("ne row");
         });
     });
+
+    describe("with line motions", function () {
+        beforeEach(function () {
+            reset("First\nSecond\nThird\nFourth");
+        });
+
+        it("deletes to the end of the file with G", function () {
+            pressKeys("jldG");
+            expect(currentText()).toBe("First");
+            expect(cursorPosition()).toEqual({row: 0, col: 0});
+        });
+
+        it("deletes to the beginning of the file with gg", function () {
+            pressKeys("Gkdgg");
+            expect(currentText()).toBe("Fourth");
+            expect(cursorPosition()).toEqual({row: 0, col: 0});
+        });
+
+        it("deletes to a specific line with [count]G", function () {
+            pressKeys("jd3G");
+            expect(currentText()).toBe("First\nFourth");
+            expect(cursorPosition()).toEqual({row: 1, col: 0});
+        });
+    });
 });

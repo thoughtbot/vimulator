@@ -34,8 +34,9 @@
         'd': new C({
             repeatable: true,
             argument: "operation",
+            defaultCount: null,
             callback: function (vim, count, motion) {
-                var before, after, range;
+                var before, after, range, firstRow, lastRow;
 
                 before = {row: vim.cursor.row, col: vim.cursor.col};
                 range = motion.execute(vim, count);
@@ -58,13 +59,18 @@
                     after.col += 1;
                 }
 
-                // d, j and k delete whole rows
-                if (/[dj]/.test(motion.commandKey)) {
-                    vim.removeRows(before.row, after.row + 1);
-                    vim.moveCursor(before.row, '^');
-                } else if (/[k]/.test(motion.commandKey)) {
-                    vim.removeRows(after.row, before.row + 1);
-                    vim.moveCursor(after.row, '^');
+                // d, G, gg, j and k delete whole rows
+                if (/[djkG]|gg/.test(motion.commandKey)) {
+                    if (before.row < after.row) {
+                        firstRow = before.row;
+                        lastRow = after.row + 1;
+                    } else {
+                        firstRow = after.row;
+                        lastRow = before.row + 1;
+                    }
+
+                    vim.removeRows(firstRow, lastRow);
+                    vim.moveCursor(lastRow, '^');
                 } else {
                     vim.removeRange(before, after);
                 }
@@ -88,8 +94,9 @@
         'c': new C({
             repeatable: true,
             argument: "operation",
+            defaultCount: null,
             callback: function (vim, count, motion) {
-                var before, after, range;
+                var before, after, range, firstRow, lastRow;
 
                 before = {row: vim.cursor.row, col: vim.cursor.col};
                 range = motion.execute(vim, count);
@@ -113,14 +120,18 @@
                 }
 
                 // c, j and k change whole rows
-                if (/[cj]/.test(motion.commandKey)) {
-                    vim.removeRows(before.row + 1, after.row + 1);
-                    vim.replaceRow('', before.row);
-                    vim.moveCursor(before.row, 0);
-                } else if (/[k]/.test(motion.commandKey)) {
-                    vim.removeRows(after.row + 1, before.row + 1);
-                    vim.replaceRow('', after.row);
-                    vim.moveCursor(after.row, 0);
+                if (/[cjkG]|gg/.test(motion.commandKey)) {
+                    if (before.row < after.row) {
+                        firstRow = before.row;
+                        lastRow = after.row + 1;
+                    } else {
+                        firstRow = after.row;
+                        lastRow = before.row + 1;
+                    }
+
+                    vim.removeRows(firstRow + 1, lastRow);
+                    vim.replaceRow('', firstRow);
+                    vim.moveCursor(firstRow, 0);
                 } else {
                     vim.removeRange(before, after);
                     if (before.row > after.row || before.row == after.row && before.col > after.col) {
