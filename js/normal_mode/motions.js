@@ -269,8 +269,7 @@
             }
         }),
 
-        //RETURN
-        '\u000D': new C({
+        '+': new C({
             callback: function (vim, count) {
                 vim.moveCursorRelative(count, '^');
             },
@@ -284,4 +283,6 @@
             }
         })
     };
+
+    Vimulator.NormalMode.Motions[U.Keys.RETURN] = Vimulator.NormalMode.Motions['+'];
 }());

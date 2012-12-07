@@ -303,4 +303,9 @@ describe("The return motion", function () {
         pressKeys("2" + RETURN);
         expect(cursorPosition()).toEqual({row: 2, col: 2});
     });
+
+    it("is the same as +", function () {
+        pressKeys("2l+");
+        expect(cursorPosition()).toEqual({row: 1, col: 0});
+    });
 });
