@@ -1,13 +1,4 @@
 (function () {
-    var escapeCommand = new Vimulator.Command({
-        callback: function (vim) {
-            vim.setMode("normal");
-            vim.moveCursorRelative(0, -1);
-        },
-        description: function () {
-            return "<kbd>ESC</kbd> Return to normal mode";
-        }
-    });
     var C = Vimulator.Command,
         U = Vimulator.Utils;
 
@@ -20,12 +11,19 @@
         this.vim.registers["."] = "";
     };
 
+    Vimulator.InsertMode.prototype.commandList = function () {
+        this.commands = this.commands || new Vimulator.CommandList(
+            Vimulator.InsertMode.Commands
+        );
+        return this.commands;
+    };
+
     Vimulator.InsertMode.prototype.keyPress = function (key) {
         var op;
 
-        if (key === U.Keys.ESC) {
-            op = new Vimulator.Operation;
-            op.setCommand(escapeCommand);
+        if (Vimulator.InsertMode.Commands.hasOwnProperty(key)) {
+            op = new Vimulator.Operation(this.commandList());
+            op.keyPress(key);
             op.execute(this.vim);
             return op;
         } else {
