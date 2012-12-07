@@ -125,12 +125,14 @@
         }
     };
     Vimulator.Base.prototype.moveCursorCol = function (col) {
+        var line = this.currentLine();
+
         this.cursor.col = col;
-        if (col === '$' || this.cursor.col >= this.lines[this.cursor.row].length) {
-            this.cursor.col = this.currentLine().length - 1;
+        if (col === '$' || this.cursor.col >= line.length) {
+            this.cursor.col = line.length - 1;
         }
         if (col === '^') {
-            this.cursor.col = this.currentLine().search(/[^\s]/);
+            this.cursor.col = line.search(/[^\s]/);
         }
         if (this.cursor.col < 0) {
             this.cursor.col = 0;
