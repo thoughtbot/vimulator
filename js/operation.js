@@ -1,4 +1,6 @@
 (function () {
+    var U = Vimulator.Utils;
+
     Vimulator.Operation = function (context) {
         this.context = context;
         this.multiplier = null;
@@ -93,12 +95,18 @@
         var desc, keys, multiplier;
 
         keys = function (str) {
-            if (str) {
-                str = '' + str;
-                return "<kbd>" + str.split("").join("</kbd> <kbd>") + "</kbd> ";
-            } else {
-                return "";
+            var i, keys;
+
+            if (!str) {
+                return '';
             }
+
+            str = '' + str;
+            keys = [];
+            for (i = 0; i < str.length; i++) {
+                keys.push("<kbd>" + U.keyName(str.charAt(i)) + "</kbd>");
+            }
+            return keys.join(' ') + ' ';
         };
         
         desc = keys(this.multiplier) +

@@ -1,4 +1,6 @@
 (function () {
+    var U = Vimulator.Utils;
+
     Vimulator.NormalMode = function (vim) {
         this.name = "normal";
         this.vim = vim;
@@ -32,8 +34,7 @@
     Vimulator.NormalMode.prototype.keyPress = function (key) {
         var op = this.currentOperation;
 
-        // Escape
-        if (key === '\u001B') {
+        if (key === U.Keys.ESC) {
             this.cancelOperation();
         } else {
             op.keyPress(key);

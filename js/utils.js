@@ -1,5 +1,12 @@
 (function () {
+    var K;
+
     Vimulator.Utils = {};
+
+    Vimulator.Utils.Keys = K = {
+        ESC: '\u001B',
+        RETURN: '\u000D'
+    };
 
     Vimulator.Utils.pluralize = function (count, word) {
         if (count === 1) {
@@ -24,9 +31,15 @@
 
     Vimulator.Utils.literalArgDescription = function (chr) {
         if (chr) {
-            return "<kbd>" + chr + "</kbd>";
+            return "<kbd>" + this.keyName(chr) + "</kbd>";
         } else {
             return "<b>&hellip;</b>";
         }
+    };
+
+    Vimulator.Utils.keyName = function (chr) {
+        if (chr === K.RETURN) { return "\u23CE"; }
+        if (chr === K.ESC)    { return "\u241B"; }
+        return chr;
     };
 }());

@@ -8,6 +8,8 @@
             return "<kbd>ESC</kbd> Return to normal mode";
         }
     });
+    var C = Vimulator.Command,
+        U = Vimulator.Utils;
 
     Vimulator.InsertMode = function (vim) {
         this.name = "insert";
@@ -21,8 +23,7 @@
     Vimulator.InsertMode.prototype.keyPress = function (key) {
         var op;
 
-        // Escape
-        if (key === '\u001B') {
+        if (key === U.Keys.ESC) {
             op = new Vimulator.Operation;
             op.setCommand(escapeCommand);
             op.execute(this.vim);
