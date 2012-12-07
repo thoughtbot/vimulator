@@ -11,7 +11,7 @@
             Vimulator.Base.prototype.render.apply(vim);
         }, this.delay);
 
-        if (op) {
+        if (op && op.description()) {
             li = this.commandList.find("li:first");
             if (li.length === 0 || li.hasClass("complete")) {
                 li = $("<li></li>").prependTo(this.commandList);
