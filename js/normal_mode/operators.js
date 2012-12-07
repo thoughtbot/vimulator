@@ -61,12 +61,10 @@
                 // d, j and k delete whole rows
                 if (/[dj]/.test(motion.commandKey)) {
                     vim.removeRows(before.row, after.row + 1);
-                    vim.moveCursorRow(before.row);
-                    vim.moveCursorCol(vim.currentLine().search(/[^\s]/));
+                    vim.moveCursor(before.row, '^');
                 } else if (/[k]/.test(motion.commandKey)) {
                     vim.removeRows(after.row, before.row + 1);
-                    vim.moveCursorRow(after.row);
-                    vim.moveCursorCol(vim.currentLine().search(/[^\s]/));
+                    vim.moveCursor(after.row, '^');
                 } else {
                     vim.removeRange(before, after);
                 }

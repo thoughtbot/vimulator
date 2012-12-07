@@ -14,8 +14,7 @@
         'I': new C({
             repeatable: true,
             callback: function (vim) {
-                var col = vim.currentLine().search(/[^\s]/);
-                vim.moveCursorCol(col);
+                vim.moveCursorCol('^');
                 vim.setMode("insert");
             },
             description: "Insert text at the start of the line" +

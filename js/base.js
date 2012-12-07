@@ -122,7 +122,10 @@
     Vimulator.Base.prototype.moveCursorCol = function (col) {
         this.cursor.col = col;
         if (col === '$' || this.cursor.col >= this.lines[this.cursor.row].length) {
-            this.cursor.col = this.lines[this.cursor.row].length - 1;
+            this.cursor.col = this.currentLine().length - 1;
+        }
+        if (col === '^') {
+            this.cursor.col = this.currentLine().search(/[^\s]/);
         }
         if (this.cursor.col < 0) {
             this.cursor.col = 0;
@@ -134,8 +137,16 @@
     };
     Vimulator.Base.prototype.moveCursorRelative = function(rows, cols) {
         var row, col;
-        if (rows === '$') { row = '$'; } else { row = this.cursor.row + rows; }
-        if (cols === '$') { col = '$'; } else { col = this.cursor.col + cols; }
+        if (typeof rows === 'string') {
+            row = rows;
+        } else {
+            row = this.cursor.row + rows;
+        }
+        if (typeof cols === 'string') {
+            col = cols;
+        } else {
+            col = this.cursor.col + cols;
+        }
         return this.moveCursor(row, col);
     };
 

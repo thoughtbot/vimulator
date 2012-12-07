@@ -67,8 +67,7 @@
 
         '^': new C({
             callback: function (vim) {
-                var col = vim.currentLine().search(/[^\s]/);
-                vim.moveCursorCol(col);
+                vim.moveCursorCol('^');
             },
             description: "Move to the first non-space on the line",
         }),
@@ -243,11 +242,8 @@
         'gg': new C({
             defaultCount: null,
             callback: function (vim, count) {
-                var col, row;
-                row = count ? count - 1 : 0;
-                vim.moveCursor(row, 0);
-                col = vim.currentLine().search(/[^\s]/);
-                vim.moveCursorCol(col);
+                var row = count ? count - 1 : 0;
+                vim.moveCursor(row, '^');
             },
             description: function (count) {
                 if (count) {
@@ -261,11 +257,8 @@
         'G': new C({
             defaultCount: null,
             callback: function (vim, count) {
-                var row, col;
-                row = count ? count - 1 : '$';
-                vim.moveCursor(row, 0);
-                col = vim.currentLine().search(/[^\s]/);
-                vim.moveCursorRelative(0, col);
+                var row = count ? count - 1 : '$';
+                vim.moveCursor(row, '^');
             },
             description: function (count) {
                 if (count) {
@@ -279,10 +272,7 @@
         //RETURN
         '\u000D': new C({
             callback: function (vim, count) {
-                var col;
-                vim.moveCursorRelative(count, 0);
-                col = vim.currentLine().search(/[^\s]/);
-                vim.moveCursorCol(col);
+                vim.moveCursorRelative(count, '^');
             },
             description: function (count) {
                 if (count === 1) {
