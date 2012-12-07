@@ -105,7 +105,8 @@
             for (i = 0; i < lastInsert.length; i++) {
                 this.keyPress(lastInsert.charCodeAt(i));
             }
-            this.keyPress(27);
+            this.setMode("normal");
+            this.moveCursorRelative(0, -1);
         }
     };
 
