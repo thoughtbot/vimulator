@@ -281,6 +281,19 @@
                            " line after the cursor";
                 }
             }
+        }),
+        '-': new C({
+            callback: function (vim, count) {
+                vim.moveCursorRelative(-count, '^');
+            },
+            description: function (count) {
+                if (count === 1) {
+                    return "Move to the start of the previous line";
+                } else {
+                    return "Move to the start of the " + U.ordinalize(count) +
+                           " line before the cursor";
+                }
+            }
         })
     };
 

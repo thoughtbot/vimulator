@@ -309,3 +309,25 @@ describe("The return motion", function () {
         expect(cursorPosition()).toEqual({row: 1, col: 0});
     });
 });
+
+describe("The minus motion", function () {
+    beforeEach(function () {
+        reset("  First\nSecond\nThird");
+        pressKeys("G");
+    });
+
+    it("moves the cursor to the start of the previous line", function () {
+        pressKeys("2l-");
+        expect(cursorPosition()).toEqual({row: 1, col: 0});
+    });
+
+    it("skips whitespace", function () {
+        pressKeys("--");
+        expect(cursorPosition()).toEqual({row: 0, col: 2});
+    });
+
+    it("accepts a numerical multiplier", function () {
+        pressKeys("2-");
+        expect(cursorPosition()).toEqual({row: 0, col: 2});
+    });
+});
