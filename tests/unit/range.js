@@ -1,4 +1,4 @@
-describe("InclusiveCharacterRange", function () {
+describe("CharacterRange set to inclusive", function () {
     var buffer, range;
 
     beforeEach(function () {
@@ -13,9 +13,10 @@ describe("InclusiveCharacterRange", function () {
 
     describe(".removeFrom", function () {
         it("can remove characters in a single line", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 4},
-                {row: 0, col: 9}
+                {row: 0, col: 9},
+                {inclusive: true}
             );
 
             range.removeFrom(buffer);
@@ -28,9 +29,10 @@ describe("InclusiveCharacterRange", function () {
         });
 
         it("can remove chracters over multiple lines", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 7},
-                {row: 2, col: 4}
+                {row: 2, col: 4},
+                {inclusive: true}
             );
 
             range.removeFrom(buffer);
@@ -41,9 +43,10 @@ describe("InclusiveCharacterRange", function () {
         });
 
         it("can remove characters to the end of a line", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 3},
-                {row: 0, col: 13}
+                {row: 0, col: 13},
+                {inclusive: true}
             );
 
             range.removeFrom(buffer);
@@ -56,9 +59,10 @@ describe("InclusiveCharacterRange", function () {
         });
 
         it("can accept a start position before the end position", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 9},
-                {row: 0, col: 4}
+                {row: 0, col: 4},
+                {inclusive: true}
             );
 
             range.removeFrom(buffer);
@@ -73,9 +77,10 @@ describe("InclusiveCharacterRange", function () {
 
     describe(".replaceIn", function () {
         it("can replace characters in a single line", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 4},
-                {row: 0, col: 9}
+                {row: 0, col: 9},
+                {inclusive: true}
             );
 
             range.replaceIn(buffer, "l-l-");
@@ -88,9 +93,10 @@ describe("InclusiveCharacterRange", function () {
         });
 
         it("can replace chracters over multiple lines", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 7},
-                {row: 2, col: 4}
+                {row: 2, col: 4},
+                {inclusive: true}
             );
 
             range.replaceIn(buffer, "-");
@@ -101,9 +107,10 @@ describe("InclusiveCharacterRange", function () {
         });
 
         it("can replace characters to the end of a line", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 3},
-                {row: 0, col: 13}
+                {row: 0, col: 13},
+                {inclusive: true}
             );
 
             range.replaceIn(buffer, "...");
@@ -116,9 +123,10 @@ describe("InclusiveCharacterRange", function () {
         });
 
         it("can accept a start position before the end position", function () {
-            range = new Vimulator.InclusiveCharacterRange(
+            range = new Vimulator.CharacterRange(
                 {row: 0, col: 9},
-                {row: 0, col: 4}
+                {row: 0, col: 4},
+                {inclusive: true}
             );
 
             range.replaceIn(buffer, "bee-");
@@ -132,11 +140,145 @@ describe("InclusiveCharacterRange", function () {
     });
 });
 
-describe("ExclusiveCharacterRange", function () {
-    describe(".removeFrom", function () {
+describe("CharacterRange set to exclusive", function () {
+    var buffer, range;
+
+    beforeEach(function () {
+        buffer = {
+            lines: [
+                "The first line",
+                "The second line",
+                "The third line"
+            ]
+        };
     });
 
-    describe(".replace", function () {
+    describe(".removeFrom", function () {
+        it("can remove characters in a single line", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 4},
+                {row: 0, col: 9},
+                {inclusive: false}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "The  line",
+                "The second line",
+                "The third line"
+            ]);
+        });
+
+        it("can remove chracters over multiple lines", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 7},
+                {row: 2, col: 4},
+                {inclusive: false}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "The firthird line"
+            ]);
+        });
+
+        it("cannot remove characters to the end of a line", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 3},
+                {row: 0, col: 13},
+                {inclusive: false}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "Thee",
+                "The second line",
+                "The third line"
+            ]);
+        });
+
+        it("can accept a start position before the end position", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 9},
+                {row: 0, col: 4},
+                {inclusive: false}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "The  line",
+                "The second line",
+                "The third line"
+            ]);
+        });
+    });
+
+    describe(".replaceIn", function () {
+        it("can replace characters in a single line", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 4},
+                {row: 0, col: 9},
+                {inclusive: false}
+            );
+
+            range.replaceIn(buffer, "l-l-");
+
+            expect(buffer.lines).toEqual([
+                "The l-l- line",
+                "The second line",
+                "The third line"
+            ]);
+        });
+
+        it("can replace chracters over multiple lines", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 7},
+                {row: 2, col: 4},
+                {inclusive: false}
+            );
+
+            range.replaceIn(buffer, "-");
+
+            expect(buffer.lines).toEqual([
+                "The fir-third line"
+            ]);
+        });
+
+        it("cannot replace characters to the end of a line", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 3},
+                {row: 0, col: 13},
+                {inclusive: false}
+            );
+
+            range.replaceIn(buffer, "...");
+
+            expect(buffer.lines).toEqual([
+                "The...e",
+                "The second line",
+                "The third line"
+            ]);
+        });
+
+        it("can accept a start position before the end position", function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 9},
+                {row: 0, col: 4},
+                {inclusive: false}
+            );
+
+            range.replaceIn(buffer, "bee-");
+
+            expect(buffer.lines).toEqual([
+                "The bee- line",
+                "The second line",
+                "The third line"
+            ]);
+        });
     });
 });
 
