@@ -16,6 +16,7 @@ describe("TextObject", function () {
 
             expect(range.start).toEqual({row: 0, col: 11});
             expect(range.end).toEqual({row: 0, col: 21});
+            expect(range.inclusive).toBe(true);
         });
 
         it("works accross multiple lines", function () {
@@ -26,6 +27,7 @@ describe("TextObject", function () {
 
             expect(range.start).toEqual({row: 0, col: 11});
             expect(range.end).toEqual({row: 2, col: 12});
+            expect(range.inclusive).toBe(true);
         });
 
         it("returns null for unmatched parens", function () {
@@ -49,6 +51,7 @@ describe("TextObject", function () {
 
             expect(range.start).toEqual({row: 0, col: 10});
             expect(range.end).toEqual({row: 0, col: 22});
+            expect(range.inclusive).toBe(true);
         });
 
         it("works accross multiple lines", function () {
@@ -59,6 +62,7 @@ describe("TextObject", function () {
 
             expect(range.start).toEqual({row: 0, col: 10});
             expect(range.end).toEqual({row: 2, col: 13});
+            expect(range.inclusive).toBe(true);
         });
 
         it("returns null for unmatched parens", function () {

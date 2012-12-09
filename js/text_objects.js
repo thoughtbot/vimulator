@@ -20,7 +20,7 @@
         });
 
         if (start && end) {
-            return {start: start, end: end};
+            return new Vimulator.CharacterRange(start, end, {inclusive: true});
         } else {
             return null;
         }
@@ -39,7 +39,7 @@
         });
 
         if (start && end) {
-            return {start: start, end: end};
+            return new Vimulator.CharacterRange(start, end, {inclusive: true});
         } else {
             return null;
         }

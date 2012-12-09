@@ -49,8 +49,9 @@
                         return;
                     }
 
-                    before = range.start;
-                    after = range.end;
+                    range.removeFrom(vim);
+                    vim.moveCursor(range.start.row, range.start.col);
+                    return;
                 }
 
                 // Some motions delete the character the cursor lands on,
@@ -109,8 +110,10 @@
                         return;
                     }
 
-                    before = range.start;
-                    after = range.end;
+                    range.replaceIn(vim, "");
+                    vim.moveCursor(range.start.row, range.start.col);
+                    vim.setMode("insert");
+                    return;
                 }
 
                 // Some motions change the character the cursor lands on,
