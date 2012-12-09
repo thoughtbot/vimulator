@@ -282,10 +282,103 @@ describe("CharacterRange set to exclusive", function () {
     });
 });
 
-describe("InclusiveLineRange", function () {
-    describe(".removeFrom", function () {
+describe("LineRange", function () {
+    var buffer, range;
+
+    beforeEach(function () {
+        buffer = {
+            lines: [
+                "The first line",
+                "The second line",
+                "The third line"
+            ]
+        };
     });
 
-    describe(".replace", function () {
+    describe(".removeFrom", function () {
+        it("can remove a single line", function () {
+            range = new Vimulator.LineRange(
+                {row: 0, col: 0},
+                {row: 0, col: 3}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "The second line",
+                "The third line"
+            ]);
+        });
+
+        it("can remove multiple lines", function () {
+            range = new Vimulator.LineRange(
+                {row: 0, col: 7},
+                {row: 1, col: 5}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "The third line"
+            ]);
+        });
+
+        it("can accept an end row before the start row", function () {
+            range = new Vimulator.LineRange(
+                {row: 1, col: 7},
+                {row: 0, col: 5}
+            );
+
+            range.removeFrom(buffer);
+
+            expect(buffer.lines).toEqual([
+                "The third line"
+            ]);
+        });
+    });
+
+    describe(".replaceIn", function () {
+        it("can replace a single line", function () {
+            range = new Vimulator.LineRange(
+                {row: 0, col: 0},
+                {row: 0, col: 3}
+            );
+
+            range.replaceIn(buffer, "Line 1");
+
+            expect(buffer.lines).toEqual([
+                "Line 1",
+                "The second line",
+                "The third line"
+            ]);
+        });
+
+        it("can replace multiple lines", function () {
+            range = new Vimulator.LineRange(
+                {row: 0, col: 7},
+                {row: 1, col: 5}
+            );
+
+            range.replaceIn(buffer, "1 & 2");
+
+            expect(buffer.lines).toEqual([
+                "1 & 2",
+                "The third line"
+            ]);
+        });
+
+        it("can accept an end row before the start row", function () {
+            range = new Vimulator.LineRange(
+                {row: 1, col: 7},
+                {row: 0, col: 5}
+            );
+
+            range.replaceIn(buffer, "Replacement");
+
+            expect(buffer.lines).toEqual([
+                "Replacement",
+                "The third line"
+            ]);
+        });
     });
 });
