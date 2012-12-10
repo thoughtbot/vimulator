@@ -40,7 +40,11 @@
                 var range = motion.execute(vim, count);
                 if (range) {
                     range.removeFrom(vim);
-                    vim.moveCursor(range.start.row, range.start.col);
+                    if (motion.commandKey === 'G') {
+                        vim.moveCursor(range.start.row, '^');
+                    } else {
+                        vim.moveCursor(range.start.row, range.start.col);
+                    }
                 }
             },
             subCommands: new Vimulator.CommandList(
