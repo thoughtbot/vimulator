@@ -51,12 +51,13 @@
                 deleteSubCommands,
                 Vimulator.NormalMode.Motions,
                 Vimulator.NormalMode.LineSearch,
+                Vimulator.NormalMode.MarkMotions,
                 Vimulator.TextObject.Commands
             ),
-            description: function (count, motion) {
+            description: function (count, motion, vim) {
                 var desc = "Delete ";
                 if (motion) {
-                    return desc + motion.description();
+                    return desc + motion.description(vim);
                 } else {
                     return desc + "<b>&hellip;</b>";
                 }
@@ -85,12 +86,13 @@
                 changeSubCommands,
                 Vimulator.NormalMode.Motions,
                 Vimulator.NormalMode.LineSearch,
+                Vimulator.NormalMode.MarkMotions,
                 Vimulator.TextObject.Commands
             ),
-            description: function (count, motion) {
+            description: function (count, motion, vim) {
                 var desc = "Change ";
                 if (motion) {
-                    return desc + motion.description();
+                    return desc + motion.description(vim);
                 } else {
                     return desc + "<b>&hellip;</b>";
                 }

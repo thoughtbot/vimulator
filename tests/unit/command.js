@@ -102,14 +102,15 @@ describe("Command", function () {
         });
 
         it("recieves the default count", function () {
-            var desc, cmd;
+            var desc, cmd, vim;
             desc = jasmine.createSpy();
             cmd = new Vimulator.Command({description: desc});
+            vim = {};
 
-            cmd.description(null, "foo");
-            expect(desc).toHaveBeenCalledWith(1, "foo");
-            cmd.description(7, "foo");
-            expect(desc).toHaveBeenCalledWith(7, "foo");
+            cmd.description(null, "foo", vim);
+            expect(desc).toHaveBeenCalledWith(1, "foo", vim);
+            cmd.description(7, "foo", vim);
+            expect(desc).toHaveBeenCalledWith(7, "foo", vim);
         });
     });
 });

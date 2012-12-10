@@ -25,6 +25,12 @@ subset of normal mode commands, and an insert mode.
 * <kbd>+</kbd> or <kbd>Return</kbd>: Move to the start of the next line (after leading whitespace)
 * <kbd>-</kbd>: Move to the start of the previous line (after leading whitespace)
 
+### Marks
+
+* <kbd>m</kbd>: Create a mark
+* <kbd>\`</kbd>: Move to a given mark
+* <kbd>'</kbd>: Move to the line containing a given mark
+
 ### Insertion
 
 * <kbd>a</kbd>: Append text after the cursor

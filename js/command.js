@@ -7,9 +7,9 @@
         this.repeatable = options.repeatable || false;
 
         if (typeof options.description === "function") {
-            this.description = function (count, arg) {
+            this.description = function (count, arg, vim) {
                 count = count === null ? this.defaultCount : count;
-                return options.description(count, arg);
+                return options.description(count, arg, vim);
             };
         } else {
             this.description = function () {

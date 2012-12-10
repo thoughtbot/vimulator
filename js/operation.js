@@ -91,7 +91,7 @@
         return factor * (this.multiplier || 1);
     };
 
-    Vimulator.Operation.prototype.description = function () {
+    Vimulator.Operation.prototype.description = function (vim) {
         var desc, keys, multiplier;
 
         keys = function (str) {
@@ -114,7 +114,7 @@
 
         if (this.command) {
             multiplier = this.multiplier ? ~~this.multiplier : null;
-            desc += this.command.description(multiplier, this.argument);
+            desc += this.command.description(multiplier, this.argument, vim);
         } else if (!this.cancelled) {
             desc += '<b>&hellip;</b>';
         }

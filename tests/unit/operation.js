@@ -387,13 +387,14 @@ describe("Operation", function () {
         });
 
         it("passes the multiplier & argument to the command", function () {
-            var cmd = mockCommand("literal", "Replace");
+            var cmd = mockCommand("literal", "Replace"),
+                vim = {};
             op.multiplier = 4;
             op.setCommand(cmd, "r");
             op.argument = "p";
 
-            expect(op.description()).toBe("<kbd>4</kbd> <kbd>r</kbd> Replace");
-            expect(cmd.description).toHaveBeenCalledWith(4, "p");
+            expect(op.description(vim)).toBe("<kbd>4</kbd> <kbd>r</kbd> Replace");
+            expect(cmd.description).toHaveBeenCalledWith(4, "p", vim);
         });
     });
 

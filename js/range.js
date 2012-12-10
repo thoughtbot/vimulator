@@ -1,5 +1,8 @@
 (function () {
     function assignOrdered(subject, start, end) {
+        subject.originalStart = start;
+        subject.originalEnd = end;
+
         if (start.row < end.row || start.row == end.row && start.col < end.col) {
             subject.start = start;
             subject.end = end;
@@ -50,7 +53,7 @@
     };
 
     Vimulator.CharacterRange.prototype.toEOL = function (buffer) {
-        return this.end.col === buffer.lines[this.end.row].length - 1;
+        return this.originalEnd.col === buffer.lines[this.originalEnd.row].length - 1;
     };
 
 

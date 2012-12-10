@@ -11,13 +11,13 @@
             Vimulator.Base.prototype.render.apply(vim);
         }, this.delay);
 
-        if (op && op.description()) {
+        if (op && op.description(this)) {
             li = this.commandList.find("li:first");
             if (li.length === 0 || li.hasClass("complete")) {
                 li = $("<li></li>").prependTo(this.commandList);
             }
 
-            li.html(op.description())
+            li.html(op.description(this))
               .toggleClass("complete", op.complete() || op.cancelled);
         }
     };

@@ -18,6 +18,7 @@
         this.cursor = {row: 0, col: 0};
         this.lines = this.textContainer.text().split('\n');
         this.registers = {};
+        this.marks = {};
 
         this.render();
 

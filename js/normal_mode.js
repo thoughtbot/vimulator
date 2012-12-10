@@ -26,7 +26,9 @@
             Vimulator.NormalMode.Edits,
             Vimulator.NormalMode.LineSearch,
             Vimulator.NormalMode.Operators,
-            Vimulator.NormalMode.Repeat
+            Vimulator.NormalMode.Repeat,
+            Vimulator.NormalMode.Marks,
+            Vimulator.NormalMode.MarkMotions
         );
         return this.commands;
     };
