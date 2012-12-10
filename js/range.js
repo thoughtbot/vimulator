@@ -49,6 +49,11 @@
         buffer.lines.splice(this.start.row + 1, this.end.row - this.start.row);
     };
 
+    Vimulator.CharacterRange.prototype.toEOL = function (buffer) {
+        return this.end.col === buffer.lines[this.end.row].length - 1;
+    };
+
+
     Vimulator.LineRange = function (start, end) {
         assignOrdered(this, start, end);
     };
@@ -71,5 +76,9 @@
     Vimulator.LineRange.prototype.replaceIn = function (buffer, str) {
         var count = this.end.row - this.start.row + 1;
         buffer.lines.splice(this.start.row, count, str);
+    };
+
+    Vimulator.LineRange.prototype.toEOL = function (buffer) {
+        return false;
     };
 }());

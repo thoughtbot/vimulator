@@ -64,10 +64,15 @@
             argument: "operation",
             defaultCount: null,
             callback: function (vim, count, motion) {
-                var range = motion.execute(vim, count);
+                var range, toEOL;
+                range = motion.execute(vim, count);
                 if (range) {
+                    toEOL = range.toEOL(vim);
                     range.replaceIn(vim, "");
                     vim.moveCursor(range.start.row, range.start.col);
+                    if (toEOL) {
+                        vim.cursor.col += 1; //FIXME
+                    }
                     vim.setMode("insert");
                     return;
                 }
