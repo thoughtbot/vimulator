@@ -1,8 +1,11 @@
 (function () {
-    var C = Vimulator.Command,
-        U = Vimulator.Utils;
+    var C, U, CR, findForwards, untilForwards, findBackwards, untilBackwards;
 
-    function findForwards(vim, count, chr) {
+    C = Vimulator.Command;
+    U = Vimulator.Utils;
+    CR = Vimulator.CharacterRange;
+
+    findForwards = CR.captureInclusive(function (vim, count, chr) {
         var found, position;
 
         found = -1;
@@ -12,11 +15,9 @@
             vim.moveCursor(position.row, position.col);
             position = vim.findNext(chr);
         }
+    });
 
-        return found > 0;
-    }
-
-    function untilForwards(vim, count, chr, repeat) {
+    untilForwards = CR.captureExclusive(function (vim, count, chr, repeat) {
         if (vim.currentLine().charAt(vim.cursor.col + 1) === chr) {
             if (repeat && count === 1) {
                 count += 1;
@@ -27,9 +28,9 @@
         if (findForwards(vim, count, chr)) {
             vim.moveCursorRelative(0, -1);
         }
-    }
+    });
 
-    function findBackwards(vim, count, chr) {
+    findBackwards = CR.captureInclusive(function (vim, count, chr) {
         var found, position;
 
         found = -1;
@@ -39,11 +40,9 @@
             vim.moveCursor(position.row, position.col);
             position = vim.findLast(chr);
         }
+    });
 
-        return found > 0;
-    }
-
-    function untilBackwards(vim, count, chr, repeat) {
+    untilBackwards = CR.captureExclusive(function (vim, count, chr, repeat) {
         if (vim.currentLine().charAt(vim.cursor.col - 1) === chr) {
             if (repeat && count === 1) {
                 count += 1;
@@ -54,14 +53,14 @@
         if (findBackwards(vim, count, chr)) {
             vim.moveCursorRelative(0, 1);
         }
-    }
+    });
 
     Vimulator.NormalMode.LineSearch = {
         'f': new C({
             argument: "literal",
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 'f', chr: chr};
-                findForwards(vim, count, chr);
+                return findForwards(vim, count, chr);
             },
             description: function (count, chr) {
                 return "Find the " + U.ordinalize(count) + " occurence of " +
@@ -73,7 +72,7 @@
             argument: "literal",
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 'F', chr: chr};
-                findBackwards(vim, count, chr);
+                return findBackwards(vim, count, chr);
             },
             description: function (count, chr) {
                 return "Find the " + U.ordinalize(count) + " occurence of " +
@@ -85,7 +84,7 @@
             argument: "literal",
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 't', chr: chr};
-                untilForwards(vim, count, chr);
+                return untilForwards(vim, count, chr);
             },
             description: function (count, chr) {
                 return "Move to the " + U.ordinalize(count) + " occurence of " +
@@ -97,7 +96,7 @@
             argument: "literal",
             callback: function (vim, count, chr) {
                 vim.lastSearch = {op: 'T', chr: chr};
-                untilBackwards(vim, count, chr);
+                return untilBackwards(vim, count, chr);
             },
             description: function (count, chr) {
                 return "Move to the " + U.ordinalize(count) + " occurence of " +
@@ -120,7 +119,7 @@
                     'T': untilBackwards
                 };
 
-                findFuncs[vim.lastSearch.op](vim, count, vim.lastSearch.chr, true);
+                return findFuncs[vim.lastSearch.op](vim, count, vim.lastSearch.chr, true);
             },
             description: function (count) {
                 desc = "Repeat the last search ";

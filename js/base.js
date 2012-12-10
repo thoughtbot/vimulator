@@ -291,4 +291,11 @@
 
         return {row: row, col: col};
     };
+
+    Vimulator.Base.prototype.cursorCopy = function () {
+        return {
+            row: this.cursor.row,
+            col: this.cursor.col
+        };
+    };
 }());

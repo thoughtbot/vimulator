@@ -14,6 +14,26 @@
         assignOrdered(this, start, end);
     };
 
+    Vimulator.CharacterRange.capture = function (rangeOptions, callback) {
+        return function (vim) {
+            var start, end;
+            start = vim.cursorCopy();
+            callback.apply(this, arguments);
+            end = vim.cursorCopy();
+            if (start.row == end.row && start.col == end.col) {
+                return null;
+            } else {
+                return new Vimulator.CharacterRange(start, end, rangeOptions);
+            }
+        };
+    };
+    Vimulator.CharacterRange.captureExclusive = function (callback) {
+        return this.capture({inclusive: false}, callback);
+    };
+    Vimulator.CharacterRange.captureInclusive = function (callback) {
+        return this.capture({inclusive: true}, callback);
+    };
+
     Vimulator.CharacterRange.prototype.removeFrom = function (buffer) {
         this.replaceIn(buffer, "");
     };
@@ -31,6 +51,16 @@
 
     Vimulator.LineRange = function (start, end) {
         assignOrdered(this, start, end);
+    };
+
+    Vimulator.LineRange.capture = function (callback) {
+        return function (vim) {
+            var start, end;
+            start = vim.cursorCopy();
+            callback.apply(this, arguments);
+            end = vim.cursorCopy();
+            return new Vimulator.LineRange(start, end);
+        }
     };
 
     Vimulator.LineRange.prototype.removeFrom = function (buffer) {

@@ -1,41 +1,43 @@
 (function () {
     var C = Vimulator.Command,
-        U = Vimulator.Utils;
+        U = Vimulator.Utils,
+        CR = Vimulator.CharacterRange,
+        LR = Vimulator.LineRange;
 
     Vimulator.NormalMode.Motions = {
         // Character motions
 
         'h': new C({
-            callback: function (vim, count) {
+            callback: CR.captureExclusive(function (vim, count) {
                 vim.moveCursorRelative(0, -count);
-            },
+            }),
             description: function (count) {
                 return "Move left " + U.pluralize(count, "character");
             }
         }),
 
         'j': new C({
-            callback: function (vim, count) {
+            callback: LR.capture(function (vim, count) {
                 vim.moveCursorRelative(count, 0);
-            },
+            }),
             description: function (count) {
                 return "Move down " + U.pluralize(count, "line");
             }
         }),
 
         'k': new C({
-            callback: function (vim, count) {
+            callback: LR.capture(function (vim, count) {
                 vim.moveCursorRelative(-count, 0);
-            },
+            }),
             description: function (count) {
                 return "Move up " + U.pluralize(count, "line");
             }
         }),
 
         'l': new C({
-            callback: function (vim, count) {
+            callback: CR.captureExclusive(function (vim, count) {
                 vim.moveCursorRelative(0, count);
-            },
+            }),
             description: function (count) {
                 return "Move right " + U.pluralize(count, "character");
             }
@@ -45,16 +47,16 @@
         // Line motions
 
         '0': new C({
-            callback: function (vim) {
+            callback: CR.captureExclusive(function (vim) {
                 vim.moveCursorCol(0);
-            },
+            }),
             description: "Move to the start of the line"
         }),
 
         '$': new C({
-            callback: function (vim, count) {
+            callback: CR.captureInclusive(function (vim, count) {
                 vim.moveCursorRelative(count - 1, '$');
-            },
+            }),
             description: function (count) {
                 if (count === 1) {
                     return "Move to the end of the line";
@@ -66,9 +68,9 @@
         }),
 
         '^': new C({
-            callback: function (vim) {
+            callback: CR.captureExclusive(function (vim) {
                 vim.moveCursorCol('^');
-            },
+            }),
             description: "Move to the first non-space on the line",
         }),
 
@@ -77,7 +79,7 @@
         //TODO DRY this code
 
         'w': new C({
-            callback: function (vim, count) {
+            callback: CR.captureExclusive(function (vim, count) {
                 var words, result;
 
                 while (true) {
@@ -95,14 +97,14 @@
                         return;
                     }
                 }
-            },
+            }),
             description: function (count) {
                 return "Move forward " + U.pluralize(count, "word");
             }
         }),
 
         'W': new C({
-            callback: function (vim, count) {
+            callback: CR.captureExclusive(function (vim, count) {
                 var words, result;
 
                 while (true) {
@@ -120,7 +122,7 @@
                         return;
                     }
                 }
-            },
+            }),
             description: function (count) {
                 return "Move forward " + U.pluralize(count, "word") +
                        " (including punctuation)";
@@ -128,7 +130,7 @@
         }),
 
         'e': new C({
-            callback: function (vim, count) {
+            callback: CR.captureInclusive(function (vim, count) {
                 var words, result;
 
                 while (true) {
@@ -146,7 +148,7 @@
                         return;
                     }
                 }
-            },
+            }),
             description: function (count) {
                 if (count === 1) {
                     return "Move to the next word end";
@@ -158,7 +160,7 @@
         }),
 
         'E': new C({
-            callback: function (vim, count) {
+            callback: CR.captureInclusive(function (vim, count) {
                 var words, result;
 
                 while (true) {
@@ -176,7 +178,7 @@
                         return;
                     }
                 }
-            },
+            }),
             description: function (count) {
                 if (count === 1) {
                     return "Move to the next word end (including punctuation)";
@@ -188,7 +190,7 @@
         }),
 
         'b': new C({
-            callback: function (vim, count) {
+            callback: CR.captureExclusive(function (vim, count) {
                 var words, result;
 
                 while (true) {
@@ -205,14 +207,14 @@
                         return;
                     }
                 }
-            },
+            }),
             description: function (count) {
                 return "Move back " + U.pluralize(count, "word");
             }
         }),
 
         'B': new C({
-            callback: function (vim, count) {
+            callback: CR.captureExclusive(function (vim, count) {
                 var words, result;
 
                 while (true) {
@@ -229,7 +231,7 @@
                         return;
                     }
                 }
-            },
+            }),
             description: function (count) {
                 return "Move back " + U.pluralize(count, "word") +
                        " (including punctuation)";
@@ -241,10 +243,10 @@
 
         'gg': new C({
             defaultCount: null,
-            callback: function (vim, count) {
+            callback: LR.capture(function (vim, count) {
                 var row = count ? count - 1 : 0;
                 vim.moveCursor(row, '^');
-            },
+            }),
             description: function (count) {
                 if (count) {
                     return "Jump to line " + count;
@@ -256,10 +258,10 @@
 
         'G': new C({
             defaultCount: null,
-            callback: function (vim, count) {
+            callback: LR.capture(function (vim, count) {
                 var row = count ? count - 1 : '$';
                 vim.moveCursor(row, '^');
-            },
+            }),
             description: function (count) {
                 if (count) {
                     return "Jump to line " + count;
@@ -270,9 +272,9 @@
         }),
 
         '+': new C({
-            callback: function (vim, count) {
+            callback: LR.capture(function (vim, count) {
                 vim.moveCursorRelative(count, '^');
-            },
+            }),
             description: function (count) {
                 if (count === 1) {
                     return "Move to the start of the next line";
@@ -283,9 +285,9 @@
             }
         }),
         '-': new C({
-            callback: function (vim, count) {
+            callback: LR.capture(function (vim, count) {
                 vim.moveCursorRelative(-count, '^');
-            },
+            }),
             description: function (count) {
                 if (count === 1) {
                     return "Move to the start of the previous line";
