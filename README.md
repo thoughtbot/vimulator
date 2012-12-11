@@ -3,6 +3,9 @@
 Vimulator is a Vim simulator for teaching and demonstrating Vim. It has a
 subset of normal mode commands, and an insert mode.
 
+[Try it out](http://thoughtbot.github.com/vimulator/) and
+[run the tests](http://thoughtbot.github.com/vimulator/test.html) online.
+
 ## Supported commands
 
 ### Motions
