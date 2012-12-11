@@ -166,7 +166,7 @@ describe("The change operator c", function () {
         });
     });
 
-    describe("with the f command", function () {
+    describe("with the f and F searches", function () {
         beforeEach(function () {
             reset("Lots of Os on one row");
         });
@@ -174,6 +174,8 @@ describe("The change operator c", function () {
         it("changes up to and including the match", function () {
             pressKeys("cft" + "Bag" + ESC);
             expect(currentText()).toBe("Bags of Os on one row");
+            pressKeys("ecFB" + "Stack" + ESC);
+            expect(currentText()).toBe("Stacks of Os on one row");
         });
 
         it("accepts numerical multipliers", function () {
@@ -189,6 +191,19 @@ describe("The change operator c", function () {
         it("accepts multiple numerical multipliers", function () {
             pressKeys("2c2fo" + "O" + ESC);
             expect(currentText()).toBe("One row");
+        });
+    });
+
+    describe("with t and T searches", function () {
+        beforeEach(function () {
+            reset("Hello world");
+        });
+
+        it("changes up to the searched character", function () {
+            pressKeys("ctw" + "Under" + ESC);
+            expect(currentText()).toBe("Underworld");
+            pressKeys("$c2Tr" + "groun" + ESC);
+            expect(currentText()).toBe("Underground");
         });
     });
 

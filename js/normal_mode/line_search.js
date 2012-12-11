@@ -17,7 +17,7 @@
         }
     });
 
-    untilForwards = CR.captureExclusive(function (vim, count, chr, repeat) {
+    untilForwards = CR.captureInclusive(function (vim, count, chr, repeat) {
         if (vim.currentLine().charAt(vim.cursor.col + 1) === chr) {
             if (repeat && count === 1) {
                 count += 1;
@@ -30,7 +30,7 @@
         }
     });
 
-    findBackwards = CR.captureInclusive(function (vim, count, chr) {
+    findBackwards = CR.captureExclusive(function (vim, count, chr) {
         var found, position;
 
         found = -1;
