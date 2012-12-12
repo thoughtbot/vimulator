@@ -53,7 +53,7 @@
 
         textObjects = {};
         textObjects['b'] = new Vimulator.TextObject({
-            name: "brackets",
+            name: "parentheses",
             start: '(',
             end: ')'
         });

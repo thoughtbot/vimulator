@@ -4,30 +4,30 @@ describe("Text objects", function () {
             reset("Text (with a parenthetical) is great");
         });
 
-        it("can specify text within brackets", function () {
+        it("can specify text within parentheses", function () {
             pressKeys("3wdib");
             expect(currentText()).toBe("Text () is great");
         });
 
-        it("matches when the cursor is on the opening bracket", function () {
+        it("matches when the cursor is on the opening parenthesis", function () {
             pressKeys("f(dib");
             expect(currentText()).toBe("Text () is great");
         });
 
-        it("matches when the cursor is on the closing bracket", function () {
+        it("matches when the cursor is on the closing parenthesis", function () {
             pressKeys("f)dib");
             expect(currentText()).toBe("Text () is great");
         });
 
-        it("can specify text including the brackets", function () {
+        it("can specify text including the parentheses", function () {
             pressKeys("3wdab");
             expect(currentText()).toBe("Text  is great");
         });
 
-        it("does nothing if there are no brackets", function () {
-            reset("Some text, no brackets");
+        it("does nothing if there are no parentheses", function () {
+            reset("Some text, no parentheses");
             pressKeys("dab");
-            expect(currentText()).toBe("Some text, no brackets");
+            expect(currentText()).toBe("Some text, no parentheses");
         });
     });
 
