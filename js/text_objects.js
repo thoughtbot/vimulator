@@ -67,12 +67,13 @@
         });
         textObjects[']'] = textObjects['['];
 
-        textObjects['{'] = new Vimulator.TextObject({
+        textObjects['B'] = new Vimulator.TextObject({
           name: "curly braces",
           start: '{',
           end: '}'
         });
-        textObjects['}'] = textObjects['{'];
+        textObjects['{'] = textObjects['B'];
+        textObjects['}'] = textObjects['B'];
 
         return {
             'a': new C({

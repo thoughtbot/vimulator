@@ -94,5 +94,4 @@ describe("Text objects", function () {
               expect(currentText()).toBe("Some text, no brackets");
           });
       });
-
 });
