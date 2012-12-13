@@ -30,4 +30,69 @@ describe("Text objects", function () {
             expect(currentText()).toBe("Some text, no brackets");
         });
     });
+
+    describe("curly braces", function () {
+        beforeEach(function () {
+          reset("Text {with curly braces} is great");
+        });
+
+        it("can specify text within braces", function () {
+          pressKeys("3wdi}");
+          expect(currentText()).toBe("Text {} is great");
+        });
+
+        it("matches when the cursor is on the opening brace", function () {
+            pressKeys("f{di{");
+            expect(currentText()).toBe("Text {} is great");
+        });
+
+        it("matches when the cursor is on the closing brace", function () {
+            pressKeys("f}di}");
+            expect(currentText()).toBe("Text {} is great");
+        });
+
+        it("can specify text including the braces", function () {
+            pressKeys("3wda}");
+            expect(currentText()).toBe("Text  is great");
+        });
+
+        it("does nothing if there are no braces", function () {
+            reset("Some text, no braces");
+            pressKeys("da}");
+            expect(currentText()).toBe("Some text, no braces");
+        });
+    });
+
+      describe("square brackets", function () {
+          beforeEach(function () {
+            reset("Text [with a square bracket] is great");
+          });
+
+          it("can specify text within brackets", function () {
+            pressKeys("3wdi]");
+            expect(currentText()).toBe("Text [] is great");
+          });
+
+          it("matches when the cursor is on the opening bracket", function () {
+              pressKeys("f[di[");
+              expect(currentText()).toBe("Text [] is great");
+          });
+
+          it("matches when the cursor is on the closing bracket", function () {
+              pressKeys("f]di]");
+              expect(currentText()).toBe("Text [] is great");
+          });
+
+          it("can specify text including the brackets", function () {
+              pressKeys("3wda]");
+              expect(currentText()).toBe("Text  is great");
+          });
+
+          it("does nothing if there are no brackets", function () {
+              reset("Some text, no brackets");
+              pressKeys("da]");
+              expect(currentText()).toBe("Some text, no brackets");
+          });
+      });
+
 });

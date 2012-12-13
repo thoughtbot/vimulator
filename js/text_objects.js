@@ -60,6 +60,20 @@
         textObjects['('] = textObjects['b'];
         textObjects[')'] = textObjects['b'];
 
+        textObjects['['] = new Vimulator.TextObject({
+          name: "square brackets",
+          start: '[',
+          end: ']'
+        });
+        textObjects[']'] = textObjects['['];
+
+        textObjects['{'] = new Vimulator.TextObject({
+          name: "curly braces",
+          start: '{',
+          end: '}'
+        });
+        textObjects['}'] = textObjects['{'];
+
         return {
             'a': new C({
                 argument: "literal",
