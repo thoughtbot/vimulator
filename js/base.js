@@ -45,19 +45,21 @@
 
         // Use keyup for special characters like escape
         $(window).keyup(function (e) {
+            var code = e.charCode || e.keyCode;
             if (
-                e.keyCode === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
-                e.keyCode === Vimulator.Utils.Keys.ESC.charCodeAt(0)
+                code === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
+                code === Vimulator.Utils.Keys.ESC.charCodeAt(0)
             ) {
-                vim.keyPress(e.keyCode);
+                vim.keyPress(code);
                 return false;
             }
         });
 
         // Use keypress for general characters
         $(window).keypress(function (e) {
-            if (e.keyCode >= 32) {
-                vim.keyPress(e.keyCode);
+            var code = e.charCode || e.keyCode;
+            if (code >= 32) {
+                vim.keyPress(code);
                 return false;
             }
         });
