@@ -1,4 +1,29 @@
 (function () {
+    function findPairs(lines, start, end) {
+        var row, col, line, chr, pairs, startStack;
+
+        pairs = [];
+        startStack = [];
+
+        for (row = 0; row < lines.length; row++) {
+            line = lines[row];
+            for (col = 0; col < line.length; col++) {
+                chr = line.charAt(col);
+                if (chr === start) {
+                    startStack.push({row: row, col: col});
+                } else if (chr === end && startStack.length > 0) {
+                    pairs.push(new Vimulator.CharacterRange(
+                        startStack.pop(),
+                        {row: row, col: col},
+                        {inclusive: true}
+                    ));
+                }
+            }
+        }
+
+        return pairs;
+    }
+
     Vimulator.TextObject = function (options) {
         this.startDelim = options.start;
         this.endDelim = options.end;
@@ -6,43 +31,33 @@
     };
 
     Vimulator.TextObject.prototype.insideRange = function (vim) {
-        var start, end;
+        var pairs, i, p;
 
-        start = vim.findLast(this.startDelim, {
-            offset: 1,
-            wrap: true,
-            inclusive: true
-        });
-        end = vim.findNext(this.endDelim, {
-            offset: -1,
-            wrap: true,
-            inclusive: true
-        });
-
-        if (start && end) {
-            return new Vimulator.CharacterRange(start, end, {inclusive: true});
-        } else {
-            return null;
+        pairs = findPairs(vim.lines, this.startDelim, this.endDelim);
+        for (i = 0; i < pairs.length; i++) {
+            p = pairs[i];
+            if (p.contains(vim.cursor)) {
+                p.start.col += 1;
+                p.end.col -= 1;
+                return p;
+            }
         }
+
+        return null;
     };
 
     Vimulator.TextObject.prototype.aroundRange = function (vim) {
-        var start, end;
+        var pairs, i, p;
 
-        start = vim.findLast(this.startDelim, {
-            wrap: true,
-            inclusive: true
-        });
-        end = vim.findNext(this.endDelim, {
-            wrap: true,
-            inclusive: true
-        });
-
-        if (start && end) {
-            return new Vimulator.CharacterRange(start, end, {inclusive: true});
-        } else {
-            return null;
+        pairs = findPairs(vim.lines, this.startDelim, this.endDelim);
+        for (i = 0; i < pairs.length; i++) {
+            p = pairs[i];
+            if (p.contains(vim.cursor)) {
+                return p;
+            }
         }
+
+        return null;
     };
 
     Vimulator.TextObject.Commands = (function () {

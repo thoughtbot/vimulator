@@ -39,6 +39,28 @@ describe("TextObject", function () {
 
             expect(range).toBe(null);
         });
+
+        it("handles outer nested parens", function () {
+            var range;
+            vim.lines = ["(Outer (inner) outer)"];
+            vim.cursor.col = 17;
+            range = to.insideRange(vim);
+
+            expect(range.start).toEqual({row: 0, col: 1});
+            expect(range.end).toEqual({row: 0, col: 19});
+            expect(range.inclusive).toBe(true);
+        });
+
+        it("handles inner nested parens", function () {
+            var range;
+            vim.lines = ["(Outer (inner) outer)"];
+            vim.cursor.col = 10;
+            range = to.insideRange(vim);
+
+            expect(range.start).toEqual({row: 0, col: 8});
+            expect(range.end).toEqual({row: 0, col: 12});
+            expect(range.inclusive).toBe(true);
+        });
     });
 
     describe(".aroundRange", function () {
@@ -73,6 +95,17 @@ describe("TextObject", function () {
             range = to.aroundRange(vim);
 
             expect(range).toBe(null);
+        });
+
+        it("handles nested parens", function () {
+            var range;
+            vim.lines = ["(Outer (inner) outer)"];
+            vim.cursor.col = 17;
+            range = to.aroundRange(vim);
+
+            expect(range.start).toEqual({row: 0, col: 0});
+            expect(range.end).toEqual({row: 0, col: 20});
+            expect(range.inclusive).toBe(true);
         });
     });
 });
