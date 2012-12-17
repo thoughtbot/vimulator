@@ -138,6 +138,33 @@ describe("CharacterRange set to inclusive", function () {
             ]);
         });
     });
+
+    describe(".contains", function () {
+        beforeEach(function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 7},
+                {row: 2, col: 4},
+                {inclusive: true}
+            );
+        });
+
+        it("returns true for the start character", function () {
+            expect(range.contains({row: 0, col: 7})).toBe(true);
+        });
+
+        it("returns true for the end character", function () {
+            expect(range.contains({row: 2, col: 4})).toBe(true);
+        });
+
+        it("returns true in the middle of the range", function () {
+            expect(range.contains({row: 1, col: 5})).toBe(true);
+        });
+
+        it("returns false for a character outside the range", function () {
+            expect(range.contains({row: 0, col: 4})).toBe(false);
+            expect(range.contains({row: 2, col: 6})).toBe(false);
+        });
+    });
 });
 
 describe("CharacterRange set to exclusive", function () {
@@ -278,6 +305,33 @@ describe("CharacterRange set to exclusive", function () {
                 "The second line",
                 "The third line"
             ]);
+        });
+    });
+
+    describe(".contains", function () {
+        beforeEach(function () {
+            range = new Vimulator.CharacterRange(
+                {row: 0, col: 7},
+                {row: 2, col: 4},
+                {inclusive: false}
+            );
+        });
+
+        it("returns true for the start character", function () {
+            expect(range.contains({row: 0, col: 7})).toBe(true);
+        });
+
+        it("returns false for the end character", function () {
+            expect(range.contains({row: 2, col: 4})).toBe(false);
+        });
+
+        it("returns true in the middle of the range", function () {
+            expect(range.contains({row: 1, col: 5})).toBe(true);
+        });
+
+        it("returns false for a character outside the range", function () {
+            expect(range.contains({row: 0, col: 4})).toBe(false);
+            expect(range.contains({row: 2, col: 6})).toBe(false);
         });
     });
 });

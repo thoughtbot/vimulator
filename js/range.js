@@ -56,6 +56,21 @@
         return this.originalEnd.col === buffer.lines[this.originalEnd.row].length - 1;
     };
 
+    Vimulator.CharacterRange.prototype.contains = function (position) {
+        var r = position.row,
+            c = position.col,
+            afterStart, beforeEnd;
+
+        afterStart = this.start.row < r ||
+                     this.start.row === r && this.start.col <= c;
+
+        beforeEnd = this.end.row > r ||
+                    this.end.row === r &&
+                    (this.end.col > c || this.inclusive && this.end.col === c);
+
+        return afterStart && beforeEnd;
+    };
+
 
     Vimulator.LineRange = function (start, end) {
         assignOrdered(this, start, end);
