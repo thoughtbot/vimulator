@@ -76,16 +76,16 @@
         textObjects[')'] = textObjects['b'];
 
         textObjects['['] = new Vimulator.TextObject({
-          name: "square brackets",
-          start: '[',
-          end: ']'
+            name: "square brackets",
+            start: '[',
+            end: ']'
         });
         textObjects[']'] = textObjects['['];
 
         textObjects['B'] = new Vimulator.TextObject({
-          name: "curly braces",
-          start: '{',
-          end: '}'
+            name: "curly braces",
+            start: '{',
+            end: '}'
         });
         textObjects['{'] = textObjects['B'];
         textObjects['}'] = textObjects['B'];
