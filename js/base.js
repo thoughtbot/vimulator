@@ -6,11 +6,13 @@
     Vimulator.Base.prototype.init = function (container) {
         this.modes = {
             normal: new Vimulator.NormalMode(this),
-            insert: new Vimulator.InsertMode(this)
+            insert: new Vimulator.InsertMode(this),
+            command: new Vimulator.CommandMode(this)
         };
 
         this.container = $(container).addClass('vimulator');
         this.textContainer = this.container.find('pre');
+        this.commandLine = this.container.find('p');
         this.commandList = this.container.find('ol');
         this.bindKeyListeners();
 
@@ -25,13 +27,13 @@
         return this;
     };
 
-    Vimulator.Base.prototype.setMode = function (name) {
+    Vimulator.Base.prototype.setMode = function (name, options) {
         this.mode = this.modes[name];
         if (!this.mode) {
             throw new Error("Illegal mode");
         }
 
-        this.mode.enter();
+        this.mode.enter(options);
     };
 
     Vimulator.Base.prototype.bindKeyListeners = function () {
@@ -48,7 +50,8 @@
             var code = e.charCode || e.keyCode;
             if (
                 code === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
-                code === Vimulator.Utils.Keys.ESC.charCodeAt(0)
+                code === Vimulator.Utils.Keys.ESC.charCodeAt(0) ||
+                code === Vimulator.Utils.Keys.RETURN.charCodeAt(0)
             ) {
                 vim.keyPress(code);
                 return false;
@@ -98,6 +101,8 @@
         this.textContainer
                 .html(rendered.join('\n'))
                 .attr('class', this.mode.name);
+        this.commandLine
+                .html(this.modes.command.command || '&nbsp;');
     };
 
     Vimulator.Base.prototype.repeatLastEdit = function () {

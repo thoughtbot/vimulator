@@ -21,6 +21,15 @@ function currentText() {
     return $('#vimulator pre').text();
 }
 
+function commandLineText() {
+    var commandLine = $('#vimulator p.command-line');
+    if (commandLine.html() === '&nbsp;') {
+        return '';
+    } else {
+        return commandLine.text();
+    }
+}
+
 function cursorPosition() {
     var lines, row, col;
 

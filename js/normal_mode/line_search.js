@@ -123,7 +123,7 @@
                 return findFuncs[lastLineSearch.op](vim, count, lastLineSearch.chr, true);
             },
             description: function (count) {
-                desc = "Repeat the last search ";
+                desc = "Repeat the last line search ";
                 if (count > 1) {
                     desc += count + " times";
                 }
@@ -149,7 +149,7 @@
                 findFuncs[lastLineSearch.op](vim, count, lastLineSearch.chr, true);
             },
             description: function (count) {
-                desc = "Repeat the last search backwards ";
+                desc = "Repeat the last line search backwards ";
                 if (count > 1) {
                     desc += count + " times";
                 }

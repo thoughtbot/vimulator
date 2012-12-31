@@ -9,6 +9,7 @@
   <body>
     <div id='vimulator'>
       <pre></pre>
+      <p class='command-line'>&nbsp;</p>
     </div>
 
     <!-- Libraries -->
@@ -33,8 +34,10 @@
     <script src='js/normal_mode/line_search.js'></script>
     <script src='js/normal_mode/operators.js'></script>
     <script src='js/normal_mode/repeat.js'></script>
+    <script src='js/normal_mode/search.js'></script>
     <script src='js/insert_mode.js'></script>
     <script src='js/insert_mode/commands.js'></script>
+    <script src='js/command_mode.js'></script>
     <script>
       window.vimulator = new Vimulator.Base().init('#vimulator');
     </script>
@@ -63,6 +66,7 @@
     <script src='tests/acceptance/repeat.js'></script>
     <script src='tests/acceptance/text_objects.js'></script>
     <script src='tests/acceptance/marks.js'></script>
+    <script src='tests/acceptance/search.js'></script>
 
     <script>
       (function () {
