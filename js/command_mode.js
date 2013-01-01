@@ -11,15 +11,11 @@
     };
 
     Vimulator.CommandMode.prototype.keyPress = function (key) {
-        var searchPosition, searchTerm;
+        var searchTerm;
 
         if (key === U.Keys.RETURN) {
             searchTerm = this.command.substr(1) || this.vim.registers['/'];
-            searchPosition = this.vim.findNext(searchTerm, {wrap: true});
-
-            if (searchPosition) {
-                this.vim.moveCursor(searchPosition.row, searchPosition.col);
-            }
+            this.vim.moveToNext(searchTerm, {wrap: true});
 
             this.vim.registers['/'] = searchTerm;
             this.vim.setMode("normal");

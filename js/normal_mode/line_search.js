@@ -7,15 +7,7 @@
     CR = Vimulator.CharacterRange;
 
     findForwards = CR.captureInclusive(function (vim, count, chr) {
-        var found, position;
-
-        found = -1;
-        position = vim.cursor;
-        while (position && found < count) {
-            found += 1;
-            vim.moveCursor(position.row, position.col);
-            position = vim.findNext(chr);
-        }
+        vim.moveToNext(chr, {count: count});
     });
 
     untilForwards = CR.captureInclusive(function (vim, count, chr, repeat) {
@@ -32,15 +24,7 @@
     });
 
     findBackwards = CR.captureExclusive(function (vim, count, chr) {
-        var found, position;
-
-        found = -1;
-        position = vim.cursor;
-        while (position && found < count) {
-            found += 1;
-            vim.moveCursor(position.row, position.col);
-            position = vim.findLast(chr);
-        }
+        vim.moveToLast(chr, {count: count});
     });
 
     untilBackwards = CR.captureExclusive(function (vim, count, chr, repeat) {

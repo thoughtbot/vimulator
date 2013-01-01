@@ -34,6 +34,11 @@ describe("Searching the line with f", function () {
         pressKeys("3,");
         expect(cursorPosition()).toEqual({row: 0, col: 5});
     });
+
+    it("does not move the cursor if the multiplier is too big", function () {
+        pressKeys("6fo");
+        expect(cursorPosition()).toEqual({row: 0, col: 0});
+    });
 });
 
 describe("Searching the line with F", function () {
@@ -72,6 +77,11 @@ describe("Searching the line with F", function () {
         expect(cursorPosition()).toEqual({row: 0, col: 1});
         pressKeys("3,");
         expect(cursorPosition()).toEqual({row: 0, col: 14});
+    });
+
+    it("does not move the cursor if the multiplier is too big", function () {
+        pressKeys("6Fo");
+        expect(cursorPosition()).toEqual({row: 0, col: 20});
     });
 });
 

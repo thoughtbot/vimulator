@@ -273,6 +273,16 @@
         }
     };
 
+    Vimulator.Base.prototype.moveToNext = function (target, options) {
+        var position = this.findNext(target, options);
+        if (position) {
+            this.moveCursor(position.row, position.col);
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     Vimulator.Base.prototype.findLast = function (target, options) {
         var row, col, lineBefore, lineOffset;
 
@@ -311,6 +321,16 @@
             return this.findLast(target, options);
         } else {
             return {row: row, col: col};
+        }
+    };
+
+    Vimulator.Base.prototype.moveToLast = function (target, options) {
+        var position = this.findLast(target, options);
+        if (position) {
+            this.moveCursor(position.row, position.col);
+            return true;
+        } else {
+            return false;
         }
     };
 
