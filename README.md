@@ -70,6 +70,12 @@ objects:
 * <kbd>;</kbd>: Repeat the last line search
 * <kbd>,</kbd>: Repeat the last line search, reversing the direction
 
+### Document search
+
+* <kbd>/</kbd>: Search forwards
+* <kbd>n</kbd>: Go to the next match for the latest search
+* <kbd>N</kbd>: Go to the previous match for the latest search
+
 ### Edits
 
 * <kbd>r</kbd>: Replace the character under the cursor
