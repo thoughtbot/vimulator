@@ -236,9 +236,9 @@
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        lineOffset = options.inclusive ? 0 : 1;
-        lineAfter = this.currentLine().substr(options.from.col + lineOffset);
         row = options.from.row;
+        lineOffset = options.inclusive ? 0 : 1;
+        lineAfter = this.lines[row].substr(options.from.col + lineOffset);
         col = lineAfter.indexOf(target);
         if (col !== -1) {
             col += options.from.col + lineOffset;
@@ -273,9 +273,9 @@
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        lineOffset = options.inclusive ? 1 : 0;
-        lineBefore = this.currentLine().substr(0, options.from.col + lineOffset);
         row = options.from.row;
+        lineOffset = options.inclusive ? 1 : 0;
+        lineBefore = this.lines[row].substr(0, options.from.col + lineOffset);
         col = lineBefore.lastIndexOf(target);
 
         while (options.wrap && row > 0 && col === -1) {
