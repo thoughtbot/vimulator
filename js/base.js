@@ -263,7 +263,14 @@
             }
         }
 
-        return {row: row, col: col};
+        if (options.count && options.count > 1) {
+            options.count -= 1;
+            options.from = {row: row, col: col};
+            options.inclusive = false;
+            return this.findNext(target, options);
+        } else {
+            return {row: row, col: col};
+        }
     };
 
     Vimulator.Base.prototype.findLast = function (target, options) {
@@ -297,7 +304,14 @@
             }
         }
 
-        return {row: row, col: col};
+        if (options.count && options.count > 1) {
+            options.count -= 1;
+            options.from = {row: row, col: col};
+            options.inclusive = false;
+            return this.findLast(target, options);
+        } else {
+            return {row: row, col: col};
+        }
     };
 
     Vimulator.Base.prototype.cursorCopy = function () {

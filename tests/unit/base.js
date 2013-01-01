@@ -116,6 +116,17 @@ describe("Base", function () {
             expect(vim.findNext('o', {inclusive: true}))
                 .toEqual({row: 0, col: 1});
         });
+
+        it("optionally skips to the nth match", function () {
+            vim.lines = ["foo foo foo", "foo foo foo"];
+
+            expect(vim.findNext("foo", {count: 1, wrap: true}))
+                .toEqual({row: 0, col: 4});
+            expect(vim.findNext("foo", {count: 2, wrap: true}))
+                .toEqual({row: 0, col: 8});
+            expect(vim.findNext("foo", {count: 3, wrap: true}))
+                .toEqual({row: 1, col: 0});
+        });
     });
 
     describe(".findLast", function () {
@@ -187,6 +198,18 @@ describe("Base", function () {
                 .toEqual({row: 0, col: 1});
             expect(vim.findLast('o', {inclusive: true}))
                 .toEqual({row: 0, col: 2});
+        });
+
+        it("optionally skips to the nth match", function () {
+            vim.lines = ["foo foo foo", "foo foo foo"];
+            vim.moveCursorRelative(1, 10);
+
+            expect(vim.findLast("foo", {count: 1, wrap: true}))
+                .toEqual({row: 1, col: 4});
+            expect(vim.findLast("foo", {count: 2, wrap: true}))
+                .toEqual({row: 1, col: 0});
+            expect(vim.findLast("foo", {count: 3, wrap: true}))
+                .toEqual({row: 0, col: 8});
         });
     });
 });
