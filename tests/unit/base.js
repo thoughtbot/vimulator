@@ -205,11 +205,11 @@ describe("Base", function () {
             vim.moveCursorRelative(1, 10);
 
             expect(vim.findLast("foo", {count: 1, wrap: true}))
-                .toEqual({row: 1, col: 4});
+                .toEqual({row: 1, col: 8});
             expect(vim.findLast("foo", {count: 2, wrap: true}))
-                .toEqual({row: 1, col: 0});
+                .toEqual({row: 1, col: 4});
             expect(vim.findLast("foo", {count: 3, wrap: true}))
-                .toEqual({row: 0, col: 8});
+                .toEqual({row: 1, col: 0});
         });
     });
 });

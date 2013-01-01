@@ -20,7 +20,11 @@
             callback: function (vim, count) {
                 var searchTerm = vim.registers['/'];
                 if (searchTerm) {
-                    vim.moveToNext(searchTerm, {wrap: true, count: count});
+                    vim.moveToNext(searchTerm, {
+                        wrap: true,
+                        loop: true,
+                        count: count
+                    });
                 }
             },
             description: 'Repeat last search' //TODO Count in description
@@ -30,7 +34,11 @@
             callback: function (vim, count) {
                 var searchTerm = vim.registers['/'];
                 if (searchTerm) {
-                    vim.moveToLast(searchTerm, {wrap: true, count: count});
+                    vim.moveToLast(searchTerm, {
+                        wrap: true,
+                        loop: true,
+                        count: count
+                    });
                 }
             },
             description: 'Repeat last search backwards' //TODO Count in description

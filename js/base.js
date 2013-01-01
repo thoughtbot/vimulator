@@ -230,23 +230,31 @@
     };
 
     Vimulator.Base.prototype.findNext = function (target, options) {
-        var row, col, lineAfter, lineOffset;
+        var row, col, startCol;
 
         options = options || {};
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        row = options.from.row;
-        lineOffset = options.inclusive ? 0 : 1;
-        lineAfter = this.lines[row].substr(options.from.col + lineOffset);
-        col = lineAfter.indexOf(target);
-        if (col !== -1) {
-            col += options.from.col + lineOffset;
+        startCol = options.from.col;
+        if (!options.inclusive) {
+            startCol += 1;
         }
+
+        row = options.from.row;
+        col = this.lines[row].indexOf(target, startCol);
 
         while (options.wrap && row < this.lines.length - 1 && col === -1) {
             row += 1;
             col = this.lines[row].indexOf(target);
+        }
+
+        if (options.loop && col === -1) {
+            row = -1;
+            while (row < options.from.row && col === -1) {
+                row += 1;
+                col = this.lines[row].indexOf(target);
+            }
         }
 
         if (col === -1) {
@@ -284,20 +292,31 @@
     };
 
     Vimulator.Base.prototype.findLast = function (target, options) {
-        var row, col, lineBefore, lineOffset;
+        var row, col, startCol;
 
         options = options || {};
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
+        startCol = options.from.col;
+        if (!options.inclusive) {
+            startCol -= 1;
+        }
+
         row = options.from.row;
-        lineOffset = options.inclusive ? 1 : 0;
-        lineBefore = this.lines[row].substr(0, options.from.col + lineOffset);
-        col = lineBefore.lastIndexOf(target);
+        col = this.lines[row].lastIndexOf(target, startCol);
 
         while (options.wrap && row > 0 && col === -1) {
             row -= 1;
             col = this.lines[row].lastIndexOf(target);
+        }
+
+        if (options.loop && col === -1) {
+            row = this.lines.length;
+            while (row > options.from.row && col === -1) {
+                row -= 1;
+                col = this.lines[row].lastIndexOf(target);
+            }
         }
 
         if (col === -1) {
