@@ -18,14 +18,20 @@
 
         'n': new C({
             callback: function (vim, count) {
-                //TODO
+                var searchTerm = vim.registers['/'];
+                if (searchTerm) {
+                    vim.moveToNext(searchTerm, {wrap: true, count: count});
+                }
             },
             description: 'Repeat last search' //TODO Count in description
         }),
 
         'N': new C({
             callback: function (vim, count) {
-                //TODO
+                var searchTerm = vim.registers['/'];
+                if (searchTerm) {
+                    vim.moveToLast(searchTerm, {wrap: true, count: count});
+                }
             },
             description: 'Repeat last search backwards' //TODO Count in description
         })
