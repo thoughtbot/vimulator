@@ -1,5 +1,6 @@
 (function () {
-    var C, U, CR, findForwards, untilForwards, findBackwards, untilBackwards;
+    var C, U, CR, findForwards, untilForwards, findBackwards, untilBackwards,
+        lastLineSearch;
 
     C = Vimulator.Command;
     U = Vimulator.Utils;
@@ -59,7 +60,7 @@
         'f': new C({
             argument: "literal",
             callback: function (vim, count, chr) {
-                vim.lastSearch = {op: 'f', chr: chr};
+                lastLineSearch = {op: 'f', chr: chr};
                 return findForwards(vim, count, chr);
             },
             description: function (count, chr) {
@@ -71,7 +72,7 @@
         'F': new C({
             argument: "literal",
             callback: function (vim, count, chr) {
-                vim.lastSearch = {op: 'F', chr: chr};
+                lastLineSearch = {op: 'F', chr: chr};
                 return findBackwards(vim, count, chr);
             },
             description: function (count, chr) {
@@ -83,7 +84,7 @@
         't': new C({
             argument: "literal",
             callback: function (vim, count, chr) {
-                vim.lastSearch = {op: 't', chr: chr};
+                lastLineSearch = {op: 't', chr: chr};
                 return untilForwards(vim, count, chr);
             },
             description: function (count, chr) {
@@ -95,7 +96,7 @@
         'T': new C({
             argument: "literal",
             callback: function (vim, count, chr) {
-                vim.lastSearch = {op: 'T', chr: chr};
+                lastLineSearch = {op: 'T', chr: chr};
                 return untilBackwards(vim, count, chr);
             },
             description: function (count, chr) {
@@ -108,7 +109,7 @@
             callback: function (vim, count) {
                 var findFuncs;
 
-                if (!vim.lastSearch) {
+                if (!lastLineSearch) {
                     return;
                 }
 
@@ -119,7 +120,7 @@
                     'T': untilBackwards
                 };
 
-                return findFuncs[vim.lastSearch.op](vim, count, vim.lastSearch.chr, true);
+                return findFuncs[lastLineSearch.op](vim, count, lastLineSearch.chr, true);
             },
             description: function (count) {
                 desc = "Repeat the last search ";
@@ -134,7 +135,7 @@
             callback: function (vim, count) {
                 var findFuncs;
 
-                if (!vim.lastSearch) {
+                if (!lastLineSearch) {
                     return;
                 }
 
@@ -145,7 +146,7 @@
                     'T': untilForwards
                 };
 
-                findFuncs[vim.lastSearch.op](vim, count, vim.lastSearch.chr, true);
+                findFuncs[lastLineSearch.op](vim, count, lastLineSearch.chr, true);
             },
             description: function (count) {
                 desc = "Repeat the last search backwards ";
