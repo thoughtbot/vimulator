@@ -29,36 +29,68 @@
     };
 
     Vimulator.Operation.prototype.keyPress = function (key) {
-        var cmd;
+        var validKey;
 
         if (this.cancelled) {
             throw new Error("Operation is cancelled");
-        } else if (
-            !this.command &&
-            !this.commandPrefix &&
-            (key >= '1' && key <= '9' || key === '0' && this.multiplier)
-        ) {
-            this.multiplier = ~~('' + (this.multiplier || '') + key);
-            return;
-        } else if (!this.command && !this.commandPrefix && /[gz]/.test(key)) {
-            // g and z are special: They are prefixes to other commands rather
-            // than being commands in their own right.
-            this.commandPrefix = key;
-        } else if (!this.command) {
-            key = this.commandPrefix + key;
-            cmd = this.context.getCommand(key);
-            if (cmd) {
-                this.setCommand(cmd, key);
-            } else {
-                this.cancel();
-            }
-        } else if (this.command.wantsLiteral()) {
-            this.argument = key;
-        } else if (this.command.wantsOperation()) {
-            this.argument.keyPress(key);
-        } else {
+        }
+
+        validKey = this.captureMultiplier(key) ||
+                   this.captureCommandPrefix(key) ||
+                   this.captureCommand(key) ||
+                   this.captureArgument(key);
+
+        if (!validKey) {
             this.cancel();
         }
+    };
+
+    Vimulator.Operation.prototype.captureMultiplier = function (key) {
+        if (
+            this.command || this.commandPrefix ||
+            (key < '1' || key > '9') && (key !== '0' || !this.multiplier)
+        ) {
+            return false;
+        }
+
+        this.multiplier = ~~('' + (this.multiplier || '') + key);
+        return true;
+    };
+
+    Vimulator.Operation.prototype.captureCommandPrefix = function (key) {
+        if (this.command || this.commandPrefix || !/[gz]/.test(key)) {
+            return false;
+        }
+
+        this.commandPrefix = key;
+        return true;
+    };
+
+    Vimulator.Operation.prototype.captureCommand = function (key) {
+        var cmd;
+
+        if (this.command) {
+            return false;
+        }
+
+        key = this.commandPrefix + key;
+        cmd = this.context.getCommand(key);
+        this.setCommand(cmd, key);
+        return !!cmd;
+    };
+
+    Vimulator.Operation.prototype.captureArgument = function (key) {
+        if (this.command) {
+            if (this.command.wantsLiteral()) {
+                this.argument = key;
+                return true;
+            } else if (this.command.wantsOperation()) {
+                this.argument.keyPress(key);
+                return true;
+            }
+        }
+
+        return false;
     };
 
     Vimulator.Operation.prototype.complete = function () {
