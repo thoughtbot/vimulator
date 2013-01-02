@@ -73,6 +73,7 @@ objects:
 ### Document search
 
 * <kbd>/</kbd>: Search forwards
+* <kbd>?</kbd>: Search backwards
 * <kbd>n</kbd>: Go to the next match for the latest search
 * <kbd>N</kbd>: Go to the previous match for the latest search
 
