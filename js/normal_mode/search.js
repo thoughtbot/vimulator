@@ -1,5 +1,6 @@
 (function () {
-    var C = Vimulator.Command;
+    var C = Vimulator.Command,
+        U = Vimulator.Utils;
 
     Vimulator.NormalMode.Search = {
         '/': new C({
@@ -8,7 +9,10 @@
                     vim.search.forward(searchTerm, count);
                 });
             },
-            description: 'Search forwards'
+            description: function (count) {
+                return "Search forwards for the " + U.ordinalize(count) +
+                       " match";
+            }
         }),
 
         '?': new C({
@@ -17,21 +21,30 @@
                     vim.search.backward(searchTerm, count);
                 });
             },
-            description: 'Search backwards'
+            description: function (count) {
+                return "Search backwards for the " + U.ordinalize(count) +
+                       " match";
+            }
         }),
 
         'n': new C({
             callback: function (vim, count) {
                 vim.search.repeat(count);
             },
-            description: 'Repeat last search' //TODO Count in description
+            description: function (count) {
+                return "Move forward " + U.pluralize(count, "match", "matches")
+                       + " for the previous search";
+            }
         }),
 
         'N': new C({
             callback: function (vim, count) {
                 vim.search.repeatReversed(count);
             },
-            description: 'Repeat last search backwards' //TODO Count in description
+            description: function (count) {
+                return "Move back " + U.pluralize(count, "match", "matches") +
+                       " for the previous search";
+            }
         })
     };
 }());
