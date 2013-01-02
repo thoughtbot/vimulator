@@ -10,6 +10,8 @@
             command: new Vimulator.CommandMode(this)
         };
 
+        this.search = new Vimulator.Search(this);
+
         this.container = $(container).addClass('vimulator');
         this.textContainer = this.container.find('pre');
         this.commandLine = this.container.find('p');
@@ -27,13 +29,16 @@
         return this;
     };
 
-    Vimulator.Base.prototype.setMode = function (name, options) {
+    Vimulator.Base.prototype.setMode = function (name, argsForMode) {
+        var args;
+
         this.mode = this.modes[name];
         if (!this.mode) {
             throw new Error("Illegal mode");
         }
 
-        this.mode.enter(options);
+        args = Array.prototype.slice.call(arguments, 1);
+        this.mode.enter.apply(this.mode, args);
     };
 
     Vimulator.Base.prototype.bindKeyListeners = function () {

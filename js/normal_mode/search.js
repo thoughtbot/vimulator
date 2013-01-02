@@ -3,43 +3,33 @@
 
     Vimulator.NormalMode.Search = {
         '/': new C({
-            callback: function (vim) {
-                vim.setMode('command', '/');
+            callback: function (vim, count) {
+                vim.setMode('command', '/', function (searchTerm) {
+                    vim.search.forward(searchTerm, count);
+                });
             },
             description: 'Search forwards'
         }),
 
         '?': new C({
-            callback: function (vim) {
-                //TODO
+            callback: function (vim, count) {
+                vim.setMode('command', '?', function (searchTerm) {
+                    vim.search.backward(searchTerm, count);
+                });
             },
             description: 'Search backwards'
         }),
 
         'n': new C({
             callback: function (vim, count) {
-                var searchTerm = vim.registers['/'];
-                if (searchTerm) {
-                    vim.moveToNext(searchTerm, {
-                        wrap: true,
-                        loop: true,
-                        count: count
-                    });
-                }
+                vim.search.repeat(count);
             },
             description: 'Repeat last search' //TODO Count in description
         }),
 
         'N': new C({
             callback: function (vim, count) {
-                var searchTerm = vim.registers['/'];
-                if (searchTerm) {
-                    vim.moveToLast(searchTerm, {
-                        wrap: true,
-                        loop: true,
-                        count: count
-                    });
-                }
+                vim.search.repeatReversed(count);
             },
             description: 'Repeat last search backwards' //TODO Count in description
         })
