@@ -1,49 +1,32 @@
 describe("Operation", function () {
     describe(".setCommand", function () {
-        var op;
+        var op, arg, cmd;
 
         beforeEach(function () {
             op = new Vimulator.Operation();
+            arg = mockArgument();
+            cmd = mockCommand({argument: arg});
+            op.setCommand(cmd, "x");
         });
 
-        it("sets the operation's command and commandKey", function () {
-            var cmd = mockCommand();
-            op.setCommand(cmd, "x");
+        it("sets the operation's command", function () {
             expect(op.command).toBe(cmd);
+        });
+
+        it("sets the operation's commandKey", function () {
             expect(op.commandKey).toBe("x");
         });
 
-        describe("with a command requiring a operation argument", function () {
-            it("creates a blank argument for the command", function () {
-                var cmd = mockCommand("operation");
-                op.setCommand(cmd);
-                expect(op.argument).not.toBe(null);
-                expect(op.argument.context).toBe(cmd);
-            });
-        });
-
-        describe("with a command requiring no argument", function () {
-            it("leaves the argument as null", function () {
-                var cmd = mockCommand();
-                op.setCommand(cmd);
-                expect(op.argument).toBe(null);
-            });
-        });
-
-        describe("with a command requiring a literal argument", function () {
-            it("leaves the argument as null", function () {
-                var cmd = mockCommand("literal");
-                op.setCommand(cmd);
-                expect(op.argument).toBe(null);
-            });
+        it("sets the operation's argument", function () {
+            expect(op.argument).toBe(arg);
         });
 
         it("raises an error if the operation already has a command", function () {
-            op.setCommand(mockCommand());
             expect(function () { op.setCommand(mockCommand()); }).toThrow();
         });
 
         it("ignores falsy commands", function () {
+            op = new Vimulator.Operation();
             op.setCommand("");
             expect(op.command).toBe(null);
         });
@@ -115,37 +98,15 @@ describe("Operation", function () {
             });
         });
 
-        describe("for an operation expecting a literal argument", function () {
+        describe("for an operation with a command", function () {
             var op;
 
             beforeEach(function () {
                 op = new Vimulator.Operation();
-                op.setCommand(mockCommand("literal"));
-            });
-
-            it("takes a letter as a literal argument", function () {
-                expect(op.argument).toBe(null);
-                op.keyPress('a');
-                expect(op.argument).toBe("a");
-            });
-
-            it("takes a number as a literal argument", function () {
-                expect(op.argument).toBe(null);
-                op.keyPress('3');
-                expect(op.argument).toBe("3");
-            });
-        });
-
-        describe("for an operation expecting an op argument", function () {
-            var op;
-
-            beforeEach(function () {
-                op = new Vimulator.Operation();
-                op.setCommand(mockCommand("operation"));
+                op.setCommand(mockCommand());
             });
 
             it("passes the key press on to its argument", function () {
-                spyOn(op.argument, "keyPress");
                 op.keyPress("1");
                 expect(op.argument.keyPress).toHaveBeenCalledWith("1");
             });
@@ -170,11 +131,31 @@ describe("Operation", function () {
             });
         });
 
-        describe("with a command expecting no argument", function () {
-            var cmd;
+        describe("with a command and an incomplete argument", function () {
+            var cmd, arg;
 
             beforeEach(function () {
-                cmd = mockCommand();
+                arg = mockArgument({complete: false});
+                cmd = mockCommand({argument: arg});
+                op.setCommand(cmd);
+            });
+
+            it("is incomplete", function () {
+                expect(op.complete()).toBe(false);
+            });
+
+            it("is not executable", function () {
+                expect(op.execute(vim)).toBe(false);
+                expect(cmd.execute).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("with a command and a complete argument", function () {
+            var cmd, arg;
+
+            beforeEach(function () {
+                arg = mockArgument({complete: true, value: "foo"});
+                cmd = mockCommand({argument: arg});
                 op.setCommand(cmd);
             });
 
@@ -184,122 +165,22 @@ describe("Operation", function () {
 
             it("executes the command", function () {
                 op.execute(vim);
-                expect(cmd.execute).toHaveBeenCalledWith(vim, null, null);
+                expect(cmd.execute).toHaveBeenCalledWith(vim, null, "foo");
             });
 
             it("passes the multiplier on to the command", function () {
                 op.multiplier = 123;
                 op.execute(vim);
-                expect(cmd.execute).toHaveBeenCalledWith(vim, 123, null);
-            });
-        });
-
-        describe("a command waiting for an operation argument", function () {
-            var cmd;
-
-            beforeEach(function () {
-                cmd = mockCommand("operation");
-                op.setCommand(cmd);
-            });
-
-            it("is incomplete", function () {
-                expect(op.complete()).toBe(false);
-            });
-
-            it("does not execute the command", function () {
-                expect(op.execute(vim)).toBe(false);
-                expect(cmd.execute).not.toHaveBeenCalled();
-            });
-        });
-
-        describe("a command waiting for a literal argument", function () {
-            var cmd;
-
-            beforeEach(function () {
-                cmd = mockCommand("literal");
-                op.setCommand(cmd);
-            });
-
-            it("is incomplete", function () {
-                expect(op.complete()).toBe(false);
-            });
-
-            it("does not execute the command", function () {
-                expect(op.execute(vim)).toBe(false);
-                expect(cmd.execute).not.toHaveBeenCalled();
-            });
-        });
-
-        describe("a command with a literal argument", function () {
-            var cmd;
-
-            beforeEach(function () {
-                cmd = mockCommand("literal");
-                op.setCommand(cmd);
-                op.argument = 'x';
-            });
-
-            it("is complete", function () {
-                expect(op.complete()).toBe(true);
-            });
-
-            it("executes the command with the argument", function () {
-                op.execute(vim);
-                expect(cmd.execute).toHaveBeenCalledWith(vim, null, 'x');
-            });
-        });
-
-        describe("a command with an incomplete operation argument", function () {
-            var cmd, arg;
-
-            beforeEach(function () {
-                cmd = mockCommand("operation");
-                arg = {
-                    complete: jasmine.createSpy().andReturn(false)
-                };
-
-                op.setCommand(cmd);
-                op.argument = arg;
-            });
-
-            it("is incomplete", function () {
-                expect(op.complete()).toBe(false);
-            });
-
-            it("does not execute the command", function () {
-                expect(op.execute(vim)).toBe(false);
-                expect(cmd.execute).not.toHaveBeenCalled();
-            });
-        });
-
-        describe("a command with a complete operation argument", function () {
-            var cmd, arg;
-
-            beforeEach(function () {
-                cmd = mockCommand("operation");
-                arg = {
-                    complete: jasmine.createSpy().andReturn(true)
-                };
-
-                op.setCommand(cmd);
-                op.argument = arg;
-            });
-
-            it("is complete", function() {
-                expect(op.complete()).toBe(true);
-            });
-
-            it("executes the command with the argument", function () {
-                op.execute(vim);
-                expect(cmd.execute).toHaveBeenCalledWith(vim, null, arg);
+                expect(cmd.execute).toHaveBeenCalledWith(vim, 123, "foo");
             });
         });
 
         describe("when passed a parent multiplier", function () {
-            var cmd;
+            var cmd, arg;
 
             beforeEach(function () {
-                cmd = mockCommand("none");
+                arg = mockArgument({complete: true, value: null});
+                cmd = mockCommand({argument: arg});
                 op.setCommand(cmd);
             });
 
@@ -373,13 +254,13 @@ describe("Operation", function () {
         });
 
         it("includes the command key and description", function () {
-            var cmd = mockCommand("none", "DESCRIPTION");
+            var cmd = mockCommand({description: "DESCRIPTION"});
             op.setCommand(cmd, "x");
             expect(op.description()).toBe("<kbd>x</kbd> DESCRIPTION");
         });
 
         it("splits up multi-character command keys", function () {
-            var cmd = mockCommand("none", "Go to the beginning");
+            var cmd = mockCommand({description: "Go to the beginning"});
             op.setCommand(cmd, "gg");
             expect(op.description()).toBe(
                 "<kbd>g</kbd> <kbd>g</kbd> Go to the beginning"
@@ -387,11 +268,11 @@ describe("Operation", function () {
         });
 
         it("passes the multiplier & argument to the command", function () {
-            var cmd = mockCommand("literal", "Replace"),
+            var cmd = mockCommand({description: "Replace"}),
                 vim = {};
             op.multiplier = 4;
             op.setCommand(cmd, "r");
-            op.argument = "p";
+            op.argument = mockArgument({value: "p"});
 
             expect(op.description(vim)).toBe("<kbd>4</kbd> <kbd>r</kbd> Replace");
             expect(cmd.description).toHaveBeenCalledWith(4, "p", vim);
@@ -418,6 +299,13 @@ describe("Operation", function () {
             spyOn(op, "complete").andReturn(true);
 
             expect(op.repeatable()).toBe(result);
+        });
+    });
+
+    describe(".value", function () {
+        it("returns the object", function () {
+            var op = new Vimulator.Operation();
+            expect(op.value()).toBe(op);
         });
     });
 });

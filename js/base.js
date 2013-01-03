@@ -6,8 +6,7 @@
     Vimulator.Base.prototype.init = function (container) {
         this.modes = {
             normal: new Vimulator.NormalMode(this),
-            insert: new Vimulator.InsertMode(this),
-            command: new Vimulator.CommandMode(this)
+            insert: new Vimulator.InsertMode(this)
         };
 
         this.search = new Vimulator.Search(this);
@@ -106,8 +105,6 @@
         this.textContainer
                 .html(rendered.join('\n'))
                 .attr('class', this.mode.name);
-        this.commandLine
-                .html(this.modes.command.command || '&nbsp;');
     };
 
     Vimulator.Base.prototype.repeatLastEdit = function () {

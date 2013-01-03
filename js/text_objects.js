@@ -92,7 +92,7 @@
 
         return {
             'a': new C({
-                argument: "literal",
+                argument: Vimulator.LiteralArgument,
                 callback: function (vim, count, key) {
                     var textObject = textObjects[key];
                     if (textObject) {
@@ -114,7 +114,7 @@
                 }
             }),
             'i': new C({
-                argument: "literal",
+                argument: Vimulator.LiteralArgument,
                 callback: function (vim, count, key) {
                     var textObject = textObjects[key];
                     if (textObject) {

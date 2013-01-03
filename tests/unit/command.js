@@ -2,37 +2,19 @@ describe("Command", function () {
     //TODO Support for both literal and operation, e.g. " expects both a
     //     register (literal) and an operation.
 
-    describe(".wantsOperation", function () {
-        it("returns true if the argType is 'operation'", function () {
-            var cmd = new Vimulator.Command({argument: "operation"});
-            expect(cmd.wantsOperation()).toBe(true);
+    describe(".buildArgument", function () {
+        it("returns the required argument type", function () {
+            var cmd, constructor;
+            constructor = function () {};
+            cmd = new Vimulator.Command({argument: constructor});
+            expect(cmd.buildArgument())
+                .toEqual(jasmine.any(constructor));
         });
 
-        it("returns false if the argType is 'literal'", function () {
-            var cmd = new Vimulator.Command({argument: "literal"});
-            expect(cmd.wantsOperation()).toBe(false);
-        });
-
-        it("returns false if the argType is 'none'", function () {
-            var cmd = new Vimulator.Command({argument: "none"});
-            expect(cmd.wantsOperation()).toBe(false);
-        });
-    });
-
-    describe(".wantsLiteral", function () {
-        it("returns false if the argType is 'operation'", function () {
-            var cmd = new Vimulator.Command({argument: "operation"});
-            expect(cmd.wantsLiteral()).toBe(false);
-        });
-
-        it("returns true if the argType is 'literal'", function () {
-            var cmd = new Vimulator.Command({argument: "literal"});
-            expect(cmd.wantsLiteral()).toBe(true);
-        });
-
-        it("returns false if the argType is 'none'", function () {
-            var cmd = new Vimulator.Command({argument: "none"});
-            expect(cmd.wantsLiteral()).toBe(false);
+        it("defaults to a NullArgument", function () {
+            var cmd = new Vimulator.Command({});
+            expect(cmd.buildArgument())
+                .toEqual(jasmine.any(Vimulator.NullArgument));
         });
     });
 
@@ -61,7 +43,6 @@ describe("Command", function () {
         beforeEach(function () {
             callback = jasmine.createSpy();
             cmd = new Vimulator.Command({
-                argument: "literal",
                 callback: callback
             });
         });

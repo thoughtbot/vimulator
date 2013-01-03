@@ -4,26 +4,24 @@
 
     Vimulator.NormalMode.Search = {
         '/': new C({
-            callback: function (vim, count) {
-                vim.setMode('command', '/', function (searchTerm) {
-                    vim.search.forward(searchTerm, count);
-                });
+            argument: Vimulator.CommandLineArgument,
+            callback: function (vim, count, searchTerm) {
+                vim.search.forward(searchTerm, count);
             },
-            description: function (count) {
+            description: function (count, searchTerm) {
                 return "Search forwards for the " + U.ordinalize(count) +
-                       " match";
+                       " match for " + (searchTerm || "&hellip;");
             }
         }),
 
         '?': new C({
-            callback: function (vim, count) {
-                vim.setMode('command', '?', function (searchTerm) {
-                    vim.search.backward(searchTerm, count);
-                });
+            argument: Vimulator.CommandLineArgument,
+            callback: function (vim, count, searchTerm) {
+                vim.search.backward(searchTerm, count);
             },
-            description: function (count) {
+            description: function (count, searchTerm) {
                 return "Search backwards for the " + U.ordinalize(count) +
-                       " match";
+                       " match for " + (searchTerm || "&hellip;");
             }
         }),
 

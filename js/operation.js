@@ -22,10 +22,7 @@
 
         this.command = command;
         this.commandKey = key;
-
-        if (this.command.wantsOperation()) {
-            this.argument = new Vimulator.Operation(this.command);
-        }
+        this.argument = command.buildArgument();
     };
 
     Vimulator.Operation.prototype.keyPress = function (key) {
@@ -80,29 +77,16 @@
     };
 
     Vimulator.Operation.prototype.captureArgument = function (key) {
-        if (this.command) {
-            if (this.command.wantsLiteral()) {
-                this.argument = key;
-                return true;
-            } else if (this.command.wantsOperation()) {
-                this.argument.keyPress(key);
-                return true;
-            }
-        }
-
-        return false;
-    };
-
-    Vimulator.Operation.prototype.complete = function () {
-        if (!this.command) {
+        if (!this.argument || this.argument.complete()) {
             return false;
         }
 
-        if (this.command.wantsOperation()) {
-            return !!(this.argument && this.argument.complete());
-        }
+        this.argument.keyPress(key);
+        return true;
+    };
 
-        return !!(!this.command.wantsLiteral() || this.argument);
+    Vimulator.Operation.prototype.complete = function () {
+        return !!(this.command && this.argument && this.argument.complete());
     };
 
     Vimulator.Operation.prototype.execute = function (vim, parentMultiplier) {
@@ -113,7 +97,7 @@
         }
 
         multiplier = this.multiply(parentMultiplier);
-        return this.command.execute(vim, multiplier, this.argument);
+        return this.command.execute(vim, multiplier, this.argument.value());
     };
 
     Vimulator.Operation.prototype.multiply = function (factor) {
@@ -145,8 +129,11 @@
                keys(this.commandKey || this.commandPrefix);
 
         if (this.command) {
-            multiplier = this.multiplier ? ~~this.multiplier : null;
-            desc += this.command.description(multiplier, this.argument, vim);
+            desc += this.command.description(
+                this.multiplier,
+                this.argument.value(),
+                vim
+            );
         } else if (!this.cancelled) {
             desc += '<b>&hellip;</b>';
         }
@@ -160,5 +147,9 @@
 
     Vimulator.Operation.prototype.cancel = function () {
         this.cancelled = true;
+    };
+
+    Vimulator.Operation.prototype.value = function () {
+        return this;
     };
 }());

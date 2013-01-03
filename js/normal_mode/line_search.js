@@ -42,7 +42,7 @@
 
     Vimulator.NormalMode.LineSearch = {
         'f': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 'f', chr: chr};
                 return findForwards(vim, count, chr);
@@ -54,7 +54,7 @@
         }),
 
         'F': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 'F', chr: chr};
                 return findBackwards(vim, count, chr);
@@ -66,7 +66,7 @@
         }),
 
         't': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 't', chr: chr};
                 return untilForwards(vim, count, chr);
@@ -78,7 +78,7 @@
         }),
 
         'T': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 'T', chr: chr};
                 return untilBackwards(vim, count, chr);

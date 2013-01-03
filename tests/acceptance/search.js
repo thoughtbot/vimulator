@@ -41,6 +41,11 @@ describe("Forward search", function () {
         expect(cursorPosition()).toEqual({row: 0, col: 10});
     });
 
+    it("can be used as an operator motion", function () {
+        pressKeys("d/contains" + RETURN);
+        expect(currentText()).toBe("contains\nThe word contains several\ntimes (contains)");
+    });
+
     describe("repeated with n", function () {
         beforeEach(function () {
             pressKeys("/contains" + RETURN);
