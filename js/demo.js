@@ -8,7 +8,7 @@
 
         vim = this;
         setTimeout(function () {
-            Vimulator.Base.prototype.render.apply(vim);
+            Vimulator.Base.prototype.render.call(vim, op);
         }, this.delay);
 
         if (op && op.description(this)) {
