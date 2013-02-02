@@ -3,8 +3,18 @@ RETURN = '\u000D';
 BACKSPACE = '\u0008';
 
 function pressKeys(keys) {
+    function keyEvent(type, key) {
+        var event = document.createEvent('Event');
+        event.initEvent(type, true, true);
+        event.keyCode = key.charCodeAt(0);
+        event.which = key.charCodeAt(0);
+        return event;
+    }
+
     jQuery.each(keys.split(''), function (i, key) {
-        window.vimulator.keyPress(key.charCodeAt(0));
+        window.dispatchEvent(keyEvent('keydown', key));
+        window.dispatchEvent(keyEvent('keypress', key));
+        window.dispatchEvent(keyEvent('keyup', key));
     });
 }
 
@@ -13,6 +23,9 @@ function pressEscape() {
 }
 
 function reset(text) {
+    $(window).unbind('keydown')
+             .unbind('keypress')
+             .unbind('keyup');
     $('#vimulator pre').text(text);
     window.vimulator = new Vimulator.Base().init('#vimulator');
 }
