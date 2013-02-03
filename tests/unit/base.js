@@ -49,6 +49,20 @@ describe("Base", function () {
                 expect(vim.mode.keyPress).toHaveBeenCalledWith(chr);
             }
         });
+
+        it("passes the key to any registered observers", function () {
+            var spy = jasmine.createSpy("observer");
+
+            vim.observeKeyPresses('test', spy);
+            vim.keyPress('a'.charCodeAt(0));
+
+            expect(spy).toHaveBeenCalledWith('a');
+
+            vim.stopObservingKeyPresses('test');
+            vim.keyPress('b'.charCodeAt(0));
+
+            expect(spy).not.toHaveBeenCalledWith('b');
+        });
     });
 
     describe(".findNext", function () {
