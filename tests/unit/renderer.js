@@ -5,6 +5,8 @@ describe("Renderer", function () {
                 return this.actual.hasClass(expected);
             }
         });
+
+        $('#vimulator').html('');
     });
 
     describe(".init", function () {
@@ -29,7 +31,6 @@ describe("Renderer", function () {
 
         it("adds a pre element if there is none present", function () {
             var preElements;
-            $('#vimulator').html('');
             renderer = new Vimulator.Renderer().init('#vimulator');
 
             preElements = $('#vimulator pre');
@@ -39,7 +40,6 @@ describe("Renderer", function () {
 
         it("adds a command line element", function () {
             var pElements;
-            $('#vimulator').html('');
             renderer = new Vimulator.Renderer().init('#vimulator');
 
             pElements = $('#vimulator p');
@@ -52,10 +52,11 @@ describe("Renderer", function () {
     describe(".renderText", function () {
         var renderer;
 
-        it("renders the text and marks the cursor position", function () {
-            $('#vimulator').html('');
+        beforeEach(function () {
             renderer = new Vimulator.Renderer().init('#vimulator');
+        });
 
+        it("renders the text and marks the cursor position", function () {
             renderer.renderText(
                 ['First line', 'Second line'],
                 {row: 0, col: 1}
@@ -66,9 +67,6 @@ describe("Renderer", function () {
         });
 
         it("can render the text without a cursor", function () {
-            $('#vimulator').html('');
-            renderer = new Vimulator.Renderer().init('#vimulator');
-
             renderer.renderText(['First line', 'Second line']);
 
             expect($('#vimulator pre').html())
@@ -79,11 +77,12 @@ describe("Renderer", function () {
     describe(".renderMode", function () {
         var renderer;
 
-        it("changes the class name of the text container", function () {
-            var textContainer;
-            $('#vimulator').html('');
+        beforeEach(function () {
             renderer = new Vimulator.Renderer().init('#vimulator');
-            textContainer = $('#vimulator pre');
+        });
+
+        it("changes the class name of the text container", function () {
+            var textContainer = $('#vimulator pre');
 
             expect(textContainer).not.toHaveClass('insert');
             renderer.renderMode('insert');
@@ -94,21 +93,15 @@ describe("Renderer", function () {
     });
 
     describe(".renderOperation", function () {
-        var renderer;
-
         it("responds to renderOperation", function () {
-            $('#vimulator').html('');
-            renderer = new Vimulator.Renderer().init('#vimulator');
-
+            var renderer = new Vimulator.Renderer().init('#vimulator');
             renderer.renderOperation({});
         });
     });
 
     describe(".readTextContainer", function () {
-        var renderer;
-
         it("responds to renderOperation", function () {
-            var text;
+            var text, renderer;
             $('#vimulator').html('<pre>A line\nAnother line</pre>');
             renderer = new Vimulator.Renderer().init('#vimulator');
 
@@ -119,11 +112,9 @@ describe("Renderer", function () {
     });
 
     describe(".bindKeyListener", function () {
-        var renderer;
-
         it("passes key code to the given callback", function () {
-            var eventHandler = jasmine.createSpy('eventHandler');
-            $('#vimulator').html('');
+            var eventHandler, renderer;
+            eventHandler = jasmine.createSpy('eventHandler');
             renderer = new Vimulator.Renderer().init('#vimulator');
 
             renderer.bindKeyListener(eventHandler);
