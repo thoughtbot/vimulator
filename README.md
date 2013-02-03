@@ -75,7 +75,7 @@ objects:
 * <kbd>r</kbd>: Replace the character under the cursor
 * <kbd>x</kbd>: Delete the character under the cursor
 * <kbd>X</kbd>: Delete the character before the cursor
-* <kbd>.</kbd>: Repeat the last edit
+* <kbd>.</kbd>: Repeat the last edit or operator
 
 ## License
 
