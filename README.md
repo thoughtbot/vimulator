@@ -54,7 +54,12 @@ subset of normal mode commands, and an insert mode.
 Operators work with all of the motions listed above, and the following text
 objects:
 
-* <kbd>i</kbd><kbd>b</kbd> and <kbd>a</kbd><kbd>b</kbd>: Inside or around parentheses
+* <kbd>i</kbd> or <kbd>a</kbd> followed by <kbd>b</kbd>, <kbd>(</kbd> or
+  <kbd>)</kbd>: Inside or around parenthesis
+* <kbd>i</kbd> or <kbd>a</kbd> followed by <kbd>B</kbd>, <kbd>{</kbd> or
+  <kbd>}</kbd>: Inside or around braces
+* <kbd>i</kbd> or <kbd>a</kbd> followed by <kbd>[</kbd> or <kbd>]</kbd>: Inside
+  or around square brackets
 
 ### Line search
 
