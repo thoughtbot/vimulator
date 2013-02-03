@@ -68,7 +68,7 @@
         this.commandLine.html(renderedText || '&nbsp;');
     };
 
-    Vimulator.Renderer.prototype.renderOperation = function (operation) {
+    Vimulator.Renderer.prototype.renderOperation = function (operation, vim) {
     };
 
     Vimulator.Renderer.prototype.readTextContainer = function () {

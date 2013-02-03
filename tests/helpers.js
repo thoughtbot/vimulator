@@ -2,6 +2,18 @@ ESC = '\u001B';
 RETURN = '\u000D';
 BACKSPACE = '\u0008';
 
+beforeEach(function () {
+    $(window).unbind('keydown')
+             .unbind('keypress')
+             .unbind('keyup');
+
+    this.addMatchers({
+        toHaveClass: function (expected) {
+            return this.actual.hasClass(expected);
+        }
+    });
+});
+
 function pressKeys(keys) {
     function keyEvent(type, key) {
         var event = document.createEvent('Event');
@@ -18,15 +30,8 @@ function pressKeys(keys) {
     });
 }
 
-function pressEscape() {
-    pressKeys(ESC);
-}
-
 function reset(text) {
-    $(window).unbind('keydown')
-             .unbind('keypress')
-             .unbind('keyup');
-    $('#vimulator pre').text(text);
+    $('#vimulator').html('<pre>' + text + '</pre>');
     window.vimulator = new Vimulator.Base().init('#vimulator');
 }
 
@@ -76,4 +81,25 @@ function mockCommand(options) {
     cmd.buildArgument.andReturn(options.argument || mockArgument());
     cmd.description.andReturn(options.description);
     return cmd;
+}
+
+function mockOperation(options) {
+    var op;
+    options = options || {};
+    op = jasmine.createSpyObj("operation", ["complete", "description"]);
+    op.complete.andReturn(!!options.complete);
+    op.description.andReturn(options.description);
+    op.cancelled = false;
+    return op;
+}
+
+function withSetTimeoutStubbed(callback) {
+    var originalSetTimeout = window.setTimeout;
+    window.setTimeout = jasmine.createSpy().andCallFake(function (func, delay) {
+        func();
+    });
+
+    callback();
+
+    window.setTimeout = originalSetTimeout;
 }

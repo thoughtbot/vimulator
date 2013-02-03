@@ -3,8 +3,12 @@
 
     Vimulator.Base = function () {};
 
-    Vimulator.Base.prototype.init = function (container) {
-        var vim = this;
+    Vimulator.Base.prototype.init = function (container, options) {
+        var vim, rendererConstructor;
+
+        vim = this;
+
+        options = options || {};
 
         this.modes = {
             normal: new Vimulator.NormalMode(this),
@@ -13,13 +17,11 @@
 
         this.search = new Vimulator.Search(this);
 
-        this.renderer = new Vimulator.Renderer().init(container);
+        rendererConstructor = options.renderer || Vimulator.Renderer;
+        this.renderer = new rendererConstructor().init(container);
         this.renderer.bindKeyListener(function (code) {
             vim.keyPress(code);
         });
-
-        //FIXME
-        this.commandList = $(container).find('ol');
 
         this.setMode("normal");
         this.cursor = {row: 0, col: 0};
@@ -61,8 +63,10 @@
         this.renderer.renderText(this.lines, this.cursor);
         this.renderer.renderMode(this.mode.name);
         if (op) {
-            this.renderer.renderOperation(op);
+            this.renderer.renderOperation(op, this);
             this.renderer.renderCommandLine(op.commandLineText());
+        } else {
+            this.renderer.renderCommandLine();
         }
     };
 
@@ -103,7 +107,7 @@
             return;
         }
 
-        line = this.currentLine();
+        line = this.currentLine() || '';
         this.cursor.col = col;
         if (col === '$' || this.cursor.col >= line.length) {
             this.cursor.col = line.length - 1;
