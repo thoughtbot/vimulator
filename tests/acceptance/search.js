@@ -65,6 +65,12 @@ describe("Forward search", function () {
             pressKeys("gg4n");
             expect(cursorPosition()).toEqual({row: 0, col: 10});
         });
+
+        it("can be used as an operator motion", function () {
+            pressKeys("dn");
+            expect(currentText())
+                .toBe("Text that contains several\ntimes (contains)");
+        });
     });
 
     describe("reversed with N", function () {
@@ -85,6 +91,11 @@ describe("Forward search", function () {
         it("wraps to the end of the document", function () {
             pressKeys("5N");
             expect(cursorPosition()).toEqual({row: 1, col: 9});
+        });
+
+        it("can be used as an operator motion", function () {
+            pressKeys("d2N");
+            expect(currentText()).toBe("Text that contains\nThe word )");
         });
     });
 });
@@ -131,6 +142,11 @@ describe("Backward search", function () {
     it("wraps to the start of the document", function () {
         pressKeys("gg?contains" + RETURN);
         expect(cursorPosition()).toEqual({row: 2, col: 7});
+    });
+
+    it("can be used as an operator motion", function () {
+        pressKeys("c2?contains" + RETURN + "(yeah" + ESC);
+        expect(currentText()).toBe("Text that contains\nThe word (yeah)");
     });
 
     describe("repeated with n", function () {

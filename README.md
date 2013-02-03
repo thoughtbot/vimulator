@@ -28,6 +28,13 @@ subset of normal mode commands, and an insert mode.
 * <kbd>+</kbd> or <kbd>Return</kbd>: Move to the start of the next line (after leading whitespace)
 * <kbd>-</kbd>: Move to the start of the previous line (after leading whitespace)
 
+### Document search
+
+* <kbd>/</kbd>: Search forwards
+* <kbd>?</kbd>: Search backwards
+* <kbd>n</kbd>: Go to the next match for the latest search
+* <kbd>N</kbd>: Go to the previous match for the latest search
+
 ### Marks
 
 * <kbd>m</kbd>: Create a mark
@@ -51,8 +58,8 @@ subset of normal mode commands, and an insert mode.
 * <kbd>c</kbd>, <kbd>c</kbd><kbd>c</kbd> and <kbd>C</kbd>: Change text
 * <kbd>d</kbd>, <kbd>d</kbd><kbd>d</kbd> and <kbd>D</kbd>: Delete text
 
-Operators work with all of the motions listed above, and the following text
-objects:
+Operators work with all of the motions and document search commands listed
+above, and the following text objects:
 
 * <kbd>i</kbd> or <kbd>a</kbd> followed by <kbd>b</kbd>, <kbd>(</kbd> or
   <kbd>)</kbd>: Inside or around parenthesis
@@ -69,13 +76,6 @@ objects:
 * <kbd>T</kbd>: Find the character after the previous ocurrence of a character
 * <kbd>;</kbd>: Repeat the last line search
 * <kbd>,</kbd>: Repeat the last line search, reversing the direction
-
-### Document search
-
-* <kbd>/</kbd>: Search forwards
-* <kbd>?</kbd>: Search backwards
-* <kbd>n</kbd>: Go to the next match for the latest search
-* <kbd>N</kbd>: Go to the previous match for the latest search
 
 ### Edits
 
