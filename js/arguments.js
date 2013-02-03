@@ -9,6 +9,10 @@
     Vimulator.NoArgument.prototype.value = function () {
         return null;
     };
+    Vimulator.NoArgument.prototype.commandLineText = function (key) {
+        return '';
+    };
+
 
     Vimulator.LiteralArgument = function () {
         this.key = null;
@@ -22,6 +26,10 @@
     Vimulator.LiteralArgument.prototype.value = function () {
         return this.key;
     };
+    Vimulator.LiteralArgument.prototype.commandLineText = function (key) {
+        return '';
+    };
+
 
     Vimulator.CommandLineArgument = function () {
         this.command = "";
@@ -39,5 +47,8 @@
     };
     Vimulator.CommandLineArgument.prototype.value = function () {
         return this.command;
+    };
+    Vimulator.CommandLineArgument.prototype.commandLineText = function (key) {
+        return key + this.command;
     };
 }());

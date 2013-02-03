@@ -58,6 +58,16 @@
         this.textContainer.html(renderedLines.join('\n'));
     };
 
+    Vimulator.Renderer.prototype.renderCommandLine = function (text, cursor) {
+        var renderedText;
+        if (cursor) {
+            renderedText = markWithCursor(text, cursor.col);
+        } else {
+            renderedText = text;
+        }
+        this.commandLine.html(renderedText || '&nbsp;');
+    };
+
     Vimulator.Renderer.prototype.renderOperation = function (operation) {
     };
 

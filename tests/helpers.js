@@ -58,9 +58,13 @@ function cursorPosition() {
 function mockArgument(options) {
     var arg;
     options = options || {};
-    arg = jasmine.createSpyObj("argument", ["keyPress", "complete", "value"]);
+    arg = jasmine.createSpyObj(
+        "argument",
+        ["keyPress", "complete", "value", "commandLineText"]
+    );
     arg.complete.andReturn(!!options.complete);
     arg.value.andReturn(options.value || null);
+    arg.commandLineText.andReturn(options.commandLineText || "");
     return arg;
 }
 

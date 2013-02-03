@@ -308,4 +308,36 @@ describe("Operation", function () {
             expect(op.value()).toBe(op);
         });
     });
+
+    describe(".commandLineText", function () {
+        it("delegates to the argument", function () {
+            var op, text, response;
+            op = new Vimulator.Operation();
+            response = {};
+            op.argument = mockArgument({commandLineText: response});
+            op.commandKey = '/';
+
+            text = op.commandLineText();
+
+            expect(op.argument.commandLineText).toHaveBeenCalledWith('/');
+            expect(text).toBe(response);
+        });
+
+        it("returns the empty string if there's no argument", function () {
+            var op = new Vimulator.Operation();
+
+            expect(op.commandLineText()).toBe('');
+        });
+
+        it("returns the empty string if the operation is cancelled", function () {
+            var op, text, response;
+            op = new Vimulator.Operation();
+            response = {};
+            op.argument = mockArgument({commandLineText: response});
+            op.commandKey = '/';
+            op.cancel();
+
+            expect(op.commandLineText()).toBe('');
+        });
+    });
 });

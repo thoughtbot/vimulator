@@ -60,7 +60,10 @@
     Vimulator.Base.prototype.render = function (op) {
         this.renderer.renderText(this.lines, this.cursor);
         this.renderer.renderMode(this.mode.name);
-        this.renderer.renderOperation(op);
+        if (op) {
+            this.renderer.renderOperation(op);
+            this.renderer.renderCommandLine(op.commandLineText());
+        }
     };
 
     Vimulator.Base.prototype.repeatLastEdit = function () {

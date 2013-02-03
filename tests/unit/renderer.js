@@ -74,6 +74,33 @@ describe("Renderer", function () {
         });
     });
 
+    describe(".renderCommandLine", function () {
+        var renderer;
+
+        beforeEach(function () {
+            renderer = new Vimulator.Renderer().init('#vimulator');
+        });
+
+        it("renders the text and marks the cursor position", function () {
+            renderer.renderCommandLine('/searchterm', {col: 2});
+
+            expect($('#vimulator p').html())
+                .toBe('/s<mark class="cursor">e</mark>archterm');
+        });
+
+        it("can render the text without a cursor", function () {
+            renderer.renderCommandLine(':wq');
+
+            expect($('#vimulator p').html()).toBe(':wq');
+        });
+
+        it("defaults to a non-breaking space", function () {
+            renderer.renderCommandLine('');
+
+            expect($('#vimulator p').html()).toBe('&nbsp;');
+        });
+    });
+
     describe(".renderMode", function () {
         var renderer;
 
