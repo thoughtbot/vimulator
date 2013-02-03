@@ -29,7 +29,8 @@
             Vimulator.NormalMode.Repeat,
             Vimulator.NormalMode.Marks,
             Vimulator.NormalMode.MarkMotions,
-            Vimulator.NormalMode.Search
+            Vimulator.NormalMode.Search,
+            Vimulator.NormalMode.Yank
         );
         return this.commands;
     };

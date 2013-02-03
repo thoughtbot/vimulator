@@ -178,12 +178,20 @@
     };
 
     Vimulator.Base.prototype.insertRowBelow = function (text, index) {
+        var newLines, i;
         index = index || this.cursor.row;
-        this.lines.splice(index + 1, 0, text);
+        newLines = text.split('\n');
+        for (i = newLines.length - 1; i >= 0; i -= 1) {
+            this.lines.splice(index + 1, 0, newLines[i]);
+        }
     };
     Vimulator.Base.prototype.insertRowAbove = function (text, index) {
+        var newLines, i;
         index = index || this.cursor.row;
-        this.lines.splice(index, 0, text);
+        newLines = text.split('\n');
+        for (i = 0; i < newLines.length; i += 1) {
+            this.lines.splice(index, 0, text);
+        }
     };
     Vimulator.Base.prototype.replaceRow = function (text, index) {
         index = (typeof index === "undefined" ? this.cursor.row : index);
