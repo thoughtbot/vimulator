@@ -3,6 +3,16 @@ describe("Yanking", function () {
         reset("First line\nSecond line");
     });
 
+    describe("a line at a time with Y", function () {
+        it("yanks the line", function () {
+            pressKeys("wY");
+            expect(cursorPosition()).toEqual({row: 0, col: 6});
+            pressKeys("jp");
+            expect(currentText()).toBe("First line\nSecond line\nFirst line");
+            expect(cursorPosition()).toEqual({row: 2, col: 0});
+        });
+    });
+
     describe("a line at a time with yy", function () {
         it("does not move the cursor", function () {
             pressKeys("2yy");
