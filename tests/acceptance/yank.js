@@ -10,19 +10,22 @@ describe("Yanking", function () {
         });
 
         it("can be put after the current line with p", function () {
-            pressKeys("yyp");
+            pressKeys("wyyp");
             expect(currentText()).toBe("First line\nFirst line\nSecond line");
+            expect(cursorPosition()).toEqual({row: 1, col: 0});
         });
 
         it("can be put before the current line with P", function () {
             pressKeys("jyykP");
             expect(currentText()).toBe("Second line\nFirst line\nSecond line");
+            expect(cursorPosition()).toEqual({row: 0, col: 0});
         });
 
         it("can be put multiple times", function () {
             pressKeys("yypp");
             expect(currentText()).toBe("First line\nFirst line\n" +
                                        "First line\nSecond line");
+            expect(cursorPosition()).toEqual({row: 2, col: 0});
         });
 
         it("accepts numeric prefixes", function () {
@@ -31,6 +34,16 @@ describe("Yanking", function () {
                                        "First line\nSecond line\n" +
                                        "First line\nSecond line\n" +
                                        "Second line");
+            expect(cursorPosition()).toEqual({row: 1, col: 0});
+        });
+
+        it("accepts numeric prefixes for P", function () {
+            pressKeys("2yy3P");
+            expect(currentText()).toBe("First line\nSecond line\n" +
+                                       "First line\nSecond line\n" +
+                                       "First line\nSecond line\n" +
+                                       "First line\nSecond line")
+            expect(cursorPosition()).toEqual({row: 0, col: 0});
         });
     });
 });

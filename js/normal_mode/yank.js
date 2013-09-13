@@ -53,6 +53,8 @@
                         vim.insertRowBelow(yankedText);
                     }
                 }
+
+                vim.moveCursorRelative(1, '^');
             },
             description: "Put previous yanked text after the cursor"
         }),

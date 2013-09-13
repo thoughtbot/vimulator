@@ -189,8 +189,8 @@
         var newLines, i;
         index = index || this.cursor.row;
         newLines = text.split('\n');
-        for (i = 0; i < newLines.length; i += 1) {
-            this.lines.splice(index, 0, text);
+        for (i = newLines.length - 1; i >= 0; i -= 1) {
+            this.lines.splice(index, 0, newLines[i]);
         }
     };
     Vimulator.Base.prototype.replaceRow = function (text, index) {
