@@ -136,6 +136,13 @@ describe("The w motion", function () {
         pressKeys("4w");
         expect(cursorPosition()).toEqual({row: 0, col: 13});
     });
+
+    it("does not move beyond the end of the file", function () {
+        pressKeys("j3w");
+        expect(cursorPosition()).toEqual({row: 1, col: 22});
+        pressKeys("gg100w");
+        expect(cursorPosition()).toEqual({row: 1, col: 22});
+    });
 });
 
 describe("The W motion", function () {
@@ -163,6 +170,13 @@ describe("The W motion", function () {
     it("accepts a numerical multiplier", function () {
         pressKeys("4W");
         expect(cursorPosition()).toEqual({row: 1, col: 0});
+    });
+
+    it("does not move beyond the end of the file", function () {
+        pressKeys("j2W");
+        expect(cursorPosition()).toEqual({row: 1, col: 22});
+        pressKeys("gg100W");
+        expect(cursorPosition()).toEqual({row: 1, col: 22});
     });
 });
 

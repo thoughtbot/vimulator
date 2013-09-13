@@ -94,6 +94,7 @@
                         vim.moveCursorRelative(1, 0);
                         vim.cursor.col = -1; //FIXME
                     } else {
+                        vim.moveCursorRelative(0, '$');
                         return;
                     }
                 }
@@ -119,6 +120,7 @@
                         vim.moveCursorRelative(1, 0);
                         vim.cursor.col = -1; //FIXME
                     } else {
+                        vim.moveCursorRelative(0, '$');
                         return;
                     }
                 }
