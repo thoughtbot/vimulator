@@ -28,7 +28,7 @@
         this.setMode("normal");
         this.cursor = {row: 0, col: 0};
         this.lines = this.renderer.readTextContainer();
-        this.registers = {};
+        this.registers = new Vimulator.Registers();
         this.marks = {};
 
         this.render();
@@ -92,7 +92,7 @@
             return;
         }
 
-        lastInsert = this.registers['.'];
+        lastInsert = this.registers.get('.');
         this.lastEdit.execute(this);
         if (this.mode.name === "insert") {
             for (i = 0; i < lastInsert.length; i++) {

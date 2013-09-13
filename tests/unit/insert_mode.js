@@ -15,12 +15,12 @@ describe("InsertMode", function () {
                 "setMode",
                 "appendChr"
             ]);
-            vim.registers = {};
+            vim.registers = new Vimulator.Registers();
             im = new Vimulator.InsertMode(vim);
             im.enter();
         });
 
-        it("leaves normal mode when pressing escape", function () {
+        it("returns to normal mode when pressing escape", function () {
             im.keyPress(ESC);
             expect(vim.setMode).toHaveBeenCalledWith("normal");
             expect(vim.moveCursorRelative).toHaveBeenCalledWith(0, -1);
@@ -46,7 +46,7 @@ describe("InsertMode", function () {
                 im.keyPress(chr);
             }
 
-            expect(vim.registers["."]).toBe("a1~");
+            expect(vim.registers.get(".")).toBe("a1~");
         });
     });
 
@@ -54,15 +54,15 @@ describe("InsertMode", function () {
         var vim, im;
 
         beforeEach(function () {
-            vim = {
-                registers: {".": "Some old text"}
-            };
+            var registers = new Vimulator.Registers();
+            registers.set("Some old text", ".");
+            vim = { registers: registers };
             im = new Vimulator.InsertMode(vim);
         });
 
         it("clears the '.' register", function () {
             im.enter();
-            expect(vim.registers["."]).toBe("");
+            expect(vim.registers.get(".")).toBe("");
         });
     });
 });

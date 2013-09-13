@@ -5,7 +5,7 @@ describe("Macros", function () {
     });
 
     it("records macros to registers", function () {
-        expect(vimulator.registers["a"]).toBe("eas" + ESC + "w");
+        expect(vimulator.registers.get('a')).toBe("eas" + ESC + "w");
     });
 
     it("allows macros to be replayed", function () {

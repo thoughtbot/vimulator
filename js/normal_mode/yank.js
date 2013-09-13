@@ -12,7 +12,7 @@
         range = motion.execute(vim, count);
         if (range) {
             yankedText = range.captureFrom(vim);
-            vim.registers[register] = yankedText;
+            vim.registers.set(yankedText);
         }
 
         vim.moveCursor(cursor.row, cursor.col);
@@ -61,7 +61,7 @@
             callback: function (vim, count) {
                 var yankedText, i;
 
-                yankedText = vim.registers['0'];
+                yankedText = vim.registers.get();
                 if (yankedText) {
                     for (i = 0; i < count; i += 1) {
                         vim.insertRowBelow(yankedText);
@@ -75,7 +75,7 @@
 
         'P': new C({
             callback: function (vim, count) {
-                var yankedText = vim.registers['0'];
+                var yankedText = vim.registers.get();
                 if (yankedText) {
                     for (i = 0; i < count; i += 1) {
                         vim.insertRowAbove(yankedText);

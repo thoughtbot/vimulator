@@ -7,12 +7,12 @@
     };
 
     performSearch = function (term, count, op) {
-        term = term || this.vim.registers['/'];
+        term = term || this.vim.registers.get('/');
         count = count || 1;
 
         if (op && term) {
             this.vim[op](term, {wrap: true, loop: true, count: count});
-            this.vim.registers['/'] = term;
+            this.vim.registers.set(term, '/');
             this.lastOp = op;
         }
     };

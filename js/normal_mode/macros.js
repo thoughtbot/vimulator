@@ -12,9 +12,9 @@
 
             macroRegister = register;
 
-            vim.registers[register] = "";
+            vim.registers.set('', register);
             vim.observeKeyPresses("macro-recorder", function (key) {
-                vim.registers[register] += key;
+                vim.registers.append(key, register);
             });
         },
         description: function (count, register) {
@@ -25,10 +25,11 @@
 
     stopCommand = new Vimulator.Command({
         callback: function (vim, count) {
+            var macro;
             Vimulator.NormalMode.Macros.q = startCommand;
             vim.stopObservingKeyPresses("macro-recorder");
-            vim.registers[macroRegister] = vim.registers[macroRegister]
-                                                    .replace(/q$/, "");
+            macro = vim.registers.get(macroRegister).replace(/q$/, '');
+            vim.registers.set(macro, macroRegister);
         },
         description: function (count, register) {
             return "Stop recoding macro";
@@ -43,7 +44,7 @@
             // Hackity hack: Start a new op before finishing this one
             vim.modes.normal.buildOperation();
 
-            keys = vim.registers[register];
+            keys = vim.registers.get(register);
             for (i = 0; i < count; i += 1) {
                 for (j = 0; j < keys.length; j += 1) {
                     vim.keyPress(keys.charCodeAt(j));

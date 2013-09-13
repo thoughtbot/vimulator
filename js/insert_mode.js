@@ -8,7 +8,7 @@
     };
 
     Vimulator.InsertMode.prototype.enter = function () {
-        this.vim.registers["."] = "";
+        this.vim.registers.set('', '.');
     };
 
     Vimulator.InsertMode.prototype.commandList = function () {
@@ -27,7 +27,7 @@
             op.execute(this.vim);
             return op;
         } else {
-            this.vim.registers["."] += key;
+            this.vim.registers.append(key, '.');
             this.vim.appendChr(key);
         }
     };
