@@ -1,6 +1,6 @@
 (function () {
     var U,
-        macroRegister,
+        currentMacroRegister, currentMacro,
         startCommand, stopCommand, replayCommand;
 
     U = Vimulator.Utils;
@@ -10,11 +10,11 @@
         callback: function (vim, count, register) {
             Vimulator.NormalMode.Macros.q = stopCommand;
 
-            macroRegister = register;
+            currentMacroRegister = register;
+            currentMacro = '';
 
-            vim.registers.set('', register);
             vim.observeKeyPresses("macro-recorder", function (key) {
-                vim.registers.append(key, register);
+                currentMacro += key;
             });
         },
         description: function (count, register) {
@@ -25,11 +25,12 @@
 
     stopCommand = new Vimulator.Command({
         callback: function (vim, count) {
-            var macro;
             Vimulator.NormalMode.Macros.q = startCommand;
             vim.stopObservingKeyPresses("macro-recorder");
-            macro = vim.registers.get(macroRegister).replace(/q$/, '');
-            vim.registers.set(macro, macroRegister);
+            vim.registers.set(
+                currentMacro.replace(/q$/, ''),
+                currentMacroRegister
+            );
         },
         description: function (count, register) {
             return "Stop recoding macro";
