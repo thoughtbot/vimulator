@@ -84,6 +84,12 @@ above, and the following text objects:
 * <kbd>X</kbd>: Delete the character before the cursor
 * <kbd>.</kbd>: Repeat the last edit or operator
 
+### Yank and put
+
+* <kbd>y</kbd><kbd>y</kbd> or <kbd>Y</kbd>: Yank the current line
+* <kbd>p</kbd>: Put the most recently yanked line after the current line
+* <kbd>P</kbd>: Put the most recently yanked line before the current line
+
 ## License
 
 Vimulator is licensed under the [MIT license][mit].
