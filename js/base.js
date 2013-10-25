@@ -272,7 +272,7 @@
         }
 
         if (col === -1) {
-            return null;
+            return {found: false};
         }
 
         col += options.offset;
@@ -291,18 +291,14 @@
             options.inclusive = false;
             return this.findNext(target, options);
         } else {
-            return {row: row, col: col};
+            return {row: row, col: col, found: true};
         }
     };
 
     Vimulator.Base.prototype.moveToNext = function (target, options) {
         var position = this.findNext(target, options);
-        if (position) {
-            this.moveCursor(position.row, position.col);
-            return true;
-        } else {
-            return false;
-        }
+        this.moveCursor(position);
+        return position.found;
     };
 
     Vimulator.Base.prototype.findLast = function (target, options) {
@@ -334,7 +330,7 @@
         }
 
         if (col === -1) {
-            return null;
+            return {found: false};
         }
 
         col += options.offset;
@@ -353,18 +349,14 @@
             options.inclusive = false;
             return this.findLast(target, options);
         } else {
-            return {row: row, col: col};
+            return {row: row, col: col, found: true};
         }
     };
 
     Vimulator.Base.prototype.moveToLast = function (target, options) {
         var position = this.findLast(target, options);
-        if (position) {
-            this.moveCursor(position.row, position.col);
-            return true;
-        } else {
-            return false;
-        }
+        this.moveCursor(position);
+        return position.found;
     };
 
     Vimulator.Base.prototype.cursorCopy = function () {

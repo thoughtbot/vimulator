@@ -56,45 +56,45 @@ describe("Base", function () {
             vim.lines = ["Lots of Os on one row"];
             vim.moveCursorRelative(0, 5);
 
-            expect(vim.findNext('o')).toEqual({col: 11, row: 0});
+            expect(vim.findNext('o')).toEqual({col: 11, row: 0, found: true});
         });
 
-        it("returns null if there is no match", function () {
+        it("returns found:false if there is no match", function () {
             vim.lines = ["The last character of the alphabet? No."];
-            expect(vim.findNext('z')).toBe(null);
+            expect(vim.findNext('z')).toEqual({found: false});
         });
 
         it("optionally wraps to other lines", function () {
             vim.lines = ["First row", "Second row"];
 
-            expect(vim.findNext('S')).toBe(null);
+            expect(vim.findNext('S')).toEqual({found: false});
             expect(vim.findNext('S', {wrap: true}))
-                .toEqual({row: 1, col: 0});
+                .toEqual({row: 1, col: 0, found: true});
         });
 
         it("optionally offsets the cursor", function () {
             vim.lines = ["Foo!"];
 
             expect(vim.findNext('!', {offset: -1}))
-                .toEqual({row: 0, col: 2});
+                .toEqual({row: 0, col: 2, found: true});
         });
 
         it("avoids illegal cursor positions when offsetting", function () {
             vim.lines = ["Foo!"];
 
             expect(vim.findNext('!', {offset: 1}))
-                .toEqual({row: 0, col: 3});
+                .toEqual({row: 0, col: 3, found: true});
         });
 
         it("will wrap the cursor when offsetting if wrap is enabled", function () {
             vim.lines = ["First", "Second"];
 
             expect(vim.findNext('s', {offset: 3}))
-                .toEqual({row: 0, col: 4});
+                .toEqual({row: 0, col: 4, found: true});
             expect(vim.findNext('s', {offset: 3, wrap: true}))
-                .toEqual({row: 1, col: 1});
+                .toEqual({row: 1, col: 1, found: true});
             expect(vim.findNext('d', {offset: 3, wrap: true}))
-                .toEqual({row: 1, col: 5});
+                .toEqual({row: 1, col: 5, found: true});
         });
 
         it("optionally start from somewhere other than the cursor", function () {
@@ -102,9 +102,9 @@ describe("Base", function () {
             vim.moveCursorRelative(0, 8);
 
             expect(vim.findNext('o'))
-                .toEqual({row: 0, col: 11});
+                .toEqual({row: 0, col: 11, found: true});
             expect(vim.findNext('o', {from: {row: 0, col: 0}}))
-                .toEqual({row: 0, col: 6});
+                .toEqual({row: 0, col: 6, found: true});
         });
 
         it("optionally includes the character under the cursor", function () {
@@ -112,20 +112,20 @@ describe("Base", function () {
             vim.moveCursorRelative(0, 1);
 
             expect(vim.findNext('o'))
-                .toEqual({row: 0, col: 2});
+                .toEqual({row: 0, col: 2, found: true});
             expect(vim.findNext('o', {inclusive: true}))
-                .toEqual({row: 0, col: 1});
+                .toEqual({row: 0, col: 1, found: true});
         });
 
         it("optionally skips to the nth match", function () {
             vim.lines = ["foo foo foo", "foo foo foo"];
 
             expect(vim.findNext("foo", {count: 1, wrap: true}))
-                .toEqual({row: 0, col: 4});
+                .toEqual({row: 0, col: 4, found: true});
             expect(vim.findNext("foo", {count: 2, wrap: true}))
-                .toEqual({row: 0, col: 8});
+                .toEqual({row: 0, col: 8, found: true});
             expect(vim.findNext("foo", {count: 3, wrap: true}))
-                .toEqual({row: 1, col: 0});
+                .toEqual({row: 1, col: 0, found: true});
         });
     });
 
@@ -134,22 +134,22 @@ describe("Base", function () {
             vim.lines = ["Lots of Os on one row"];
             vim.moveCursorRelative(0, 5);
 
-            expect(vim.findLast('o')).toEqual({col: 1, row: 0});
+            expect(vim.findLast('o')).toEqual({col: 1, row: 0, found: true});
         });
 
-        it("returns null if there is no match", function () {
+        it("returns found:false if there is no match", function () {
             vim.lines = ["The last character of the alphabet? No."];
             vim.moveCursorRelative(0, 20);
-            expect(vim.findLast('z')).toBe(null);
+            expect(vim.findLast('z')).toEqual({found: false});
         });
 
         it("optionally wraps to other lines", function () {
             vim.lines = ["First row", "Second row"];
             vim.moveCursorRelative(1, 2);
 
-            expect(vim.findLast('F')).toBe(null);
+            expect(vim.findLast('F')).toEqual({found: false});
             expect(vim.findLast('F', {wrap: true}))
-                .toEqual({row: 0, col: 0});
+                .toEqual({row: 0, col: 0, found: true});
         });
 
         it("optionally offsets the cursor", function () {
@@ -157,7 +157,7 @@ describe("Base", function () {
             vim.moveCursorRelative(0, 3);
 
             expect(vim.findLast('F', {offset: 1}))
-                .toEqual({row: 0, col: 1});
+                .toEqual({row: 0, col: 1, found: true});
         });
 
         it("avoids illegal cursor positions when offsetting", function () {
@@ -165,7 +165,7 @@ describe("Base", function () {
             vim.moveCursorRelative(0, 3);
 
             expect(vim.findLast('F', {offset: -1}))
-                .toEqual({row: 0, col: 0});
+                .toEqual({row: 0, col: 0, found: true});
         });
 
         it("will wrap the cursor when offsetting if wrap is enabled", function () {
@@ -173,11 +173,11 @@ describe("Base", function () {
             vim.moveCursorRelative(1, 5);
 
             expect(vim.findLast('e', {offset: -3}))
-                .toEqual({row: 1, col: 0});
+                .toEqual({row: 1, col: 0, found: true});
             expect(vim.findLast('e', {offset: -3, wrap: true}))
-                .toEqual({row: 0, col: 3});
+                .toEqual({row: 0, col: 3, found: true});
             expect(vim.findLast('F', {offset: -3, wrap: true}))
-                .toEqual({row: 0, col: 0});
+                .toEqual({row: 0, col: 0, found: true});
         });
 
         it("optionally start from somewhere other than the cursor", function () {
@@ -185,9 +185,9 @@ describe("Base", function () {
             vim.moveCursorRelative(0, 8);
 
             expect(vim.findLast('o'))
-                .toEqual({row: 0, col: 6});
+                .toEqual({row: 0, col: 6, found: true});
             expect(vim.findLast('o', {from: {row: 0, col: 15}}))
-                .toEqual({row: 0, col: 11});
+                .toEqual({row: 0, col: 11, found: true});
         });
 
         it("optionally includes the character under the cursor", function () {
@@ -195,9 +195,9 @@ describe("Base", function () {
             vim.moveCursorRelative(0, 2);
 
             expect(vim.findLast('o'))
-                .toEqual({row: 0, col: 1});
+                .toEqual({row: 0, col: 1, found: true});
             expect(vim.findLast('o', {inclusive: true}))
-                .toEqual({row: 0, col: 2});
+                .toEqual({row: 0, col: 2, found: true});
         });
 
         it("optionally skips to the nth match", function () {
@@ -205,11 +205,11 @@ describe("Base", function () {
             vim.moveCursorRelative(1, 10);
 
             expect(vim.findLast("foo", {count: 1, wrap: true}))
-                .toEqual({row: 1, col: 8});
+                .toEqual({row: 1, col: 8, found: true});
             expect(vim.findLast("foo", {count: 2, wrap: true}))
-                .toEqual({row: 1, col: 4});
+                .toEqual({row: 1, col: 4, found: true});
             expect(vim.findLast("foo", {count: 3, wrap: true}))
-                .toEqual({row: 1, col: 0});
+                .toEqual({row: 1, col: 0, found: true});
         });
     });
 
