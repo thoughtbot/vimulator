@@ -11,10 +11,10 @@ describe("Command", function () {
                 .toEqual(jasmine.any(constructor));
         });
 
-        it("defaults to a NullArgument", function () {
+        it("defaults to a NoArgument", function () {
             var cmd = new Vimulator.Command({});
             expect(cmd.buildArgument())
-                .toEqual(jasmine.any(Vimulator.NullArgument));
+                .toEqual(jasmine.any(Vimulator.NoArgument));
         });
     });
 

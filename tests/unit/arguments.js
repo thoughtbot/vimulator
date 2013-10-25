@@ -1,8 +1,8 @@
-describe("NullArgument", function () {
+describe("NoArgument", function () {
     var arg;
 
     beforeEach(function () {
-        arg = new Vimulator.NullArgument();
+        arg = new Vimulator.NoArgument();
     });
 
     describe(".keyPress", function () {

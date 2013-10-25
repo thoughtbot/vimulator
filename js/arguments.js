@@ -1,12 +1,12 @@
 (function () {
     var U = Vimulator.Utils;
 
-    Vimulator.NullArgument = function () {};
-    Vimulator.NullArgument.prototype.keyPress = function () {};
-    Vimulator.NullArgument.prototype.complete = function () {
+    Vimulator.NoArgument = function () {};
+    Vimulator.NoArgument.prototype.keyPress = function () {};
+    Vimulator.NoArgument.prototype.complete = function () {
         return true;
     };
-    Vimulator.NullArgument.prototype.value = function () {
+    Vimulator.NoArgument.prototype.value = function () {
         return null;
     };
 

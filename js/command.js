@@ -1,6 +1,6 @@
 (function () {
     Vimulator.Command = function (options) {
-        this.argConstructor = options.argument || Vimulator.NullArgument;
+        this.argConstructor = options.argument || Vimulator.NoArgument;
         this.callback = options.callback;
         this.subCommands = options.subCommands;
         this.defaultCount = "defaultCount" in options ? options.defaultCount : 1;
