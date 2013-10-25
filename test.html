@@ -9,6 +9,7 @@
   <body>
     <div id='vimulator'>
       <pre></pre>
+      <p class='command-line'>&nbsp;</p>
     </div>
 
     <!-- Libraries -->
@@ -18,11 +19,13 @@
 
     <!-- Code under test -->
     <script src='js/base.js'></script>
+    <script src='js/search.js'></script>
     <script src='js/utils.js'></script>
     <script src='js/range.js'></script>
     <script src='js/operation.js'></script>
     <script src='js/command.js'></script>
     <script src='js/command_list.js'></script>
+    <script src='js/arguments.js'></script>
     <script src='js/words.js'></script>
     <script src='js/text_objects.js'></script>
     <script src='js/normal_mode.js'></script>
@@ -31,6 +34,7 @@
     <script src='js/normal_mode/insertion.js'></script>
     <script src='js/normal_mode/edits.js'></script>
     <script src='js/normal_mode/line_search.js'></script>
+    <script src='js/normal_mode/search.js'></script>
     <script src='js/normal_mode/operators.js'></script>
     <script src='js/normal_mode/repeat.js'></script>
     <script src='js/insert_mode.js'></script>
@@ -47,6 +51,7 @@
     <script src='tests/unit/range.js'></script>
     <script src='tests/unit/operation.js'></script>
     <script src='tests/unit/command.js'></script>
+    <script src='tests/unit/arguments.js'></script>
     <script src='tests/unit/command_list.js'></script>
     <script src='tests/unit/normal_mode.js'></script>
     <script src='tests/unit/insert_mode.js'></script>
@@ -63,6 +68,7 @@
     <script src='tests/acceptance/repeat.js'></script>
     <script src='tests/acceptance/text_objects.js'></script>
     <script src='tests/acceptance/marks.js'></script>
+    <script src='tests/acceptance/search.js'></script>
 
     <script>
       (function () {

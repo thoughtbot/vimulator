@@ -1,6 +1,6 @@
 (function () {
     Vimulator.Command = function (options) {
-        this.argType = options.argument || "none";
+        this.argConstructor = options.argument || Vimulator.NoArgument;
         this.callback = options.callback;
         this.subCommands = options.subCommands;
         this.defaultCount = "defaultCount" in options ? options.defaultCount : 1;
@@ -18,12 +18,8 @@
         }
     };
 
-    Vimulator.Command.prototype.wantsOperation = function () {
-        return this.argType === "operation";
-    };
-
-    Vimulator.Command.prototype.wantsLiteral = function () {
-        return this.argType === "literal";
+    Vimulator.Command.prototype.buildArgument = function () {
+        return new this.argConstructor(this);
     };
 
     Vimulator.Command.prototype.getCommand = function (key) {

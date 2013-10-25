@@ -9,16 +9,16 @@
         ESC:        '\u001B'
     };
 
-    Vimulator.Utils.pluralize = function (count, word) {
+    Vimulator.Utils.pluralize = function (count, word, plural) {
         if (count === 1) {
             return "1 " + word;
         } else {
-            return count + " " + word.replace(/y$/, "ie") + "s";
+            plural = plural || word.replace(/y$/, "ie") + "s";
+            return count + " " + plural;
         }
     };
 
     Vimulator.Utils.ordinalize = function (count) {
-        var str = "" + count;
         if (/^(.*[^1])?1$/.test(count)) {
             return count + "st";
         } else if (/^(.*[^1])?2$/.test(count)) {

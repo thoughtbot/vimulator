@@ -6,7 +6,7 @@
 
     Vimulator.NormalMode.Marks = {
         'm': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, name) {
                 vim.marks[name] = vim.cursorCopy();
             },
@@ -19,12 +19,10 @@
 
     Vimulator.NormalMode.MarkMotions = {
         '`': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: CR.captureExclusive(function (vim, count, name) {
                 var mark = vim.marks[name];
-                if (mark) {
-                    vim.moveCursor(mark.row, mark.col);
-                }
+                vim.moveCursor(mark);
             }),
             description: function (count, name, vim) {
                 var mark, desc;
@@ -42,7 +40,7 @@
             }
         }),
         "'": new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: LR.capture(function (vim, count, name) {
                 var mark = vim.marks[name];
                 if (mark) {

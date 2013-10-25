@@ -34,7 +34,7 @@
     Vimulator.NormalMode.Operators = {
         'd': new C({
             repeatable: true,
-            argument: "operation",
+            argument: Vimulator.Operation,
             defaultCount: null,
             callback: function (vim, count, motion) {
                 var range = motion.execute(vim, count);
@@ -52,6 +52,7 @@
                 Vimulator.NormalMode.Motions,
                 Vimulator.NormalMode.LineSearch,
                 Vimulator.NormalMode.MarkMotions,
+                Vimulator.NormalMode.Search,
                 Vimulator.TextObject.Commands
             ),
             description: function (count, motion, vim) {
@@ -66,7 +67,7 @@
 
         'c': new C({
             repeatable: true,
-            argument: "operation",
+            argument: Vimulator.Operation,
             defaultCount: null,
             callback: function (vim, count, motion) {
                 var range, toEOL;
@@ -87,6 +88,7 @@
                 Vimulator.NormalMode.Motions,
                 Vimulator.NormalMode.LineSearch,
                 Vimulator.NormalMode.MarkMotions,
+                Vimulator.NormalMode.Search,
                 Vimulator.TextObject.Commands
             ),
             description: function (count, motion, vim) {

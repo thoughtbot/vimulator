@@ -7,15 +7,7 @@
     CR = Vimulator.CharacterRange;
 
     findForwards = CR.captureInclusive(function (vim, count, chr) {
-        var found, position;
-
-        found = -1;
-        position = vim.cursor;
-        while (position && found < count) {
-            found += 1;
-            vim.moveCursor(position.row, position.col);
-            position = vim.findNext(chr);
-        }
+        vim.moveToNext(chr, {count: count});
     });
 
     untilForwards = CR.captureInclusive(function (vim, count, chr, repeat) {
@@ -32,15 +24,7 @@
     });
 
     findBackwards = CR.captureExclusive(function (vim, count, chr) {
-        var found, position;
-
-        found = -1;
-        position = vim.cursor;
-        while (position && found < count) {
-            found += 1;
-            vim.moveCursor(position.row, position.col);
-            position = vim.findLast(chr);
-        }
+        vim.moveToLast(chr, {count: count});
     });
 
     untilBackwards = CR.captureExclusive(function (vim, count, chr, repeat) {
@@ -58,7 +42,7 @@
 
     Vimulator.NormalMode.LineSearch = {
         'f': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 'f', chr: chr};
                 return findForwards(vim, count, chr);
@@ -70,7 +54,7 @@
         }),
 
         'F': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 'F', chr: chr};
                 return findBackwards(vim, count, chr);
@@ -82,7 +66,7 @@
         }),
 
         't': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 't', chr: chr};
                 return untilForwards(vim, count, chr);
@@ -94,7 +78,7 @@
         }),
 
         'T': new C({
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, chr) {
                 lastLineSearch = {op: 'T', chr: chr};
                 return untilBackwards(vim, count, chr);
@@ -123,7 +107,7 @@
                 return findFuncs[lastLineSearch.op](vim, count, lastLineSearch.chr, true);
             },
             description: function (count) {
-                desc = "Repeat the last search ";
+                desc = "Repeat the last line search ";
                 if (count > 1) {
                     desc += count + " times";
                 }
@@ -149,7 +133,7 @@
                 findFuncs[lastLineSearch.op](vim, count, lastLineSearch.chr, true);
             },
             description: function (count) {
-                desc = "Repeat the last search backwards ";
+                desc = "Repeat the last line search backwards ";
                 if (count > 1) {
                     desc += count + " times";
                 }

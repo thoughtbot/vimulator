@@ -37,7 +37,7 @@
 
         'r': new C({
             repeatable: true,
-            argument: "literal",
+            argument: Vimulator.LiteralArgument,
             callback: function (vim, count, replacement) {
                 var line, repeat;
 

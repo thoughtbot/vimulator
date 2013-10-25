@@ -9,8 +9,11 @@
             insert: new Vimulator.InsertMode(this)
         };
 
+        this.search = new Vimulator.Search(this);
+
         this.container = $(container).addClass('vimulator');
         this.textContainer = this.container.find('pre');
+        this.commandLine = this.container.find('p');
         this.commandList = this.container.find('ol');
         this.bindKeyListeners();
 
@@ -25,13 +28,16 @@
         return this;
     };
 
-    Vimulator.Base.prototype.setMode = function (name) {
+    Vimulator.Base.prototype.setMode = function (name, argsForMode) {
+        var args;
+
         this.mode = this.modes[name];
         if (!this.mode) {
             throw new Error("Illegal mode");
         }
 
-        this.mode.enter();
+        args = Array.prototype.slice.call(arguments, 1);
+        this.mode.enter.apply(this.mode, args);
     };
 
     Vimulator.Base.prototype.bindKeyListeners = function () {
@@ -48,7 +54,8 @@
             var code = e.charCode || e.keyCode;
             if (
                 code === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
-                code === Vimulator.Utils.Keys.ESC.charCodeAt(0)
+                code === Vimulator.Utils.Keys.ESC.charCodeAt(0) ||
+                code === Vimulator.Utils.Keys.RETURN.charCodeAt(0)
             ) {
                 vim.keyPress(code);
                 return false;
@@ -119,6 +126,9 @@
     };
 
     Vimulator.Base.prototype.moveCursorRow = function (row) {
+        if (!row && row !== 0) {
+            return;
+        }
         this.cursor.row = row;
         if (row === '$' || this.cursor.row >= this.lines.length) {
             this.cursor.row = this.lines.length - 1;
@@ -128,8 +138,13 @@
         }
     };
     Vimulator.Base.prototype.moveCursorCol = function (col) {
-        var line = this.currentLine();
+        var line;
 
+        if (!col && col !== 0) {
+            return;
+        }
+
+        line = this.currentLine();
         this.cursor.col = col;
         if (col === '$' || this.cursor.col >= line.length) {
             this.cursor.col = line.length - 1;
@@ -142,6 +157,10 @@
         }
     };
     Vimulator.Base.prototype.moveCursor = function(row, col) {
+        if (row && typeof row === 'object') {
+            col = row.col;
+            row = row.row;
+        }
         this.moveCursorRow(row);
         this.moveCursorCol(col);
     };
@@ -221,31 +240,39 @@
                 this.lines[end.row].substr(end.col);
 
         this.lines.splice(start.row + 1, end.row - start.row);
-        this.moveCursor(start.row, start.col);
+        this.moveCursor(start);
     };
 
     Vimulator.Base.prototype.findNext = function (target, options) {
-        var row, col, lineAfter, lineOffset;
+        var row, col, startCol;
 
         options = options || {};
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        lineOffset = options.inclusive ? 0 : 1;
-        lineAfter = this.currentLine().substr(options.from.col + lineOffset);
-        row = options.from.row;
-        col = lineAfter.indexOf(target);
-        if (col !== -1) {
-            col += options.from.col + lineOffset;
+        startCol = options.from.col;
+        if (!options.inclusive) {
+            startCol += 1;
         }
+
+        row = options.from.row;
+        col = this.lines[row].indexOf(target, startCol);
 
         while (options.wrap && row < this.lines.length - 1 && col === -1) {
             row += 1;
             col = this.lines[row].indexOf(target);
         }
 
+        if (options.loop && col === -1) {
+            row = -1;
+            while (row < options.from.row && col === -1) {
+                row += 1;
+                col = this.lines[row].indexOf(target);
+            }
+        }
+
         if (col === -1) {
-            return null;
+            return {found: false};
         }
 
         col += options.offset;
@@ -258,28 +285,52 @@
             }
         }
 
-        return {row: row, col: col};
+        if (options.count && options.count > 1) {
+            options.count -= 1;
+            options.from = {row: row, col: col};
+            options.inclusive = false;
+            return this.findNext(target, options);
+        } else {
+            return {row: row, col: col, found: true};
+        }
+    };
+
+    Vimulator.Base.prototype.moveToNext = function (target, options) {
+        var position = this.findNext(target, options);
+        this.moveCursor(position);
+        return position.found;
     };
 
     Vimulator.Base.prototype.findLast = function (target, options) {
-        var row, col, lineBefore, lineOffset;
+        var row, col, startCol;
 
         options = options || {};
         options.offset = options.offset || 0;
         options.from = options.from || this.cursor;
 
-        lineOffset = options.inclusive ? 1 : 0;
-        lineBefore = this.currentLine().substr(0, options.from.col + lineOffset);
+        startCol = options.from.col;
+        if (!options.inclusive) {
+            startCol -= 1;
+        }
+
         row = options.from.row;
-        col = lineBefore.lastIndexOf(target);
+        col = this.lines[row].lastIndexOf(target, startCol);
 
         while (options.wrap && row > 0 && col === -1) {
             row -= 1;
             col = this.lines[row].lastIndexOf(target);
         }
 
+        if (options.loop && col === -1) {
+            row = this.lines.length;
+            while (row > options.from.row && col === -1) {
+                row -= 1;
+                col = this.lines[row].lastIndexOf(target);
+            }
+        }
+
         if (col === -1) {
-            return null;
+            return {found: false};
         }
 
         col += options.offset;
@@ -292,7 +343,20 @@
             }
         }
 
-        return {row: row, col: col};
+        if (options.count && options.count > 1) {
+            options.count -= 1;
+            options.from = {row: row, col: col};
+            options.inclusive = false;
+            return this.findLast(target, options);
+        } else {
+            return {row: row, col: col, found: true};
+        }
+    };
+
+    Vimulator.Base.prototype.moveToLast = function (target, options) {
+        var position = this.findLast(target, options);
+        this.moveCursor(position);
+        return position.found;
     };
 
     Vimulator.Base.prototype.cursorCopy = function () {

@@ -21,6 +21,15 @@ function currentText() {
     return $('#vimulator pre').text();
 }
 
+function commandLineText() {
+    var commandLine = $('#vimulator p.command-line');
+    if (commandLine.html() === '&nbsp;') {
+        return '';
+    } else {
+        return commandLine.text();
+    }
+}
+
 function cursorPosition() {
     var lines, row, col;
 
@@ -33,15 +42,21 @@ function cursorPosition() {
     }
 }
 
-function mockCommand(argumentType, description) {
-    return {
-        wantsOperation: jasmine.createSpy().andCallFake(function () {
-            return argumentType === "operation";
-        }),
-        wantsLiteral: jasmine.createSpy().andCallFake(function () {
-            return argumentType === "literal"
-        }),
-        description: jasmine.createSpy().andReturn(description),
-        execute: jasmine.createSpy()
-    };
+function mockArgument(options) {
+    var arg;
+    options = options || {};
+    arg = jasmine.createSpyObj("argument", ["keyPress", "complete", "value"]);
+    arg.complete.andReturn(!!options.complete);
+    arg.value.andReturn(options.value || null);
+    return arg;
+}
+
+function mockCommand(options) {
+    var cmd;
+    options = options || {};
+    cmd = jasmine.createSpyObj("command", ["buildArgument", "description",
+        "execute"]);
+    cmd.buildArgument.andReturn(options.argument || mockArgument());
+    cmd.description.andReturn(options.description);
+    return cmd;
 }
