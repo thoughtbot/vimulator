@@ -126,6 +126,9 @@
     };
 
     Vimulator.Base.prototype.moveCursorRow = function (row) {
+        if (!row && row !== 0) {
+            return;
+        }
         this.cursor.row = row;
         if (row === '$' || this.cursor.row >= this.lines.length) {
             this.cursor.row = this.lines.length - 1;
@@ -135,8 +138,13 @@
         }
     };
     Vimulator.Base.prototype.moveCursorCol = function (col) {
-        var line = this.currentLine();
+        var line;
 
+        if (!col && col !== 0) {
+            return;
+        }
+
+        line = this.currentLine();
         this.cursor.col = col;
         if (col === '$' || this.cursor.col >= line.length) {
             this.cursor.col = line.length - 1;
@@ -149,6 +157,10 @@
         }
     };
     Vimulator.Base.prototype.moveCursor = function(row, col) {
+        if (row && typeof row === 'object') {
+            col = row.col;
+            row = row.row;
+        }
         this.moveCursorRow(row);
         this.moveCursorCol(col);
     };

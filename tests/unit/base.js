@@ -212,4 +212,35 @@ describe("Base", function () {
                 .toEqual({row: 1, col: 0});
         });
     });
+
+    describe(".moveCursor", function () {
+        beforeEach(function () {
+            vim.lines = ["first", "second", "third"];
+        });
+
+        it("moves the cursor to the specified position", function () {
+            vim.moveCursor(1, 3);
+
+            expect(vim.cursor.row).toEqual(1);
+            expect(vim.cursor.col).toEqual(3);
+        });
+
+        it("accepts an object with row and col properties", function () {
+            vim.moveCursor({row: 1, col: 3});
+
+            expect(vim.cursor.row).toEqual(1);
+            expect(vim.cursor.col).toEqual(3);
+        });
+
+        it("does not move the cursor for undefined or null arguments", function () {
+            vim.moveCursor(2, 4);
+
+            vim.moveCursor();
+            vim.moveCursor(null, null);
+            vim.moveCursor({});
+
+            expect(vim.cursor.row).toEqual(2);
+            expect(vim.cursor.col).toEqual(4);
+        });
+    });
 });
