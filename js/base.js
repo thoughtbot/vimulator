@@ -240,7 +240,7 @@
                 this.lines[end.row].substr(end.col);
 
         this.lines.splice(start.row + 1, end.row - start.row);
-        this.moveCursor(start.row, start.col);
+        this.moveCursor(start);
     };
 
     Vimulator.Base.prototype.findNext = function (target, options) {

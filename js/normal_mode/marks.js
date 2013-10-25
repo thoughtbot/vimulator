@@ -22,9 +22,7 @@
             argument: Vimulator.LiteralArgument,
             callback: CR.captureExclusive(function (vim, count, name) {
                 var mark = vim.marks[name];
-                if (mark) {
-                    vim.moveCursor(mark.row, mark.col);
-                }
+                vim.moveCursor(mark);
             }),
             description: function (count, name, vim) {
                 var mark, desc;
