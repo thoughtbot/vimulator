@@ -23,11 +23,7 @@
         // Use keyup for special characters like escape
         $(window).keyup(function (e) {
             var code = e.charCode || e.keyCode;
-            if (
-                code === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
-                code === Vimulator.Utils.Keys.ESC.charCodeAt(0) ||
-                code === Vimulator.Utils.Keys.RETURN.charCodeAt(0)
-            ) {
+            if (specialKeyCode(code)) {
                 handler(code);
                 return false;
             }
@@ -88,5 +84,13 @@
         return line.substr(0, column) +
                '<mark class="cursor">' + chr + '</mark>' +
                line.substr(column + 1);
+    }
+
+    function specialKeyCode(code) {
+        return (
+            code === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
+            code === Vimulator.Utils.Keys.ESC.charCodeAt(0) ||
+            code === Vimulator.Utils.Keys.RETURN.charCodeAt(0)
+        );
     }
 }());
