@@ -3,7 +3,13 @@
 
     Vimulator.Base = function () {};
 
-    Vimulator.Base.prototype.init = function (container) {
+    Vimulator.Base.prototype.init = function (container, options) {
+        var vim, rendererConstructor;
+
+        vim = this;
+
+        options = options || {};
+
         this.modes = {
             normal: new Vimulator.NormalMode(this),
             insert: new Vimulator.InsertMode(this)
@@ -11,15 +17,15 @@
 
         this.search = new Vimulator.Search(this);
 
-        this.container = $(container).addClass('vimulator');
-        this.textContainer = this.container.find('pre');
-        this.commandLine = this.container.find('p');
-        this.commandList = this.container.find('ol');
-        this.bindKeyListeners();
+        rendererConstructor = options.renderer || Vimulator.Renderer;
+        this.renderer = new rendererConstructor().init(container);
+        this.renderer.bindKeyListener(function (code) {
+            vim.keyPress(code);
+        });
 
         this.setMode("normal");
         this.cursor = {row: 0, col: 0};
-        this.lines = this.textContainer.text().split('\n');
+        this.lines = this.renderer.readTextContainer();
         this.registers = {};
         this.marks = {};
 
@@ -40,38 +46,6 @@
         this.mode.enter.apply(this.mode, args);
     };
 
-    Vimulator.Base.prototype.bindKeyListeners = function () {
-        var vim = this;
-
-        this.input = $('<input type="text">').appendTo(this.container)
-                                             .focus()
-                                             .blur(function () {
-                                                 $(this).focus();
-                                             });
-
-        // Use keyup for special characters like escape
-        $(window).keyup(function (e) {
-            var code = e.charCode || e.keyCode;
-            if (
-                code === Vimulator.Utils.Keys.BACKSPACE.charCodeAt(0) ||
-                code === Vimulator.Utils.Keys.ESC.charCodeAt(0) ||
-                code === Vimulator.Utils.Keys.RETURN.charCodeAt(0)
-            ) {
-                vim.keyPress(code);
-                return false;
-            }
-        });
-
-        // Use keypress for general characters
-        $(window).keypress(function (e) {
-            var code = e.charCode || e.keyCode;
-            if (code >= 32) {
-                vim.keyPress(code);
-                return false;
-            }
-        });
-    };
-
     Vimulator.Base.prototype.keyPress = function (code) {
         var chr, op;
 
@@ -86,25 +60,14 @@
     };
 
     Vimulator.Base.prototype.render = function (op) {
-        var vim, rendered;
-
-        vim = this;
-        rendered = jQuery.map(this.lines, function (line, i) {
-            var chr;
-
-            if (i == vim.cursor.row) {
-                chr = line.substr(vim.cursor.col, 1) || ' ';
-                return line.substr(0, vim.cursor.col) +
-                       '<mark class="cursor">' + chr + '</mark>' +
-                       line.substr(vim.cursor.col + 1);
-            } else {
-                return line;
-            }
-        });
-
-        this.textContainer
-                .html(rendered.join('\n'))
-                .attr('class', this.mode.name);
+        this.renderer.renderText(this.lines, this.cursor);
+        this.renderer.renderMode(this.mode.name);
+        if (op) {
+            this.renderer.renderOperation(op, this);
+            this.renderer.renderCommandLine(op.commandLineText());
+        } else {
+            this.renderer.renderCommandLine();
+        }
     };
 
     Vimulator.Base.prototype.repeatLastEdit = function () {
@@ -144,7 +107,7 @@
             return;
         }
 
-        line = this.currentLine();
+        line = this.currentLine() || '';
         this.cursor.col = col;
         if (col === '$' || this.cursor.col >= line.length) {
             this.cursor.col = line.length - 1;

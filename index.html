@@ -6,16 +6,15 @@
   </head>
   <body>
     <div id='vimulator'>
-      <pre id='text'>def greet(name)
+      <pre>def greet(name)
   puts "Hello #{name}"
 end</pre>
-      <p class='command-line'>&nbsp;</p>
-      <ol id='commands'>
-      </ol>
     </div>
     <script src='lib/jquery.min.js'></script>
 
     <script src='js/base.js'></script>
+    <script src='js/renderer.js'></script>
+    <script src='js/demo_renderer.js'></script>
     <script src='js/search.js'></script>
     <script src='js/utils.js'></script>
     <script src='js/range.js'></script>
@@ -36,9 +35,10 @@ end</pre>
     <script src='js/normal_mode/repeat.js'></script>
     <script src='js/insert_mode.js'></script>
     <script src='js/insert_mode/commands.js'></script>
-    <script src='js/demo.js'></script>
     <script>
-      window.vimulator = new Vimulator.Demo().init('#vimulator');
+      window.vimulator = new Vimulator.Base().init('#vimulator', {
+        renderer: Vimulator.DemoRenderer
+      });
     </script>
   </body>
 </html>

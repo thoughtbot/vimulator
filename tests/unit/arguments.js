@@ -22,6 +22,12 @@ describe("NoArgument", function () {
             expect(arg.value()).toBe(null);
         });
     });
+
+    describe(".commandLineText", function () {
+        it("returns the empty string", function () {
+            expect(arg.commandLineText('x')).toBe('');
+        });
+    });
 });
 
 describe("LiteralArgument", function () {
@@ -42,6 +48,12 @@ describe("LiteralArgument", function () {
             expect(arg.complete()).toBe(false);
             arg.keyPress("x");
             expect(arg.complete()).toBe(true);
+        });
+    });
+
+    describe(".commandLineText", function () {
+        it("returns the empty string", function () {
+            expect(arg.commandLineText('r')).toBe('');
         });
     });
 });
@@ -72,6 +84,15 @@ describe("CommandLineArgument", function () {
             expect(arg.complete()).toBe(false);
             arg.keyPress(RETURN);
             expect(arg.complete()).toBe(true);
+        });
+    });
+
+    describe(".commandLineText", function () {
+        it("returns the command prefixed with the command key", function () {
+            arg.keyPress("f");
+            arg.keyPress("o");
+            arg.keyPress("o");
+            expect(arg.commandLineText("/")).toBe("/foo");
         });
     });
 });

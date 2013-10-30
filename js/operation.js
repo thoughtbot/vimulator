@@ -149,7 +149,16 @@
         this.cancelled = true;
     };
 
+    // Gives Operations a consistent interface with Arguments
     Vimulator.Operation.prototype.value = function () {
         return this;
+    };
+
+    Vimulator.Operation.prototype.commandLineText = function () {
+        if (!this.cancelled && this.commandKey && this.argument) {
+            return this.argument.commandLineText(this.commandKey);
+        } else {
+            return '';
+        }
     };
 }());
