@@ -186,12 +186,8 @@
         }
     };
     Vimulator.Base.prototype.insertRowAbove = function (text, index) {
-        var newLines, i;
         index = index || this.cursor.row;
-        newLines = text.split('\n');
-        for (i = newLines.length - 1; i >= 0; i -= 1) {
-            this.lines.splice(index, 0, newLines[i]);
-        }
+        this.insertRowBelow(text, index - 1);
     };
     Vimulator.Base.prototype.replaceRow = function (text, index) {
         index = (typeof index === "undefined" ? this.cursor.row : index);
