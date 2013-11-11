@@ -99,4 +99,8 @@
     Vimulator.LineRange.prototype.toEOL = function (buffer) {
         return false;
     };
+
+    Vimulator.LineRange.prototype.captureFrom = function (buffer) {
+        return buffer.lines.slice(this.start.row, this.end.row + 1).join('\n');
+    };
 }());

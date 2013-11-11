@@ -435,4 +435,34 @@ describe("LineRange", function () {
             ]);
         });
     });
+
+    describe(".captureFrom", function () {
+        it("can capture the first line", function () {
+            range = new Vimulator.LineRange(
+                {row: 0, col: 0},
+                {row: 0, col: 2}
+            );
+
+            expect(range.captureFrom(buffer)).toBe("The first line");
+        });
+
+        it("can capture the last line", function () {
+            range = new Vimulator.LineRange(
+                {row: 2, col: 0},
+                {row: 2, col: 2}
+            );
+
+            expect(range.captureFrom(buffer)).toBe("The third line");
+        });
+
+        it("can capture multiple lines", function () {
+            range = new Vimulator.LineRange(
+                {row: 0, col: 0},
+                {row: 1, col: 2}
+            );
+
+            expect(range.captureFrom(buffer))
+                .toBe("The first line\nThe second line");
+        });
+    });
 });
