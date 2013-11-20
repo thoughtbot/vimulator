@@ -90,6 +90,11 @@ above, and the following text objects:
 * <kbd>p</kbd>: Put the most recently yanked line after the current line
 * <kbd>P</kbd>: Put the most recently yanked line before the current line
 
+### Macros
+
+* <kbd>q</kbd>: Start or stop recording a macro
+* <kbd>@</kbd>: Replay a recorded macro
+
 ## License
 
 Vimulator is licensed under the [MIT license][mit].

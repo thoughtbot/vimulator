@@ -23,10 +23,12 @@
             vim.keyPress(code);
         });
 
+        this.keyPressObservers = {};
+
         this.setMode("normal");
         this.cursor = {row: 0, col: 0};
         this.lines = this.renderer.readTextContainer();
-        this.registers = {};
+        this.registers = new Vimulator.Registers();
         this.marks = {};
 
         this.render();
@@ -47,16 +49,29 @@
     };
 
     Vimulator.Base.prototype.keyPress = function (code) {
-        var chr, op;
-
+        var chr, op, observer;
         chr = String.fromCharCode(code);
-        op = this.mode.keyPress(chr);
 
+        for (observer in this.keyPressObservers) {
+            if (this.keyPressObservers.hasOwnProperty(observer)) {
+                this.keyPressObservers[observer](chr);
+            }
+        }
+
+        op = this.mode.keyPress(chr);
         if (op && op.repeatable()) {
             this.lastEdit = op;
         }
 
         this.render(op);
+    };
+
+    Vimulator.Base.prototype.observeKeyPresses = function (name, callback) {
+        this.keyPressObservers[name] = callback;
+    };
+
+    Vimulator.Base.prototype.stopObservingKeyPresses = function (name) {
+        delete this.keyPressObservers[name];
     };
 
     Vimulator.Base.prototype.render = function (op) {
@@ -77,7 +92,7 @@
             return;
         }
 
-        lastInsert = this.registers['.'];
+        lastInsert = this.registers.get('.');
         this.lastEdit.execute(this);
         if (this.mode.name === "insert") {
             for (i = 0; i < lastInsert.length; i++) {

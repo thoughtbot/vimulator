@@ -30,7 +30,8 @@
             Vimulator.NormalMode.Marks,
             Vimulator.NormalMode.MarkMotions,
             Vimulator.NormalMode.Search,
-            Vimulator.NormalMode.Yank
+            Vimulator.NormalMode.Yank,
+            Vimulator.NormalMode.Macros
         );
         return this.commands;
     };
