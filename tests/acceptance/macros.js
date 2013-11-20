@@ -9,12 +9,22 @@ describe("Macros", function () {
     });
 
     it("allows macros to be replayed", function () {
-        pressKeys("@a");
-        expect(currentText()).toBe("Somes texts made of words");
+        runs(function () {
+            pressKeys("@a");
+        });
+        waits(0);
+        runs(function () {
+            expect(currentText()).toBe("Somes texts made of words");
+        });
     });
 
     it("allows macros to be replayed multiple times", function () {
-        pressKeys("3@a");
-        expect(currentText()).toBe("Somes texts mades ofs words");
+        runs(function () {
+            pressKeys("3@a");
+        });
+        waits(0);
+        runs(function () {
+            expect(currentText()).toBe("Somes texts mades ofs words");
+        });
     });
 });

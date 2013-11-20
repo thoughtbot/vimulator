@@ -40,17 +40,18 @@
     replayCommand = new Vimulator.Command({
         argument: Vimulator.LiteralArgument,
         callback: function (vim, count, register) {
-            var i, j, keys;
+            // Allow the current key press event to finish before
+            // replaying the macro.
+            setTimeout(function () {
+                var i, j, keys;
 
-            // Hackity hack: Start a new op before finishing this one
-            vim.modes.normal.buildOperation();
-
-            keys = vim.registers.get(register);
-            for (i = 0; i < count; i += 1) {
-                for (j = 0; j < keys.length; j += 1) {
-                    vim.keyPress(keys.charCodeAt(j));
+                keys = vim.registers.get(register);
+                for (i = 0; i < count; i += 1) {
+                    for (j = 0; j < keys.length; j += 1) {
+                        vim.keyPress(keys.charCodeAt(j));
+                    }
                 }
-            }
+            }, 0);
         },
         description: function (count, register) {
             var desc = "Replay the macro in register " +
